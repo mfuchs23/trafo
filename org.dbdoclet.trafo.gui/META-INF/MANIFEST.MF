@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Service-Component: OSGI-INF/component-description.xml
+Bundle-ManifestVersion: 2
+Bundle-Name: Trafo GUI
+Bundle-SymbolicName: org.dbdoclet.trafo.gui
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.google.inject,
+ com.google.inject.binder,
+ com.google.inject.matcher,
+ com.google.inject.name,
+ com.google.inject.util,
+ javax.inject,
+ org.apache.commons.logging,
+ org.dbdoclet,
+ org.dbdoclet.jive,
+ org.dbdoclet.jive.dialog,
+ org.dbdoclet.jive.text,
+ org.dbdoclet.jive.widget,
+ org.dbdoclet.progress,
+ org.dbdoclet.service,
+ org.dbdoclet.trafo,
+ org.dbdoclet.trafo.script,
+ org.osgi.framework,
+ org.osgi.service.component;version="1.1.0",
+ org.osgi.util.tracker

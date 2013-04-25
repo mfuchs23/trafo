@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<component name="trafoGui">
+	<implementation class="org.dbdoclet.trafo.gui.TrafoGui" />
+	<reference name="trafoService" interface="org.dbdoclet.trafo.TrafoService"
+		cardinality="0..n" policy="dynamic" bind="addTrafoService" unbind="removeTrafoService" />
+</component>

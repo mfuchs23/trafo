@@ -1,0 +1,6 @@
+transformation html2docbook;
+
+section DocBook {
+	document-element = "article";
+	detect-trapped-br = false;
+}

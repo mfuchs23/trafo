@@ -1,0 +1,7 @@
+transformation html2docbook;
+
+section DocBook {
+	abstract = """<title>Lorem</title>
+	<para>ipsum, sed <emphasis>dolor</emphasis> amet.</para>
+	<para>In excelsis deo.</para>""";
+}

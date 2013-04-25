@@ -1,0 +1,6 @@
+transformation html2docbook;
+
+section DocBook {
+	abstract = """Lorem ipsum,
+	sed dolor amet.""";
+}

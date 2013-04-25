@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="1.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xl="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Herold Tutorial</title>
+
+    <abstract>
+      <para>Tutorial for the HTML to DocBook converter herold.</para>
+    </abstract>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Herold is a free command line tool that converts HTML files to
+    DocBook XML files. The possibilities of such a transformation are somewhat
+    limited and depend on the structure and quality of the HTML sources. The
+    more information you have in your HTML compared to formatting elements,
+    the better the results will be.</para>
+
+    <section>
+      <title>Installation</title>
+
+      <para>To install herold on your computer choose the installation package
+      for your operation system and run your installation program. After the
+      file are copied to your filesystem, make sure that the start skript
+      &lt;INSTALLATION_DIRECTORY&gt;/bin/herold(.bat) can be found via your
+      Path variable. Then open a terminal window and run <command>herold
+      -V.</command> The following output should appear on your screen:</para>
+
+      <screen>herold version "6.0.1"</screen>
+    </section>
+  </section>
+
+  <section>
+    <title>Options</title>
+
+    <para>Like nearly every command tool herold comes with a set of command
+    line options to control the behaviour of the transformation:</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>--in, -i</term>
+
+        <listitem>
+          <para>Specifies the HTML input file.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--out, -o</term>
+
+        <listitem>
+          <para>Specifies the DocBook XML destination file.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--profile, -p</term>
+
+        <listitem>
+          <para>A profile file with predefined settings.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--help, -h</term>
+
+        <listitem>
+          <para>Prints a help page on the console.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--destination-encoding, -d</term>
+
+        <listitem>
+          <para>Specifies the encoding of the generated DocBook XML
+          files.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--exclude, -e</term>
+
+        <listitem>
+          <para>Specifies a xpath expression. All elements of the html source,
+          which match this expression are excluded from the transformation.
+          This option can be used multiple times.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--source-encoding, -s</term>
+
+        <listitem>
+          <para>Specifies the encoding of the HTML source files, such as
+          ISO-8859-1.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--root-element, -r</term>
+
+        <listitem>
+          <para>The root element of the document. Possible values are: book,
+          article and reference. The default value for this option is
+          'article'</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--docbook-script-path</term>
+
+        <listitem>
+          <para>The path to the grovvy scripts for HTML customization.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--html-script-path</term>
+
+        <listitem>
+          <para>The path to the grovvy scripts for DocBook
+          customization.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--root-element, -r</term>
+
+        <listitem>
+          <para>The root element of the document. Possible values are: book,
+          article and reference. The default value for this option is
+          'article'</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--title, -t</term>
+
+        <listitem>
+          <para>The title for the resulting document.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--decompose-tables, -T</term>
+
+        <listitem>
+          <para>Decomposes the tables from the HTML code into single
+          paragraphs. This can be useful, if a document contains a lot of
+          tables for formatting reasons.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--version, -V</term>
+
+        <listitem>
+          <para>Displays the version of herold.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>--verbose, v</term>
+
+        <listitem>
+          <para>Enables the verbosity for the console output.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+
+  <section>
+    <title>Profiles</title>
+
+    <para>Transformation parameters can be stored in profile files. The
+    following example is a profile file for the export of a well known text
+    processor.</para>
+
+    <programlistingco>
+      <areaspec>
+        <area coords="1" xml:id="l1"/>
+
+        <area coords="3" xml:id="l3"/>
+      </areaspec>
+
+      <programlisting linenumbering="numbered">transformation html2docbook;
+
+input {
+}
+
+output {
+}
+
+section HTML {
+    source-encoding = "windows-1252";
+    exclude = [ "//p[starts-with(@class, 'MsoToc')]" ];
+}
+
+section DocBook {
+    destination-encoding = "UTF-8";
+    section-numbering-pattern = "(((\d\.)+)?\d?\.?\p{Z}*).*";
+}
+
+</programlisting>
+
+      <calloutlist>
+        <callout arearefs="l1">
+          <para>The first line must start with the keyword
+          <varname>transformation</varname> followed by the identifier for the
+          transformation engine. The statement is finished with a
+          semicolon.</para>
+        </callout>
+
+        <callout arearefs="l3">
+          <para>The input section can be used to define a fixed input file,
+          but is normally left empty.</para>
+        </callout>
+      </calloutlist>
+    </programlistingco>
+  </section>
+
+  <section>
+    <title>Customization of the transformation with Groovy</title>
+
+    <para>To customize the transformation you have to write a groovy script
+    for the element you want to edit. There are 2 different hooks where you
+    can influence the transformation. The first is right after the parsing of
+    HTML code and before the conversion starts. The second is at the end of
+    the transformation, when the DocBook tree is traversed a last time.</para>
+
+    <section>
+      <title>Customization of the HTML tree</title>
+
+      <para>The customization of the HTML tree can be used to remove certain
+      type of elements, e.g. to suppress all &lt;script&gt; tags. To
+      accomplish this, you have to create a file named
+      <filename>script.groovy</filename> in a directory of your choice. When
+      executing <command>herold</command> use the command line argument
+      <command>--html-script-path</command> to point to this directory. The
+      script will be called for every node that represents a script tag. As
+      binding it has the variable node, which is of type
+      <classname>org.dbdoclet.xiphias.dom.NodeImpl</classname> and references
+      the DOM node. The following program listing shows the script:</para>
+
+      <programlisting>node.getParentNode().removeChild(node);</programlisting>
+
+      <para>At this stage you can manipulate the DOM tree of the HTML code to
+      remove everything unneccesary like advertisment, banners or
+      tables.</para>
+    </section>
+
+    <section>
+      <title>Customization of the DocBook tree</title>
+
+      <para>If you want to manipulate the resulting DocBook, you can create
+      groovy scripts for certain elements, e.g. to replace the info section of
+      an article element write a script named
+      <filename>article.groovy</filename>. When executing
+      <command>herold</command> use the command line argument
+      <command>--docbook-script-path</command> to point to the directory which
+      contains your script. Here is an example:</para>
+
+      <screen>herold --in=Article.html --out=Article.xml --docbook-script-path=./scripts/docbook</screen>
+
+      <para>The groovy script
+      <filename>article.groovy</filename><programlisting
+      linenumbering="numbered">
+import javax.xml.xpath.*
+import org.dbdoclet.trafo.tag.docbook.DocBookTagFactory
+
+println "Customizing element article..."
+
+def xpath = XPathFactory.newInstance().newXPath()
+
+def nodes = xpath.evaluate( './info', node, XPathConstants.NODESET )
+
+nodes.each { 
+  node.removeChild(it);
+}
+
+DocBookTagFactory dbf = new DocBookTagFactory()
+node.insertChild(0, dbf.createInfo().appendChild(dbf.createTitle("Customized title")))
+
+</programlisting></para>
+    </section>
+
+    <section>
+      <title>Howto customize the transformation of span</title>
+
+      <para>This chapter shows the customized transformation of HTML span
+      elements with a certain class attribute to markup elements in the
+      resulting DocBook XML. The path of the input HTML file is ./span.html
+      and the content looks like this:</para>
+
+      <programlisting>&lt;html&gt; 
+  &lt;body&gt; 
+    &lt;p&gt;Lorem ipsum &lt;span class="tag"&gt;dolor&lt;/span&gt; sit &lt;span&gt;amet&lt;/span&gt; consectetur, adipisci velit.&lt;/p&gt; 
+  &lt;/body&gt; 
+&lt;/html&gt;</programlisting>
+
+      <para>To customize the transformation, a groovy script must be created
+      which manipulates the HTML-Tree and gives a editor instruction to the
+      transformation engine. The script is located in the directory
+      ./scripts/html and its name is span.groovy:</para>
+
+      <programlisting linenumbering="numbered">import org.dbdoclet.trafo.tag.docbook.Markup
+import org.dbdoclet.xiphias.dom.NodeImpl
+import org.dbdoclet.xiphias.dom.TransformInstruction
+import org.w3c.dom.Node
+
+String attr = node.getAttribute("class") 
+
+if (attr != null &amp;&amp; attr == "tag") {
+  Markup markup = new Markup() 
+  TransformInstruction ti = new TransformInstruction()
+  ti.setReplacement(markup) 
+  node.setTransformInstruction(ti) 
+} </programlisting>
+
+      <para>The script is called for every span element while traversing the
+      HTML tree. Herold passes a parameter named node of type
+      org.dbdoclet.xiphias.dom.NodeImpl to the groovy code. In the next step
+      the script checks wether an attribute class with a value of tag exists
+      in the node. If this test returns true, an object of type
+      org.dbdoclet.trafo.tag.docbook.Markup is created. Then this markup
+      object is stored as replacement in an also newly created
+      TransformInstruction object. Finally the transform instruction is added
+      to the node. Later, when the transformation engine is traversing the
+      tree, the instruction will be valuated and the span element will be
+      transformed to a markup tag. To execute herold with this customization
+      run the command:</para>
+
+      <screen>herold -i span.html --html-script-path=./scripts/html/</screen>
+
+      <para>The result shoul look like this:</para>
+
+      <programlisting linenumbering="numbered">&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
+&lt;article version="5.0" xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink"&gt;
+  &lt;info&gt;
+    &lt;title&gt;Lorem ipsum &lt;/title&gt;
+  &lt;/info&gt; 
+  &lt;para&gt;Lorem ipsum &lt;markup&gt;dolor&lt;/markup&gt; sit amet consectetur, adipisci velit.&lt;/para&gt;
+&lt;/article&gt; </programlisting>
+    </section>
+  </section>
+</article>

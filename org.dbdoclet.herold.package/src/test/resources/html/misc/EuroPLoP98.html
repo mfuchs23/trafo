@@ -1,0 +1,2412 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1">
+<TITLE>C++ Idioms (Presented at EuroPLoP 98)</TITLE>
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BGCOLOR="#FFFFFF">
+<!-- BEGIN WAYBACK TOOLBAR INSERT -->
+
+<script type="text/javascript" src="/static/js/disclaim-element.js" ></script>
+<script type="text/javascript" src="/static/js/graph-calc.js" ></script>
+<script type="text/javascript" src="/static/jflot/jquery.min.js" ></script>
+<script type="text/javascript">
+//<![CDATA[
+var firstDate = 820454400000;
+var lastDate = 1388534399999;
+var wbPrefix = "/web/";
+var wbCurrentUrl = "http:\/\/users.rcn.com\/jcoplien\/Patterns\/C++Idioms\/EuroPLoP98.html";
+
+var curYear = -1;
+var curMonth = -1;
+var yearCount = 18;
+var firstYear = 1996;
+var imgWidth = 450;
+var yearImgWidth = 25;
+var monthImgWidth = 2;
+var trackerVal = "none";
+var displayDay = "25";
+var displayMonth = "Nov";
+var displayYear = "2010";
+var prettyMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function showTrackers(val) {
+	if(val == trackerVal) {
+		return;
+	}
+	if(val == "inline") {
+		document.getElementById("displayYearEl").style.color = "#ec008c";
+		document.getElementById("displayMonthEl").style.color = "#ec008c";
+		document.getElementById("displayDayEl").style.color = "#ec008c";		
+	} else {
+		document.getElementById("displayYearEl").innerHTML = displayYear;
+		document.getElementById("displayYearEl").style.color = "#ff0";
+		document.getElementById("displayMonthEl").innerHTML = displayMonth;
+		document.getElementById("displayMonthEl").style.color = "#ff0";
+		document.getElementById("displayDayEl").innerHTML = displayDay;
+		document.getElementById("displayDayEl").style.color = "#ff0";
+	}
+   document.getElementById("wbMouseTrackYearImg").style.display = val;
+   document.getElementById("wbMouseTrackMonthImg").style.display = val;
+   trackerVal = val;
+}
+function getElementX2(obj) {
+	var thing = jQuery(obj);
+	if((thing == undefined) 
+			|| (typeof thing == "undefined") 
+			|| (typeof thing.offset == "undefined")) {
+		return getElementX(obj);
+	}
+	return Math.round(thing.offset().left);
+}
+function trackMouseMove(event,element) {
+
+   var eventX = getEventX(event);
+   var elementX = getElementX2(element);
+   var xOff = eventX - elementX;
+	if(xOff < 0) {
+		xOff = 0;
+	} else if(xOff > imgWidth) {
+		xOff = imgWidth;
+	}
+   var monthOff = xOff % yearImgWidth;
+
+   var year = Math.floor(xOff / yearImgWidth);
+	var yearStart = year * yearImgWidth;
+   var monthOfYear = Math.floor(monthOff / monthImgWidth);
+   if(monthOfYear > 11) {
+       monthOfYear = 11;
+   }
+   // 1 extra border pixel at the left edge of the year:
+   var month = (year * 12) + monthOfYear;
+   var day = 1;
+	if(monthOff % 2 == 1) {
+		day = 15;
+	}
+	var dateString = 
+		zeroPad(year + firstYear) + 
+		zeroPad(monthOfYear+1,2) +
+		zeroPad(day,2) + "000000";
+
+	var monthString = prettyMonths[monthOfYear];
+	document.getElementById("displayYearEl").innerHTML = year + 1996;
+	document.getElementById("displayMonthEl").innerHTML = monthString;
+	// looks too jarring when it changes..
+	//document.getElementById("displayDayEl").innerHTML = zeroPad(day,2);
+
+	var url = wbPrefix + dateString + '/' +  wbCurrentUrl;
+	document.getElementById('wm-graph-anchor').href = url;
+
+   //document.getElementById("wmtbURL").value="evX("+eventX+") elX("+elementX+") xO("+xOff+") y("+year+") m("+month+") monthOff("+monthOff+") DS("+dateString+") Moy("+monthOfYear+") ms("+monthString+")";
+   if(curYear != year) {
+       var yrOff = year * yearImgWidth;
+       document.getElementById("wbMouseTrackYearImg").style.left = yrOff + "px";
+       curYear = year;
+   }
+   if(curMonth != month) {
+       var mtOff = year + (month * monthImgWidth) + 1;
+       document.getElementById("wbMouseTrackMonthImg").style.left = mtOff + "px";
+       curMonth = month;
+   }
+}
+//]]>
+</script>
+
+<style type="text/css">body{margin-top:0!important;padding-top:0!important;min-width:800px!important;}#wm-ipp a:hover{text-decoration:underline!important;}</style>
+<div id="wm-ipp" style="display:none; position:relative;padding:0 5px;min-height:70px;min-width:800px; z-index:9000;">
+<div id="wm-ipp-inside" style="position:fixed;padding:0!important;margin:0!important;width:97%;min-width:780px;border:5px solid #000;border-top:none;background-image:url(/static/images/toolbar/wm_tb_bk_trns.png);text-align:center;-moz-box-shadow:1px 1px 3px #333;-webkit-box-shadow:1px 1px 3px #333;box-shadow:1px 1px 3px #333;font-size:11px!important;font-family:'Lucida Grande','Arial',sans-serif!important;">
+   <table style="border-collapse:collapse;margin:0;padding:0;width:100%;"><tbody><tr>
+   <td style="padding:10px;vertical-align:top;min-width:110px;">
+   <a href="/web/" title="Wayback Machine home page" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wayback-toolbar-logo.png" alt="Wayback Machine" width="110" height="39" border="0"/></a>
+   </td>
+   <td style="padding:0!important;text-align:center;vertical-align:top;width:100%;">
+
+       <table style="border-collapse:collapse;margin:0 auto;padding:0;width:570px;"><tbody><tr>
+       <td style="padding:3px 0;" colspan="2">
+       <form target="_top" method="get" action="/web/form-submit.jsp" name="wmtb" id="wmtb" style="margin:0!important;padding:0!important;"><input type="text" name="url" id="wmtbURL" value="http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html" style="width:400px;font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;" onfocus="javascript:this.focus();this.select();" /><input type="hidden" name="type" value="replay" /><input type="hidden" name="date" value="20101125222546" /><input type="submit" value="Go" style="font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;margin-left:5px;" /><span id="wm_tb_options" style="display:block;"></span></form>
+       </td>
+       <td style="vertical-align:bottom;padding:5px 0 0 0!important;" rowspan="2">
+           <table style="border-collapse:collapse;width:110px;color:#99a;font-family:'Helvetica','Lucida Grande','Arial',sans-serif;"><tbody>
+			
+           <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+           <tr style="width:110px;height:16px;font-size:10px!important;">
+           	<td style="padding-right:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20101024134005/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="24 Oct 2010"><strong>OCT</strong></a>
+		                
+               </td>
+               <td id="displayMonthEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight:bold;text-transform:uppercase;width:34px;height:15px;padding-top:1px;text-align:center;" title="You are here: 22:25:46 Nov 25, 2010">NOV</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20120928180753/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="28 Sep 2012"><strong>SEP</strong></a>
+		                
+               </td>
+           </tr>
+
+           <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+           <tr>
+               <td style="padding-right:9px;white-space:nowrap;overflow:visible;text-align:right!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+		                <a href="/web/20101124220655/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html" title="22:06:55 Nov 24, 2010" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wm_tb_prv_on.png" alt="Previous capture" width="14" height="16" border="0" /></a>
+		                
+               </td>
+               <td id="displayDayEl" style="background:#000;color:#ff0;width:34px;height:24px;padding:2px 0 0 0;text-align:center;font-size:24px;font-weight: bold;" title="You are here: 22:25:46 Nov 25, 2010">25</td>
+				<td style="padding-left:9px;white-space:nowrap;overflow:visible;text-align:left!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+		                <a href="/web/20120928180753/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html" title="18:07:53 Sep 28, 2012" style="background-color:transparent;border:none;"><img src="/static/images/toolbar/wm_tb_nxt_on.png" alt="Next capture" width="14" height="16" border="0"/></a>
+		                
+			    </td>
+           </tr>
+
+           <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+           <tr style="width:110px;height:13px;font-size:9px!important;">
+				<td style="padding-right:9px;font-size:11px!important;font-weight: bold;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20090524045254/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="24 May 2009"><strong>2009</strong></a>
+		                
+               </td>
+               <td id="displayYearEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight: bold;padding-top:1px;width:34px;height:13px;text-align:center;" title="You are here: 22:25:46 Nov 25, 2010">2010</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight: bold;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+		                <a href="/web/20120928180753/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html" style="text-decoration:none;color:#33f;font-weight:bold;background-color:transparent;border:none;" title="28 Sep 2012"><strong>2012</strong></a>
+		                
+				</td>
+           </tr>
+           </tbody></table>
+       </td>
+
+       </tr>
+       <tr>
+       <td style="vertical-align:middle;padding:0!important;">
+           <a href="/web/20101125222546*/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html" style="color:#33f;font-size:11px;font-weight:bold;background-color:transparent;border:none;" title="See a list of every capture for this URL"><strong>25 captures</strong></a>
+           <div style="margin:0!important;padding:0!important;color:#666;font-size:9px;padding-top:2px!important;white-space:nowrap;" title="Timespan for captures of this URL">20 Oct 03 - 28 Sep 12</div>
+       </td>
+       <td style="padding:0!important;">
+       <a style="position:relative; white-space:nowrap; width:450px;height:27px;" href="" id="wm-graph-anchor">
+       <div id="wm-ipp-sparkline" style="position:relative; white-space:nowrap; width:450px;height:27px;background-color:#fff;cursor:pointer;border-right:1px solid #ccc;" title="Explore captures for this URL">
+			<img id="sparklineImgId" style="position:absolute; z-index:9012; top:0px; left:0px;"
+				onmouseover="showTrackers('inline');" 
+				onmouseout="showTrackers('none');"
+				onmousemove="trackMouseMove(event,this)"
+				alt="sparklines"
+				width="450"
+				height="27"
+				border="0"
+				src="/web/jsp/graph.jsp?graphdata=450_27_1996:-1:000000000000_1997:-1:000000000000_1998:-1:000000000000_1999:-1:000000000000_2000:-1:000000000000_2001:-1:000000000000_2002:-1:000000000000_2003:-1:000000000100_2004:-1:000011000000_2005:-1:100000000002_2006:-1:000000000000_2007:-1:010001000001_2008:-1:000101110100_2009:-1:001110000000_2010:10:101110000120_2011:-1:000000000000_2012:-1:000000001000_2013:-1:000000000000"></img>
+			<img id="wbMouseTrackYearImg" 
+				style="display:none; position:absolute; z-index:9010;"
+				width="25" 
+				height="27"
+				border="0"
+				src="/static/images/toolbar/transp-yellow-pixel.png"></img>
+			<img id="wbMouseTrackMonthImg"
+				style="display:none; position:absolute; z-index:9011; " 
+				width="2"
+				height="27" 
+				border="0"
+				src="/static/images/toolbar/transp-red-pixel.png"></img>
+       </div>
+		</a>
+
+       </td>
+       </tr></tbody></table>
+   </td>
+   <td style="text-align:right;padding:5px;width:65px;font-size:11px!important;">
+       <a href="javascript:;" onclick="document.getElementById('wm-ipp').style.display='none';" style="display:block;padding-right:18px;background:url(/static/images/toolbar/wm_tb_close.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;margin-bottom:23px;background-color:transparent;border:none;" title="Close the toolbar">Close</a>
+       <a href="http://faq.web.archive.org/" style="display:block;padding-right:18px;background:url(/static/images/toolbar/wm_tb_help.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;background-color:transparent;border:none;" title="Get some help using the Wayback Machine">Help</a>
+   </td>
+   </tr></tbody></table>
+
+</div>
+</div>
+<script type="text/javascript">
+ var wmDisclaimBanner = document.getElementById("wm-ipp");
+ if(wmDisclaimBanner != null) {
+   disclaimElement(wmDisclaimBanner);
+ }
+</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+
+
+<center>
+<FONT FACE="Times" SIZE=8>
+<B>C++ Idioms</B>
+</FONT>
+<P>
+<FONT FACE="Times" SIZE=5>
+James O. Coplien
+<br>
+</FONT>
+<FONT FACE="Times" SIZE=4>
+Lucent Technologies, Bell Labs Innovations
+<br>
+Author Address:  ILIE00
+2A312, 263 Shuman Boulevard, Naperville
+IL 60566-7050 USA</P>
+<P>E-mail:
+</FONT><FONT FACE="Courier"
+SIZE=4><a href="mailto:cope@research.bell-labs.com">cope@research.bell-labs.com</a></P>
+</FONT><FONT FACE="Times" SIZE=2>
+<P>Copyright &copy;1998
+Lucent Technologies, Bell Labs
+Innovations. All rights
+reserved. Permission granted to reprint
+verbatim for non-commercial use
+provided this copyright notice appears.</P>
+</FONT><FONT FACE="Times" SIZE=4>
+</center>
+<hr>
+<H1>Introduction</H1>
+<P ALIGN="JUSTIFY">This paper attempts
+to do three things.  The first is to
+recast the well-known idioms of
+<I>Advanced C++ Programming Styles and
+Idioms</I> </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Coplien1992"><FONT
+FACE="Times"
+SIZE=4>[Coplien1992]</FONT></A><FONT
+FACE="Times" SIZE=4> in pattern form.
+The second is to organize these idioms,
+which until now have survived as
+independent and largely unrelated
+patterns, into a true pattern
+language.  That means that the patterns
+form a graph and that they should be
+applied in an order dictated by the
+structure of the graph.  The third goal
+is to show that the patterns together
+(as a pattern language) attack what is
+metaphorically, conceptually, or
+actually a structural problem.
+Structure is a central element in
+Alexander's theories of
+beauty, a perspective that pervades
+all his work but which has become more
+directly articulated in recent works
+such as Nature of Order.  These
+patterns do piecemeal construction of
+the structure of an inheritance
+hierarchy and the structure of the
+classes within it.  The paper tries to
+explore that geometric nature.</P>
+<H1>Pattern Intents</H1>
+<P ALIGN="JUSTIFY">Overall, this
+pattern language deals with one aspect
+of C++ design:  In particular, it deals
+with that aspect that focuses on
+algebraic types.  C++ is rich in
+features that support algebraic types,
+including  operator overloading and a
+good family of built-in numeric types.
+The idioms surrounding the algebraic
+view are strong enough that the
+tradition carries on in libraries for
+strings and other non-numeric types.
+There are many non-numeric and,
+properly, non-algebraic types to which
+many of these patterns may apply.</P>
+<P ALIGN="JUSTIFY">There are also many
+inheritance hierarchies to which the
+algebraic patterns in particular are
+irrelevant;  some types just don't
+have algebraic properties.  The same is
+true even for patterns like </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><FONT
+FACE="Times"
+SIZE=4>Handle/Body</FONT></A><FONT
+FACE="Times" SIZE=4> (which applies
+largely to types that behave as
+built-in value types) and </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A><FONT FACE="Times"
+SIZE=4> (which is pertinent for
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><FONT
+FACE="Times"
+SIZE=4>Handle/Body</FONT></A><FONT
+FACE="Times" SIZE=4> instances with
+dynamically allocated resources).  The
+Context and Forces sections of each
+pattern guide the reader in the
+appropriate application of these
+patterns to individual problems.</P>
+<P ALIGN="JUSTIFY">This pattern
+language does not focus on techniques
+based on templates.  One can view
+templates largely as a macro facility
+that transforms an existing inheritance
+structure into an isomorphic
+structure.  However, there are some
+idiomatic uses of templates that might
+be considered in later iterations of
+this pattern language.</P>
+<P ALIGN="JUSTIFY">These are the
+pattern intents, a quick index of the
+patterns in this paper.</P>
+
+<UL>
+<LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><B><FONT
+FACE="Times"
+SIZE=4>Handle/Body</B></FONT></A><FONT
+FACE="Times" SIZE=4>:  Separating
+Interface from Implementation.</LI>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><B><FONT
+FACE="Times" SIZE=4>Counted
+Body</B></FONT></A><FONT FACE="Times"
+SIZE=4>:  Manage logical sharing and
+proper resource deallocation of objects
+that use dynamically allocated resources.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#DetachedCountedBody"><B><FONT
+FACE="Times" SIZE=4>Detached Counted
+Body</B></FONT></A><FONT FACE="Times"
+SIZE=4>:  Adding reference counting to
+an object to which a reference count
+cannot directly be added.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBodyHierarchy"><B><FONT
+FACE="Times" SIZE=4>Handle/Body
+Hierarchy</B></FONT></A><FONT
+FACE="Times" SIZE=4>:  To separate
+representation inheritance from
+subtyping inheritance.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#EnvelopeLetter"><B><FONT
+FACE="Times"
+SIZE=4>Envelope/Letter</B></FONT></A><FONT
+FACE="Times" SIZE=4>:  To tie together
+common semantics of handle and body classes.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#VirtualConstructor"><B><FONT
+FACE="Times" SIZE=4>Virtual
+Constructor</B></FONT></A><FONT
+FACE="Times" SIZE=4>: How to build an
+object of known abstract type, but of
+unknown concrete type, without
+violating the encapsulation of the
+inheritance hierarchy.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#ConcreteDataType"><B><FONT
+FACE="Times" SIZE=4>Concrete Data
+Type</B></FONT></A><FONT FACE="Times"
+SIZE=4>:  Determine whether to allocate
+an object on the heap or in the current scope.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#AlgebraicHierarchy"><B><FONT
+FACE="Times" SIZE=4>Algebraic
+Hierarchy</B></FONT></A><FONT
+FACE="Times" SIZE=4>: Structuring
+classes whose type relationships follow
+classic algebraic types.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HomogeneousAddition"><B><FONT
+FACE="Times" SIZE=4>Homogeneous
+Addition</B></FONT></A><FONT
+FACE="Times" SIZE=4>:  Simplify the
+implementation of operations in an
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#AlgebraicHierarchy"><FONT
+FACE="Times" SIZE=4>Algebraic Hierarchy</FONT></A>.</LI></P>
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromoteAndAdd"><B><FONT
+FACE="Times" SIZE=4>Promote And
+Add</B></FONT></A><FONT FACE="Times"
+SIZE=4>: How to add objects of two
+different types when only </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HomogeneousAddition"><FONT
+FACE="Times" SIZE=4>Homogeneous
+Addition</FONT></A><FONT FACE="Times"
+SIZE=4> is supported.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromotionLadder"><B><FONT
+FACE="Times" SIZE=4>Promotion
+Ladder:</B></FONT></A><FONT FACE="Times"
+SIZE=4>  How to assign type promotion
+responsibility to classes in an
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#AlgebraicHierarchy"><FONT
+FACE="Times" SIZE=4>Algebraic Hierarchy</FONT></A>.</LI></P>
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#NonHierarchicalAddition"><B><FONT
+FACE="Times" SIZE=4>Non-Hierarchical
+Addition</B></FONT></A><FONT
+FACE="Times" SIZE=4>: How to deal with
+arithmetic operations between types
+when neither can be promoted to the other.</LI></P>
+<P ALIGN="JUSTIFY"><LI></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#TypePromotion"><B><FONT
+FACE="Times" SIZE=4>Type
+Promotion</B></FONT></A><FONT
+FACE="Times" SIZE=4>: How to use two
+type conversion
+mechanisms--operator functions and
+constructors--to build a consistent
+type promotion structure.</LI></P></UL>
+
+<H2>The pattern language structure</H2>
+<P ALIGN="JUSTIFY">The patterns are
+presented as a pattern language with
+the structure of Figure 1.  All the
+patterns are contained in </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><FONT
+FACE="Times"
+SIZE=4>Handle/Body</FONT></A><FONT
+FACE="Times" SIZE=4> and/or </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#ConcreteDataType"><FONT
+FACE="Times" SIZE=4>Concrete Data
+Type</FONT></A><FONT FACE="Times"
+SIZE=4>. Many of the GOF patterns
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#GOF1995"><FONT
+FACE="Times"
+SIZE=4>[GOF1995]</FONT></A><FONT
+FACE="Times" SIZE=4>, indicated as
+rounded boxes instead of rectangles,
+are also in  this pattern language.
+The GOF patterns are not reiterated
+here.</P>
+<H2>A Spatial Progression</H2>
+<P ALIGN="JUSTIFY"><CENTER><IMG
+SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image14.gif" WIDTH=262 HEIGHT=230></P>
+</CENTER>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">One can view these
+patterns as a way to guide the geometry
+of an inheritance hierarchy in C++.
+Geometry is an essential consideration
+in patterns, a fact  most contemporary
+software patterns fail to heed.
+Inheritance structures are one of the
+most accessible structures of
+object-oriented software design, though
+they are less evident in code than
+implementation hierarchies or other
+direct geometric properties like
+indentation (and what it portends for
+scope and other semantic properties).</P>
+<P ALIGN="JUSTIFY"></P></FONT>
+<CENTER>
+<TABLE BORDER CELLSPACING=2
+BORDERCOLOR="#000000" CELLPADDING=5 WIDTH=314>
+<TR><TD WIDTH="49%" VALIGN="TOP">
+<B><FONT FACE="Times" SIZE=4
+COLOR="#808080"><P ALIGN="JUSTIFY"><A
+NAME="_Hlk426694981">Pattern Name</B></FONT></TD>
+<TD WIDTH="51%" VALIGN="TOP">
+<B><FONT FACE="Times" SIZE=4
+COLOR="#808080"><P ALIGN="JUSTIFY">Geometry</B></FONT></TD>
+</TR>
+<TR><TD WIDTH="49%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P ALIGN="JUSTIFY">Handle/Body</FONT></TD>
+<TD WIDTH="51%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><IMG SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image47.gif"
+WIDTH=138 HEIGHT=31></FONT></TD>
+</TR>
+<TR><TD WIDTH="49%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Counted Body</FONT></TD>
+<TD WIDTH="51%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><IMG SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image48.gif"
+WIDTH=138 HEIGHT=31></FONT></TD>
+</TR>
+<TR><TD WIDTH="49%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Detached Counted Body</FONT></TD>
+<TD WIDTH="51%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><IMG SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image49.gif"
+WIDTH=138 HEIGHT=31></FONT></TD>
+</TR>
+<TR><TD WIDTH="49%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Handle/Body Hierarchy</P>
+<P ALIGN="JUSTIFY">&nbsp;</FONT></TD>
+<TD WIDTH="51%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><IMG SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image50.gif"
+WIDTH=139 HEIGHT=75></FONT></TD>
+</TR>
+<TR><TD WIDTH="49%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P ALIGN="JUSTIFY">Envelope/Letter</P>
+<P ALIGN="JUSTIFY">Virtual Constructor</FONT></TD>
+<TD WIDTH="51%" VALIGN="TOP">
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><IMG SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image51.gif"
+WIDTH=139 HEIGHT=75></FONT></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+<FONT FACE="Times" SIZE=6><P ALIGN="JUSTIFY"></A></P>
+</FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Most of the crisp
+idioms of <I>Advanced C++ Programming
+Styles and Idioms</I> deal with class
+structures and, in particular,
+inheritance structures.  They are the
+foundations of flexible object-oriented
+programming in C++.</P>
+<P ALIGN="JUSTIFY">Here, we both
+develop a pattern language based on
+problems, solutions, and intents, and
+we develop the corresponding
+progression of geometric structures as
+in Table 1:  Progression of Geometric
+Structure in the Patterns.  Only the
+more basic patterns are depicted here.
+Each shows  two ellipses, one ellipse
+representing the interface class, and
+another, the representation class.
+Objects (the rectangles) are members of
+the set defined by the class.  The
+arrows show the relationships between
+objects or classes as appropriate.</P>
+<HR>
+<a NAME="HandleBody">
+<H1>Handle/Body</H1></a>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Advanced C++ programs
+using user-defined classes which should
+behave like built-in types as much as possible.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">How do you separate
+interface from implementation in C++ objects?</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces:</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>C++ public and
+private sections were designed to
+separate implementation from interface,
+but changes even to private data force recompilation.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Changes to a
+class implementation cause unnecessary
+recompilation of client code.</LI></P>
+<P ALIGN="JUSTIFY"><LI>The class
+implementation is visible (though
+inaccessible) in a C++ class
+declaration.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Split a design class
+into two implementation classes. One
+takes on the role of an identifier and
+presents the class interface to the
+user.  We call this first class the
+<i>handle</i>.  The other class embodies the
+implementation and is called the
+<i>body</i>.  The handle forwards member
+function invocations to the body.</P>
+<P ALIGN="JUSTIFY"><CENTER><IMG
+SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image20.gif" WIDTH=323 HEIGHT=141></CENTER></P>
+<B><I><P ALIGN="JUSTIFY">Example</B></I>:</P><DIR>
+<PRE>
+</FONT><FONT FACE="Courier" SIZE=4>class StringRep {
+// this can be in a separate source file
+// than class String, so it can be compiled
+// separately, and made invisible to the
+// client
+friend class String;
+	StringRep(const char *s);
+	~StringRep();
+	int count; char *rep;
+};
+
+class String {
+public:
+	String();
+	String(const String &amp;s);
+	String &amp;operator=(const String &amp;s);
+	~String();
+	String(const char *s);
+	. . . .
+private:
+	StringRep *rep;
+};
+</FONT><FONT FACE="Times" SIZE=4><P ALIGN="JUSTIFY">&nbsp;</DIR>
+</PRE>
+
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context:
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Data changes can now
+safely be made to the implementation
+(body) without recompiling clients of
+the handle.</P>
+<P ALIGN="JUSTIFY">The implementation
+becomes &quot;more hidden&quot; behind
+a pointer.</P>
+<P ALIGN="JUSTIFY">The extra level of
+indirection has a performance cost.</P>
+<P ALIGN="JUSTIFY">This pattern
+doesn't address the issues of deep
+versus shallow copy and other runtime
+dynamics;  see <A
+NAME="_Hlk418927114"></A></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A>,<FONT FACE="Times"
+SIZE=4> <U> </U></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#EnvelopeLetter"><FONT
+FACE="Times"
+SIZE=4>Envelope/Letter</FONT></A>,<FONT
+FACE="Times" SIZE=4> and their
+subtending patterns.</P>
+<P ALIGN="JUSTIFY">The pattern also
+makes inheritance less useful;  see
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBodyHierarchy"><FONT
+FACE="Times" SIZE=4>Handle/Body
+Hierarchy</FONT></A><FONT FACE="Times"
+SIZE=4> to overcome this shortcoming. </P>
+<P ALIGN="JUSTIFY">This pattern has
+limits in managing the dynamically
+allocated memory of the body class; 
+see </FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A><FONT FACE="Times"
+SIZE=4>. It also introduces the need
+for occasional redundant update to the
+handle and body classes, a problem
+addressed in part by </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#EnvelopeLetter"><FONT
+FACE="Times"
+SIZE=4>Envelope/Letter</FONT></A><FONT
+FACE="Times" SIZE=4>.  To use this
+pattern in conjunction with
+inheritance, see </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBodyHierarchy"><FONT
+FACE="Times" SIZE=4>Handle/Body
+Hierarchy</FONT></A><FONT FACE="Times"
+SIZE=4>.</P>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Design Rationale:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">All interesting
+problems in computer science reduce to
+what's in a name and can be solved by
+one more level of indirection.  In
+high-level languages like Smalltalk,
+identifiers and objects are different
+things.  An object can be associated
+with one or more identifiers.  The
+loose association between identifiers
+and objects clarifies questions of
+equality and identity, for example, and
+lays a foundation for automatic garbage
+collection.  The </FONT>
+<A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A><FONT FACE="Times"
+SIZE=4> pattern takes advantage of this
+property as it apes Smalltalk garbage
+collection in a somewhat indirect way.</P>
+<HR>
+<a NAME="CountedBody">
+<H1>Counted Body</H1></a>
+<P><FONT FACE="Helvetica" SIZE=4><B><I>Also known as:
+Counted Handle/Body</I></B></FONT></P
+><P><B><FONT FACE="Helvetica" SIZE=4>
+Context:</FONT></B></P>
+</FONT><FONT FACE="Times" SIZE=4>
+<P ALIGN="JUSTIFY">A design has been
+transformed using </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><FONT
+FACE="Times"
+SIZE=4>Handle/Body</FONT></A><FONT
+FACE="Times" SIZE=4> class pairs.  The
+pattern may be relevant to other
+object-based programming languages.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Naive implementations
+of assignment in C++ are often
+inefficient or incorrect.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces:</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>Assignment in C++
+is defined recursively as
+member-by-member assignment with
+copying as the termination of the
+recursion; it would be more efficient
+and more in the spirit of
+Smalltalk--that is, in the spirit
+of the benefits promised by close
+adherence to the object
+paradigm--if copying were rebinding.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Copying of
+bodies is expensive.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Copying can be
+avoided by using pointers and
+references, but these leave the
+problem of who is responsible for
+cleaning up the object and leave a
+user-visible distinction between
+built-in types and user-defined types.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Sharing bodies
+on assignment is usually semantically
+incorrect if the shared body is
+modified through one of the handles.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Add a reference count
+to the body class to facilitate memory
+management;  hence the name
+&quot;Counted Body.&quot;</P>
+<P ALIGN="JUSTIFY">Memory management is
+added to the handle class, particularly
+to its implementation of
+initialization, assignment, copying,
+and destruction.</P>
+<P ALIGN="JUSTIFY">It is incumbent on
+any operation that modifies the state
+of the body to break the sharing of the
+body by making its own copy. It must
+decrement the reference count of the
+original body.</P>
+<B><I><P ALIGN="JUSTIFY">Example</B></I>:</P><DIR><PRE>
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">&nbsp;</P>
+class StringRep {
+friend class String;
+	StringRep(const char *s): count(1) {
+		strcpy(rep=new char[strlen(s)+1], s);
+	}
+	~StringRep() { delete [] rep; }
+	int count; char *rep;
+} *rep;
+
+class String {
+public:
+	String():rep(new StringRep("")) { }
+	String(const String &amp;s): rep(s.rep) { rep-&gt;count++; }
+	String &amp;operator=(const String &amp;s){
+		s.rep-&gt;count++;
+		if(--rep-&gt;count &lt;= 0) delete rep;
+		rep = s.rep;
+		return *this;
+	}
+	~String() {
+		if(--rep-&gt;count &lt;= 0) delete rep;
+	}
+	void putChar(char c) {
+		// putChar does memory management so
+		// it's a handle class member function
+		int len = strlen(rep-&gt;rep);
+		char *newrep = new char[len + 2];
+		strcpy(newrep, rep-&gt;rep);
+		newrep-&gt;rep[len] = c;
+		newrep-&gt;rep[len+1] = '\0';
+		if (--rep-&gt;count &lt;= 0) delete rep;
+		rep = new StringRep(newrep);
+	}
+	String(const char *s): rep(new StringRep(s)) { }
+	. . . .
+private:
+	class StringRep *rep;
+};
+
+int main() {
+	String a = "hello", b = "world";
+	a = b;
+	return 0;
+}
+<P ALIGN="JUSTIFY">&nbsp;</P></PRE>
+</DIR>
+
+</FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><CENTER><IMG SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image52.gif"
+WIDTH=324 HEIGHT=264></CENTER></P>
+
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Gratuitous copying is
+avoided, leading to a more efficient
+implementation.</P>
+<P ALIGN="JUSTIFY">Sharing is broken
+when the body state is modified through
+any handle. Sharing is preserved in the
+more common case of parameter passing,
+and so forth.</P>
+<P ALIGN="JUSTIFY">Special pointer and
+reference types are avoided.</P>
+<P ALIGN="JUSTIFY">Smalltalk semantics
+are approximated; garbage collection
+builds on this model.</P>
+<P ALIGN="JUSTIFY">This pattern
+presumes that the programmer can edit
+the source code for the abstraction of
+interest.  When that's not
+possible, use </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#DetachedCountedBody"><FONT
+FACE="Times" SIZE=4>Detached Counted
+Body</FONT></A><FONT FACE="Times"
+SIZE=4>.</P>
+<P ALIGN="JUSTIFY">Additional patterns
+are necessary to make such code
+thread-safe.</P>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Design Rationale:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Reference counting is
+efficient and spreads the overhead
+across the execution of real-time
+programs. This implementation is a
+variation of shallow copy with the
+semantics of deep copy and the
+efficiency of Smalltalk name-value
+pairs.</P>
+<P ALIGN="JUSTIFY">See also </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Cargill1996"><FONT
+FACE="Times"
+SIZE=4>[Cargill1996]</FONT></A><FONT
+FACE="Times" SIZE=4>.</P>
+<HR>
+<A name="DetachedCountedBody"><H1>Detached Counted Body</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Many C++ programs use
+types whose implementations use
+dynamically allocated
+memory. Programmers often create such
+types and put them in libraries without
+adding the machinery to make these
+types as well-behaved as built-in types.</P>
+<B><FONT FACE="Helvetica" SIZE=4><P ALIGN="JUSTIFY">Problem</B></FONT>:</P>
+<P ALIGN="JUSTIFY">How do you overcome
+overhead of an additional level of
+indirection that comes when applying
+the </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A><FONT FACE="Times"
+SIZE=4> pattern to immutable classes?</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces:</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>The standard
+solution, <U> </U></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A><FONT FACE="Times"
+SIZE=4>, embeds a reference count in a
+shared implementation that is managed
+by a handle class:</LI></P></UL>
+
+<P ALIGN="JUSTIFY"><CENTER><IMG
+SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image53.gif" WIDTH=309 HEIGHT=264></CENTER></P>
+
+<UL>
+<P ALIGN="JUSTIFY"><LI>However, we may
+not add a reference count to a library
+abstraction, since we only have object
+code and a header file. We could solve
+this with an added level of indirection,</LI></P></UL>
+
+<P ALIGN="JUSTIFY">&nbsp;</P>
+<P ALIGN="JUSTIFY"><CENTER><IMG
+SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image54.gif" WIDTH=315 HEIGHT=279></CENTER></P>
+<P ALIGN="JUSTIFY">but that adds a
+extra level of indirection to each
+dereference, and may be too expensive.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Associate both a shared
+count, and a separate shared body, with
+each instance of a common handle abstraction:</P>
+<P ALIGN="JUSTIFY"><CENTER><IMG
+SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image55.gif" WIDTH=309 HEIGHT=265></CENTER></P>
+<B><I><P ALIGN="JUSTIFY">Example</B></I>:</P><DIR>
+<PRE>
+</FONT><FONT FACE="Courier" SIZE=4><P
+ALIGN="JUSTIFY">class String {
+public:
+	String(): rep(new char[1]), count(new int(1)) {
+		rep[0] = '\0';
+	}
+	String(const String &amp;s): rep(s.rep), count(s.count) {
+		(*count)++;
+	}
+	String &amp;operator=(const String &amp;s) {
+		(*s.count)++;
+		if(--*count &lt;= 0) {
+			delete [] rep; delete count;
+		}
+		rep = s.rep;
+		count = s.count;
+		return *this;
+	}
+	~String() {
+		if(--*count &lt;= 0) {
+			delete [] rep;
+			delete count;
+		}
+	}
+	String(const char *s): count(new int(1)),
+			rep(new char[strlen(s)+1]) {
+		strcpy(rep,s);
+	}
+	. . . .
+private:
+	char *rep;
+	int *count;
+};
+
+int main() {
+	String a = "hello", b = "world";
+	a = b;
+	return 0;
+}
+</FONT><FONT FACE="Times" SIZE=4><P ALIGN="JUSTIFY">&nbsp;</P></PRE>
+</DIR>
+
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Now we can access the
+body with a single level of
+indirection, while still using only a
+single indirection for the count.</P>
+<P ALIGN="JUSTIFY">Handles are slightly
+more expensive to copy than in
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A>,<FONT FACE="Times"
+SIZE=4> memory fragmentation may
+increase, and initial construction
+overhead is higher because we are
+allocating multiple blocks.</P>
+<P ALIGN="JUSTIFY">The pattern source
+appears to be </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Koenig1995"><FONT
+FACE="Times"
+SIZE=4>[Koenig1995]</FONT></A>.<FONT
+FACE="Times" SIZE=4>  See also
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Cargill1996"><FONT
+FACE="Times"
+SIZE=4>[Cargill1996]</FONT></A>.<FONT
+FACE="Times" SIZE=4></P>
+<HR>
+<A name="HandleBodyHierarchy"><H1>Handle/Body Hierarchy</H1></A>
+<P><FONT FACE="Helvetica" SIZE=4><B><I>Also known as:
+Bridge</I></B></FONT></P
+><P><FONT FACE="Helvetica" SIZE=4><B>Context:</B></FONT></P>
+<FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">A C++ program in which
+the </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><FONT
+FACE="Times"
+SIZE=4>Handle/Body</FONT></A><FONT
+FACE="Times" SIZE=4> idiom has been
+applied, in which some classes have
+subtyping relationships and
+implementation-sharing relationships
+that do not correspond with each other.</P>
+<P ALIGN="JUSTIFY">One way this shows
+up is when a statically typed language
+that expresses subtyping as
+inheritance. The base class has an
+operation whose parameters correspond
+to degrees of freedom in its state
+space.  The interface of the subtype is
+more constrained than the interface of
+the supertype.  We want to inherit that
+operation in the derived class (which
+takes away at least one degree of
+freedom present in the base class; see
+the example that follows). Stated another way, some
+operations that are closed under the
+base class are not closed under the
+&#9;derived class.</P>
+<P ALIGN="JUSTIFY">Another way this
+shows up is when the base class has a
+larger state space than the derived
+class.  A derived class should restrict
+the state space of the base class.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">C++ ties implementation
+inheritance and representation
+inheritance together, and we may want
+to inherit each separately.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces:</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>You might want to
+inherit interface without inheriting
+implementation.</LI></P>
+<P ALIGN="JUSTIFY"><LI>In exceptional
+cases, you might want to inherit
+implementation without inheriting
+interface. For example, a base class
+member function may take one parameter
+for each of the degrees of freedom in
+its state space.  Because the derived
+class is a subtype of the base class,
+it has fewer degrees of freedom than
+the base class. To inherit a base class
+operation whose parameters map onto
+degrees of freedom in the state space,
+the derived class must elide one
+argument (or otherwise constrain the
+arguments). But a base class operation
+inherited by the derived class should
+exhibit  the same signature in both
+classes.</LI></P>
+<P ALIGN="JUSTIFY"><LI>If you inherit
+from a C++ class, you inherit its
+implementation.</LI></P>
+<P ALIGN="JUSTIFY"><LI>We usually use
+(public) inheritance (in the languages
+defined in the context) to express
+subtyping.</LI></P></UL>
+
+<B><I><P ALIGN="JUSTIFY">Example</B></I>:</P><DIR>
+<PRE>
+
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">class Ellipse {
+public:
+	Ellipse(Pdouble majorAxis,
+	Pdouble minorAxis, Point center);
+	virtual void resize(Pdouble majorAxis, Pdouble minorAxis);
+	. . . .
+private:
+	// representation is in terms of two
+	// foci, the constant sum of the distance 
+	// between any point on the ellipse and
+	// each of the two centers
+	Point center1, center2, sum;
+};</P>
+
+class Circle: public Ellipse { // because a
+	// Circle IS-A
+	// Ellipse
+public:
+	Circle(Pdouble radius, Point center): 
+	Ellipse(radius, radius, center) { }
+	void resize( ? );
+private:
+	// can reuse sum as the radius, and one
+	// of the centers as the center, but the
+	// other center is wasted
+};
+</FONT><FONT FACE="Times" SIZE=4><P ALIGN="JUSTIFY">&nbsp;</P></PRE>
+</DIR>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Maintain separate
+inheritance hierarchies for handle
+classes and body classes.  The base
+interface class contains a reference to
+the base  implementation class.</P>
+<P ALIGN="JUSTIFY"><CENTER><IMG
+SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image56.gif" WIDTH=310 HEIGHT=192></CENTER></P>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Interface and
+implementation can be separately
+inherited. A compact representation can
+be used, independent of the interface
+presented to the application
+programmer. Though this saves the
+memory of the extra datum inherited
+from the base class, it adds space for
+a pointer.</P>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Design Rationale:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Much of the power of
+object-oriented programming comes from
+separating identifiers and their
+semantics from objects and their
+semantics. In C++, objects adopt the
+semantics of the identifiers to which
+they are bound. Identifiers adopt the
+semantics of their compile-time type.</P>
+<P ALIGN="JUSTIFY">These semantics
+include object size, permissible
+operations, and compatibility with
+other types.</P>
+<P ALIGN="JUSTIFY">Because objects
+adopt the semantics of the identifiers
+through which they are manipulated,
+they carry the semantics of a
+compile-time type.</P>
+<P ALIGN="JUSTIFY">This chain of
+dependency can be broken with pointers
+(which relax object size restrictions)
+and virtual functions (which retain the
+semantics of a fixed set of permissible
+operations, but allow for variant
+implementations of an
+operation). However, no single language
+mechanism combines the implementation
+decoupling of pointers with the
+sharing of type semantics provided by
+inheritance.</P>
+<P ALIGN="JUSTIFY">In pure
+object-oriented languages, identifiers
+and objects have distinct
+semantics. There is a chain of
+dependency from type to object, but no
+compile-time dependency from identifier
+to type.</P>
+<P ALIGN="JUSTIFY">Though this
+seriously weakens compile-time type
+checking, it addresses the forces
+described earlier.</P>
+<P ALIGN="JUSTIFY">At first glance,
+</FONT><FONT FACE="Courier"
+SIZE=4>resize(Pdouble,Pdouble</FONT><FONT
+FACE="Times" SIZE=4>) seems to apply to
+</FONT><FONT FACE="Courier"
+SIZE=4>Ellipse</FONT><FONT FACE="Times"
+SIZE=4>s but &#9; not to </FONT><FONT
+FACE="Courier"
+SIZE=4>Circle</FONT><FONT FACE="Times"
+SIZE=4>s. It is easy to conclude this,
+because resize is closed under
+</FONT><FONT FACE="Courier"
+SIZE=4>Ellipse</FONT><FONT FACE="Times"
+SIZE=4>, but not under </FONT><FONT
+FACE="Courier"
+SIZE=4>Circle</FONT><FONT FACE="Times"
+SIZE=4>. However, resize applies
+equally &#9; to </FONT><FONT
+FACE="Courier"
+SIZE=4>Circle</FONT><FONT FACE="Times"
+SIZE=4>s as to </FONT><FONT
+FACE="Courier"
+SIZE=4>Ellipse</FONT><FONT FACE="Times"
+SIZE=4>s, and is closed under
+</FONT><FONT FACE="Courier"
+SIZE=4>Ellipse</FONT><FONT FACE="Times"
+SIZE=4>s in general. &#9; This means
+that any attempt to resize a
+</FONT><FONT FACE="Courier"
+SIZE=4>Circle</FONT><FONT FACE="Times"
+SIZE=4> changes it into an </FONT><FONT
+FACE="Courier"
+SIZE=4>Ellipse</FONT><FONT FACE="Times"
+SIZE=4>. Such dynamic retyping is
+difficult to support in the given
+context of statically typed
+languages. To overcome this
+restriction, use idioms (like the
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#EnvelopeLetter"><FONT
+FACE="Times" SIZE=4>Envelope/Letter
+</FONT></A><FONT FACE="Times"
+SIZE=4> <U>idiom</U>) or design patterns
+(like the GOF <U>Bridge</U> </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#GOF1995"><FONT
+FACE="Times"
+SIZE=4>[GOF1995]</FONT></A><FONT
+FACE="Times" SIZE=4>) that allow
+dynamic retyping of an object at
+run time. Here, the type is a function
+of the number of degrees of freedom in
+the state. This is a subtle
+&#9;difference from the GOF
+<U>State</U> pattern </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#GOF1995"><FONT
+FACE="Times"
+SIZE=4>[GOF1995]</FONT></A><FONT
+FACE="Times" SIZE=4> alone, where type
+depends on value.</P>
+<P ALIGN="JUSTIFY">Compare <U>Rungs of
+a Dual Hierarchy</U> from </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Martin1997"><FONT
+FACE="Times"
+SIZE=4>[Martin1997]</FONT></A><FONT
+FACE="Times" SIZE=4>.</P>
+<HR>
+<A name="EnvelopeLetter"><H1>Envelope/Letter</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">A program using
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><FONT
+FACE="Times"
+SIZE=4>Handle/Body</FONT></A><FONT
+FACE="Times" SIZE=4> pairs and/or
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A><FONT FACE="Times"
+SIZE=4> pairs</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Supporting multiple
+implementations of a single ADT
+instance across its lifetime</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces:</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>Multiple
+implementations of an ADT share
+signature:  we want to capture that in
+the design and code.</LI></P>
+<P ALIGN="JUSTIFY"><LI>All
+implementations (bodies) of a given ADT
+share signature with the ADT's
+interface (handle):  we want to capture
+that.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Adding a new
+operation to a handle/body pair causes
+redundant update to both classes.</LI></P>
+<P ALIGN="JUSTIFY"><LI>The handle
+implementation is coupled to the
+implementations of all possible bodies.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Derive all solution
+body classes from a common base class.
+To reflect the commonality in signature
+between the handle and the body, use
+the handle class as the common base
+class for alternative bodies. Make
+handle member functions virtual.  Each
+alternative implementation derived from
+the handle class (in its role as the
+class defining the interface to the
+implementations) overrides suitable
+virtual functions.  The base class
+implementation of these member
+functions defines the handle class
+functionality: it forwards requests to
+its associated body class instance.</P>
+<P ALIGN="JUSTIFY"><CENTER><IMG
+SRC="/web/20101125222546im_/http://users.rcn.com/jcoplien/Patterns/C++Idioms/Image26.gif" WIDTH=322 HEIGHT=200></CENTER></P>
+<P ALIGN="JUSTIFY">The solution is
+weakly reflexive.</P>
+<B><I><P ALIGN="JUSTIFY">Example</B></I>:</P>
+<P ALIGN="JUSTIFY">Consider a
+</FONT><FONT FACE="Courier"
+SIZE=4>Shape</FONT><FONT FACE="Times"
+SIZE=4> library with code to support
+</FONT><FONT FACE="Courier"
+SIZE=4>Circle</FONT><FONT FACE="Times"
+SIZE=4>s and </FONT><FONT
+FACE="Courier"
+SIZE=4>Ellipse</FONT><FONT FACE="Times"
+SIZE=4>s.  Consider an </FONT><FONT
+FACE="Courier"
+SIZE=4>Ellipse</FONT><FONT FACE="Times"
+SIZE=4> that is resized so it becomes a
+</FONT><FONT FACE="Courier"
+SIZE=4>Circle</FONT><FONT FACE="Times"
+SIZE=4>.  We could leave it as an
+</FONT><FONT FACE="Courier"
+SIZE=4>Ellipse</FONT><FONT FACE="Times"
+SIZE=4>, but changing the type to
+</FONT><FONT FACE="Courier"
+SIZE=4>Circle</FONT><FONT FACE="Times"
+SIZE=4> allows for significant
+optimizations.  For example, rotation
+can now be done much more efficiently.
+We can implement this either through
+changing type in place through a
+function like:</P><DIR>
+<DIR>
+
+</FONT><FONT FACE="Courier" SIZE=4><P
+ALIGN="JUSTIFY">void
+Shape::resize(Distance major, Distance minor);</P></DIR>
+</DIR>
+
+</FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">which would change the
+type of the body object pointed to by
+</FONT><FONT FACE="Courier"
+SIZE=4>*this</FONT><FONT FACE="Times"
+SIZE=4>;  or we could have </FONT><FONT
+FACE="Courier"
+SIZE=4>resize</FONT><FONT FACE="Times"
+SIZE=4> return a value whose type is
+determined at run time:</P><DIR>
+<DIR>
+
+</FONT><FONT FACE="Courier" SIZE=4><P
+ALIGN="JUSTIFY">Shape
+Shape::resize(Distance major, Distance
+minor) const;</P></DIR>
+</DIR>
+
+</FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">The same is true for
+algebraic types.</P>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">The ADT instance can
+now &quot;metamorphize&quot; between
+different body classes at run time.</P>
+<P ALIGN="JUSTIFY">All bodies share a
+common signature and share the
+signature of the handle.</P>
+<P ALIGN="JUSTIFY">New signatures need
+be added in one less place than if the
+information were duplicated.</P>
+<P ALIGN="JUSTIFY">The handle class can
+decouple itself from the
+implementation of alternative body
+classes, if its public member functions
+are virtual.</P>
+<P ALIGN="JUSTIFY">This pattern is the
+basis for </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#VirtualConstructor"><FONT
+FACE="Times" SIZE=4>Virtual
+Constructor</FONT></A><FONT
+FACE="Times" SIZE=4>s.</P>
+<P ALIGN="JUSTIFY">In </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#AlgebraicHierarchy"><FONT
+FACE="Times" SIZE=4>Algebraic
+Hierarchy</FONT></A>,<FONT FACE="Times"
+SIZE=4> this pattern forms the basis
+for a </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromotionLadder"><FONT
+FACE="Times" SIZE=4>Promotion
+Ladder</FONT></A>.<FONT FACE="Times"
+SIZE=4></P>
+<P ALIGN="JUSTIFY">To vary the
+implementation at run time, consider
+the <U>State</U> pattern.</P>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Design Rationale:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Others prefer to use a
+distinct base class for alternative
+implementations;  this is okay,
+but depends on the forces one wants to
+resolve.</P>
+<HR>
+<A name="VirtualConstructor"><H1>Virtual Constructor</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">A particular client
+wants to create an object of an
+unspecified class chosen from a
+specified class hierarchy.   Once
+created, any object created from the
+classes in the hierarchy can be used
+interchangeably by the client.   The
+particular class is chosen from
+an arbitrary global context according to
+the needs of the client.  The </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><FONT
+FACE="Times"
+SIZE=4>Handle/Body</FONT></A><FONT
+FACE="Times" SIZE=4> pattern has been
+applied.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">How do you create an
+object whose general type is known by
+the client requesting it, but whose
+specific subtype characteristics must
+be chosen from context?</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>You want to hide
+the implementation of the inheritance
+hierarchy from the user of the
+hierarchy's objects:  only the base
+class interface should be published.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Code must be
+written to select the most appropriate
+derived class.  The code should be
+associated with the abstraction that
+minimizes coupling between all classes
+involved.</LI></P>
+<P ALIGN="JUSTIFY"><LI>The client must
+be able to use the services of any
+derived class object.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Just use the </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#EnvelopeLetter"><FONT
+FACE="Times"
+SIZE=4>Envelope/Letter</FONT></A><FONT
+FACE="Times" SIZE=4> pattern
+structure.   The base class is an
+intermediary agent that selects the
+appropriate derived type from
+context. The notion of supporting
+multiple implementations of an object
+across its lifetime generalizes to
+selecting the appropriate initial
+implementation, even in the degenerate
+case that the body instance doesn't
+change over the lifetime of the
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HandleBody"><FONT
+FACE="Times"
+SIZE=4>Handle/Body</FONT></A><FONT
+FACE="Times" SIZE=4> pair.</P>
+<B><I><P ALIGN="JUSTIFY">Example</P></B></I>
+<P ALIGN="JUSTIFY">Consider a
+</FONT><FONT FACE="Courier"
+SIZE=4>Message</FONT><FONT FACE="Times"
+SIZE=4> class with a constructor:</P><DIR>
+<DIR>
+
+</FONT><FONT FACE="Courier" SIZE=4><P
+ALIGN="JUSTIFY">Message::Message(void
+*ptr, short nbytes);</P></DIR>
+</DIR>
+
+</FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">whose intent is to
+create a message of a suitable type
+according to the header information
+that appears in the body of an
+in-memory message image of length
+</FONT><FONT FACE="Courier"
+SIZE=4>nbytes</FONT><FONT FACE="Times"
+SIZE=4> at address </FONT><FONT
+FACE="Courier" SIZE=4>ptr</FONT><FONT
+FACE="Times" SIZE=4>. The concrete type
+of the message is unknown until run
+time, but it will always be some class
+derived from </FONT><FONT
+FACE="Courier"
+SIZE=4>Message</FONT><FONT FACE="Times"
+SIZE=4>. The class </FONT><FONT
+FACE="Courier"
+SIZE=4>Message</FONT><FONT FACE="Times"
+SIZE=4> can be made an envelope class,
+and the constructor can instantiate a
+body of a suitable type derived from
+</FONT><FONT FACE="Courier"
+SIZE=4>Message</FONT><FONT FACE="Times"
+SIZE=4>.</P>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">This pattern is the
+basis for <U>Abstract Factory</U>.</P>
+<P ALIGN="JUSTIFY">When the letter
+class variations are largely
+algorithmic, especially if the letter
+class contains only one member
+function, refine this pattern using
+<U>Strategy</U>.</P>
+<HR>
+<A name="ConcreteDataType"><H1>Concrete Data Type</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Your design enumerates
+system classes, and you need to
+establish the lifetime and scope of the
+objects for those classes. This is
+particularly important for languages
+like C++ where the object
+representation is visible to the user;
+that is, there are important
+distinctions between pointers and
+instances. Most of these languages lack
+garbage collection and other important
+finalization constructs.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">How do you decide when
+to use
+</FONT><FONT FACE="Courier" SIZE=4>operator new</FONT>
+to allocate an
+object instead of allocating it within
+some program scope?</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>Unlike the
+procedural paradigm, in which lifetime
+follows scope, the object paradigm
+leads to designs where lifetime and
+scope are decoupled. Dynamic (heap)
+allocation is the usual mechanism to
+separate lifetime and scope.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Given the context,
+the programming language can't
+make the difference between these two
+cases transparent.</LI></P>
+<P ALIGN="JUSTIFY"><LI>It's better
+for lifetime to follow scope, because
+the compiler can generate code to clean
+up the object when the scope
+closes. Dynamically allocated objects
+must be cleaned up by the programmer.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Yet if every
+object is bound to an identifier
+declared in some scope (whether
+procedure or object scope), and its
+lifetime is bound to some identifier in
+that scope, it restricts the object
+lifetime to be different than the
+corresponding real-world
+abstraction. Software objects should
+capture important real-world
+abstractions, and must pay homage to
+such properties as lifetime and scope.</LI></P>
+<P ALIGN="JUSTIFY"><LI>On the other
+hand, not all classes reflect
+real-world objects; many are artifacts
+of the implementation.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Objects that represent
+real-world entities that
+live outside the program should be
+instantiated from the heap using
+</FONT><FONT FACE="Courier" SIZE=4>operator new</FONT>.
+<FONT FACE="Times" SIZE=4>The lifetime of these
+objects is likely to be independent of
+the lifetime of any procedure or class
+scope, so it is unwise to declare them
+as objects in any scope. </FONT><FONT
+FACE="Courier"
+SIZE=4>Window</FONT><FONT FACE="Times"
+SIZE=4> is an example of such a class.</P>
+<P ALIGN="JUSTIFY">Objects that
+represent abstractions that live
+&quot;inside&quot; the program,
+closely tied to the computational
+model, the implementation, or the
+programming language,
+should be declared as local (automatic or static)
+instances or as member instances. Collection
+classes (</FONT><FONT FACE="Courier"
+SIZE=4>string</FONT><FONT FACE="Times"
+SIZE=4>, </FONT><FONT FACE="Courier"
+SIZE=4>list</FONT><FONT FACE="Times"
+SIZE=4>, </FONT><FONT FACE="Courier"
+SIZE=4>set</FONT><FONT FACE="Times"
+SIZE=4>) are examples of this kind of
+abstraction (though they may use heap
+data, they themselves are not heap
+objects).  They are concrete data
+types--they aren't
+&quot;abstract,&quot; but are as
+concrete as </FONT><FONT FACE="Courier"
+SIZE=4>int</FONT><FONT FACE="Times"
+SIZE=4> and </FONT><FONT FACE="Courier"
+SIZE=4>double</FONT><FONT FACE="Times"
+SIZE=4>.</P>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Objects allocated from
+the heap can follow the lifetimes of
+the application abstractions they
+represent. Internal abstractions such
+as strings, which have no direct
+external world counterparts, can be
+automatically managed by the compiler.</P>
+<P ALIGN="JUSTIFY">To deal with
+dynamically allocated representations,
+see </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#CountedBody"><FONT
+FACE="Times" SIZE=4>Counted
+Body</FONT></A><FONT FACE="Times"
+SIZE=4>.</P>
+<P ALIGN="JUSTIFY">For user-defined
+types that behave like built-in
+algebraic types, see </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#AlgebraicHierarchy"><FONT
+FACE="Times" SIZE=4>Algebraic
+Hierarchy.</FONT></A><FONT FACE="Times"
+SIZE=4></P>
+<HR>
+<A name="AlgebraicHierarchy"><H1>Algebraic Hierarchy</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">You are designing a system with
+user-defined types that support binary
+operations. Consider, for example, a
+number hierarchy with </FONT><FONT
+FACE="Courier"
+SIZE=4>Complex</FONT><FONT FACE="Times"
+SIZE=4> as the base class. </FONT><FONT
+FACE="Courier"
+SIZE=4>Complex</FONT><FONT FACE="Times"
+SIZE=4> is the most general of the
+number types under consideration.  A
+</FONT><FONT FACE="Courier"
+SIZE=4>Complex</FONT><FONT FACE="Times"
+SIZE=4> number has two scalar floating
+point numbers as its representation.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">How do you construct
+the inheritance hierarchy for algebraic types?</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>If we use C++
+inheritance to express subtyping
+relationships, class </FONT><FONT
+FACE="Courier" SIZE=4>Real</FONT><FONT
+FACE="Times" SIZE=4> would be derived
+from </FONT><FONT FACE="Courier"
+SIZE=4>Complex</FONT><FONT FACE="Times"
+SIZE=4>, and </FONT><FONT
+FACE="Courier"
+SIZE=4>Integer</FONT><FONT FACE="Times"
+SIZE=4> from </FONT><FONT
+FACE="Courier" SIZE=4>Real</FONT><FONT
+FACE="Times" SIZE=4>. Each of these
+specific types supports all the
+operations of its base class.</LI></P>
+<P ALIGN="JUSTIFY"><LI>However, C++
+inheritance also bestows all base class
+data on the derived class. That means
+that </FONT><FONT FACE="Courier"
+SIZE=4>Real</FONT><FONT FACE="Times"
+SIZE=4> has at least two scalar
+floating point numbers as its
+representation. And likewise for
+</FONT><FONT FACE="Courier"
+SIZE=4>Integer</FONT><FONT FACE="Times"
+SIZE=4>.</LI></P>
+<P ALIGN="JUSTIFY"><LI>We could
+minimize this waste by making the base
+class fields protected instead of
+private (so the derived class could
+&quot;reuse&quot; one of the base class
+fields). Even so, the designer would
+prefer to use a single integer as the
+representation of <FONT FACE="Courier"
+SIZE=4>Integer</FONT> than to use a
+floating point number in the interest
+of space and computational
+efficiency. And <FONT FACE="Courier"
+SIZE=4>Real</FONT> still has an extra
+floating point number that is waste.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Use the <U>Bridge</U>
+pattern </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#GOF1995"><FONT
+FACE="Times"
+SIZE=4>[GOF1995]</FONT></A><FONT
+FACE="Times" SIZE=4> to separate
+interface from implementation. The
+visible part of the <U>Bridge</U> is
+called class </FONT><FONT
+FACE="Courier"
+SIZE=4>Number</FONT><FONT FACE="Times"
+SIZE=4>. It contains a pointer to a
+representation part, which contains the
+representation and operations of the
+specific type (</FONT><FONT
+FACE="Courier"
+SIZE=4>Complex</FONT><FONT FACE="Times"
+SIZE=4>, </FONT><FONT FACE="Courier"
+SIZE=4>Real</FONT><FONT FACE="Times"
+SIZE=4>, </FONT><FONT FACE="Courier"
+SIZE=4>Integer</FONT><FONT FACE="Times"
+SIZE=4>, </FONT><FONT FACE="Courier"
+SIZE=4>Imaginary</FONT><FONT
+FACE="Times" SIZE=4>, etc.).</P>
+<B><I><P ALIGN="JUSTIFY">Example</P></B></I>
+<DIR>
+<PRE>
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">class Number {
+public:
+	virtual Number add(const Number &amp;n) {
+		return rep-&gt;add(n);
+	}
+	virtual Number div(const Number&amp;);
+	. . . .
+private:
+	NumberRep *rep;
+};
+
+
+class Complex: public Number {
+	. . . .
+};
+
+
+class Real: public Complex {
+	. . . .
+};
+
+class NumberRep {
+friend Number;
+	virtual Number add(const Number&amp;);
+	virtual Number div(const Number&amp;);
+	. . . .
+};
+
+class ComplexRep: public NumberRep {
+	virtual Number add(const Number &amp;n) {
+		.  . . .
+	}
+	double rpart, ipart;
+};
+
+class RealRep: public NumberRep {
+	virtual Number add(const Number &amp;n) {
+		.  . . .
+	}
+	double rpart;
+};</P></PRE>
+</DIR>
+
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Interface and
+implementation are now separate, and we
+can capture the subtyping semantics in
+the C++ inheritance
+hierarchy. Commonality between the
+implementation parts can be captured in
+a separate inheritance hierarchy if
+desired.</P>
+<P ALIGN="JUSTIFY">One can also combine
+the <U>State</U> pattern so given
+</FONT><FONT FACE="Courier"
+SIZE=4>Number</FONT><FONT FACE="Times"
+SIZE=4>s can change type over time:</P><DIR>
+<PRE>
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">class Number { . . . . };</P>
+<P ALIGN="JUSTIFY">class Complex: public Number { . . . . };</P>
+<P ALIGN="JUSTIFY">class Real: public</P>
+<P ALIGN="JUSTIFY">class Complex { . . . . };</P>
+<P ALIGN="JUSTIFY">class Rational: public Real { . . . . };</P>
+
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">int main() {
+	Complex i(3, &#151;2), j(3, 2);
+	i *= j; // i.e., 13
+	return 0;
+}</PRE>
+</DIR>
+
+</FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">In fact, this use of
+<U>Bridge</U> and <U>State</U> and
+other patterns forms a small pattern
+language in its own right.  In
+particular, </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HomogeneousAddition"><FONT
+FACE="Times" SIZE=4>Homogeneous
+Addition</FONT></A><FONT FACE="Times"
+SIZE=4>, </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromoteAndAdd"><FONT
+FACE="Times" SIZE=4>Promote And
+Add</FONT></A><FONT FACE="Times"
+SIZE=4>, </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromotionLadder"><FONT
+FACE="Times" SIZE=4>Promotion
+Ladder</FONT></A><FONT FACE="Times"
+SIZE=4>, </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#NonHierarchicalAddition"><FONT
+FACE="Times" SIZE=4>Non-Hierarchical
+Addition</FONT></A><FONT FACE="Times"
+SIZE=4>, and </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#TypePromotion"><FONT
+FACE="Times" SIZE=4>Type
+Promotion</FONT></A><FONT FACE="Times"
+SIZE=4> fill out the structure of an
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#AlgebraicHierarchy"><FONT
+FACE="Times" SIZE=4>Algebraic
+Hierarchy</FONT></A><FONT FACE="Times"
+SIZE=4>.</P>
+<HR>
+<A name="HomogeneousAddition"><H1>Homogeneous Addition</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">You have built a
+hierarchy of classes (</FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#AlgebraicHierarchy"><FONT
+FACE="Times" SIZE=4>Algebraic
+Hierarchy</FONT></A><FONT FACE="Times"
+SIZE=4>) whose objects are to
+participate in binary operations. Each
+class is implemented using the
+<U>Bridge</U> pattern.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">You need to distribute
+responsibilities to the objects; i.e.,
+the addition operation. How many
+addition operations are there, and
+where do they belong?</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>One of the main
+reasons for types in programming
+languages is efficiency. Good type
+design teaches the compiler how to
+generate efficient code for common
+operations.</LI></P>
+<P ALIGN="JUSTIFY"><LI>In general,
+efficient code must know the types of
+both operands involved.</LI></P>
+<P ALIGN="JUSTIFY"><LI>However, this
+leads to a combinatorial explosion in
+algorithms, <I>n<SUP>2</I></SUP> for
+<I>n</I> types </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Ingalls1986"><FONT
+FACE="Times"
+SIZE=4>[Ingalls1986]</FONT></A><FONT
+FACE="Times" SIZE=4>. This violates the
+evolution law of continuity: it should
+be cheap to add a new type, not as
+expensive as adding code to every type
+that already exists!</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Addition can always be
+expressed in terms of homogeneous
+operations (e.g., </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromoteAndAdd"><FONT
+FACE="Times" SIZE=4>Promote And
+Add</FONT></A>).<FONT FACE="Times"
+SIZE=4> Each type should support only
+homogeneous algebraic operations,
+unless there are substantial
+performance gains to be realized by
+doing otherwise.</P>
+<P ALIGN="JUSTIFY">The solution
+generalizes to other binary operations.</P>
+<B><I><P ALIGN="JUSTIFY">Example</P></B></I>
+<DIR>
+<PRE>
+
+</FONT><FONT FACE="Courier" SIZE=4><P
+ALIGN="JUSTIFY">class Complex: public Number {
+public:
+	. . .  .
+	// this must deal only with
+	// Complex numbers
+	Number add(const Number&amp;) const;
+};
+
+class Imaginary: public Complex {
+public:
+	. . . .
+	// this must deal only with
+	// Imaginary numbers
+	Number add(const Number&amp;) const;
+};
+</FONT><FONT FACE="Times" SIZE=4><P ALIGN="JUSTIFY">&nbsp;</P></PRE>
+</DIR>
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P ALIGN="JUSTIFY">
+This pattern leads to a design with a minimal number
+of implementations for operator new.
+This provides a foundation for a simple implementation
+of </FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromoteAndAdd"><FONT FACE="Times" SIZE=4>Promote And
+Add</FONT></A><FONT FACE="Times" SIZE=4>.
+
+<HR>
+<A name="PromoteAndAdd"><H1>Promote And Add</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">You have an </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#AlgebraicHierarchy"><FONT
+FACE="Times" SIZE=4>Algebraic
+Hierarchy</FONT></A><FONT FACE="Times"
+SIZE=4>. Each type knows how to add
+itself to an object of the same type
+</FONT>(<A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HomogeneousAddition"><FONT
+FACE="Times" SIZE=4>Homogeneous
+Addition</FONT></A>).<FONT FACE="Times"
+SIZE=4> Each class knows important
+properties of its base class.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">How do you do
+heterogeneous addition?</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>Having </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HomogeneousAddition"><FONT
+FACE="Times" SIZE=4>Homogeneous
+Addition</FONT></A><FONT FACE="Times"
+SIZE=4> is fine, but even the most
+basic languages support polymorphic
+addition.</LI></P>
+<P ALIGN="JUSTIFY"><LI>The type of a
+result will, in general, be at least as
+general as the type of the more general
+of the two operands. For example, the
+result from adding a </FONT><FONT
+FACE="Courier"
+SIZE=4>Complex</FONT><FONT FACE="Times"
+SIZE=4> and an <FONT FACE="Courier"
+SIZE=4>Integer</FONT> cannot be an
+</FONT><FONT FACE="Courier"
+SIZE=4>Integer</FONT><FONT FACE="Times"
+SIZE=4>.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Note that the
+result of multiplying two </FONT><FONT
+FACE="Courier"
+SIZE=4>Complex</FONT><FONT FACE="Times"
+SIZE=4> numbers can be an
+integer. However, this knowledge is
+sophisticated enough that it belongs in
+</FONT><FONT FACE="Courier"
+SIZE=4>Complex</FONT><FONT FACE="Times"
+SIZE=4>, not in Integer.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Using RTTI, it is
+straightforward to establish which of
+two object types is the more general.
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromoteAndAdd"><FONT
+FACE="Times" SIZE=4>Promote And
+Add</FONT></A><FONT FACE="Times"
+SIZE=4> the object of the more specific
+type to the type of the more general
+object, using </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromotionLadder"><FONT
+FACE="Times" SIZE=4>Promotion
+Ladder</FONT></A>.<FONT FACE="Times"
+SIZE=4> Then, use </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HomogeneousAddition"><FONT
+FACE="Times" SIZE=4>Homogeneous
+Addition</FONT></A><FONT FACE="Times"
+SIZE=4> to satisfy the request.</P>
+<P ALIGN="JUSTIFY">C++ in particular is
+rich in language features that support
+promotions involving both user-defined
+types and built-in types.</P>
+<P ALIGN="JUSTIFY">The pattern
+generalizes beyond addition to other
+binary operations.</P><DIR>
+<PRE>
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">class Number {
+public:
+	virtual Number promote() const;
+};
+
+Number operator+(const Number &amp;n1, const Number &amp;n2)
+{
+	if (n1.isA(n2)) {
+		do { n1 = n1.promote(); }
+		while (n1.isA(n2) &amp;&amp; n1.type != complexExemplar);
+		return n2.add(n1);
+	} else if (n2.isA(n1)) {
+		do { n2 = n2.promote(); }
+		while (n2.isA(n1) &amp;&amp; n2.type != complexExemplar);
+		return n1.add(n2);
+	}
+}
+</P>
+<P ALIGN="JUSTIFY">&nbsp;</P></PRE>
+</DIR>
+
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">This pattern fails if
+one of the operands is not a proper
+subtype of the other;  to solve that,
+use </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#NonHierarchicalAddition"><FONT
+FACE="Times" SIZE=4>Non-Hierarchical
+Addition</FONT></A><FONT FACE="Times"
+SIZE=4>.</P>
+<P ALIGN="JUSTIFY">Again, compare
+<U>Rungs of a Dual Hierarchy</U> from
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Martin1997"><FONT
+FACE="Times"
+SIZE=4>[Martin1997]</FONT></A><FONT
+FACE="Times" SIZE=4>.</P>
+<HR>
+<A name="PromotionLadder"><H1>Promotion Ladder</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Types know how to
+promote themselves <U>(</U></FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromoteAndAdd"><FONT
+FACE="Times" SIZE=4>Promote And
+Add</FONT></A><FONT FACE="Times"
+SIZE=4>), making heterogeneous addition
+possible.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Where do you put the
+knowledge of type promotion?</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>You want to
+minimize cohesion and coupling between
+classes, even along an inheritance
+hierarchy. In particular, base classes
+shouldn't know about their derived
+classes.</LI></P>
+<P ALIGN="JUSTIFY"><LI>However, to do
+promotion from one type to another,
+each type must know something about the
+other.</LI></P>
+<P ALIGN="JUSTIFY"><LI>You might do
+this with casting and conversion
+operators,  but in general the types
+can't be foreknown at compile time.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Putting the
+knowledge of promotion in the base
+class might make it necessary to expose
+the derived class implementation if
+promotion is to be efficient. But
+putting knowledge of promotion in the
+derived class would likewise expose the
+implementation of the base class, which
+is even worse.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Knowledge of
+promotion needn't be replicated in
+each pair of classes; once is
+sufficient. However, there must be some
+convention that points to the knowledge
+(e.g., in the more general or more
+derived class) to avoid ambiguity.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Each class should know
+how to promote itself to its own base
+class type. Promotions that involve
+more than two levels of the inheritance
+hierarchy can be handled by multiple
+successive promotions.</P><DIR>
+<PRE>
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">class Imaginary: public Complex {
+public:
+	. . . .
+	Number promote(const Number&amp; n) const {
+		// always returns a Complex
+		return Number(0, n.ipart())
+	}
+	Number add(const Number&amp;) const;
+};
+
+class Complex: public Number {
+public:
+	. . . . 
+	// no promote:  nothing is promoted
+	// to a Complex
+	Number add(const Number&amp;) const;
+};
+</FONT><FONT FACE="Times" SIZE=4><P ALIGN="JUSTIFY">&nbsp;</P></PRE>
+</DIR>
+
+<P ALIGN="JUSTIFY">Compare to the
+pattern <U>Intelligent Children</U>
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Martin1997"><FONT
+FACE="Times"
+SIZE=4>[Martin1997]</FONT></A><FONT
+FACE="Times" SIZE=4>.</P>
+<HR>
+<A name="NonHierarchicalAddition"><H1>Non-Hierarchical Addition</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">You've built a
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromotionLadder"><FONT
+FACE="Times" SIZE=4>Promotion
+Ladder</FONT></A><FONT FACE="Times"
+SIZE=4> of types, each of which support
+</FONT><A HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#HomogeneousAddition"><FONT
+FACE="Times" SIZE=4>Homogeneous
+Addition</FONT></A><FONT FACE="Times"
+SIZE=4>, that makes overall
+heterogeneous addition possible.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Sometimes, two objects
+are involved in a binary computation
+in which neither can be promoted to the
+type of the other. Consider the
+addition of an </FONT><FONT
+FACE="Courier"
+SIZE=4>Imaginary</FONT><FONT
+FACE="Times" SIZE=4> and an
+</FONT><FONT FACE="Courier"
+SIZE=4>Integer</FONT><FONT FACE="Times"
+SIZE=4>. Neither knows how to promote
+itself to the type of the other.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>You could handle
+such exceptions as special cases, but
+that would clutter the code, and it
+would be difficult to present a
+convincing case that all cases were
+covered. </LI></P>
+<P ALIGN="JUSTIFY"><LI>You could build
+a full promotion matrix that would map
+any given pair of types onto the right
+promotion algorithm, but that would
+lead to a combinatorial explosion in
+conversion functions.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Detect cases in which
+neither type can be promoted to the
+other. Promote both to a more general
+type and retry the operation.</P>
+
+<B><I><P ALIGN="JUSTIFY">Example</P></B></I>
+<DIR>
+<PRE>
+
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">Number operator+(const Number &amp;n1, const Number &amp;n2) {
+	if (n1.isA(n2)) {
+		do { n1 = n1.promote(); }
+		while (n1.isA(n2) &amp;&amp; n1.type != complexExemplar);
+		return n2.add(n1);
+	} else if (n2.isA(n1)) {
+		do { n2 = n2.promote(); }
+		while (n2.isA(n1) &amp;&amp; 2.type != complexExemplar);
+		return n1.add(n2);
+	} else {
+		// promote both to Complex &amp; retry
+		.  . . .
+	}</P>
+}</P>
+</FONT><FONT FACE="Geneva"><P ALIGN="JUSTIFY">&nbsp;</P></PRE>
+</DIR>
+<HR>
+<A name="TypePromotion"><H1>Type Promotion</H1>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Context:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">The pattern applies to
+C++ and potentially to other
+object-oriented programming languages.</P>
+<P ALIGN="JUSTIFY">The decision of
+which promotion to apply is made at
+compile time.</P>
+<P ALIGN="JUSTIFY">The context is
+inadequate for the compiler to apply
+built-in translation rules, as would be
+possible for conversion between
+built-in types, or between a derived
+class and one of its base
+classes. </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromotionLadder"><FONT
+FACE="Times" SIZE=4>Promotion
+Ladder</FONT></A><FONT FACE="Times"
+SIZE=4> may not apply.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Problem</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Promotion between
+objects of different but related C++
+types, zero or one of which is a
+built-in type.</P>
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Forces:</P>
+
+<UL>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY"><LI>The implementation
+of promotion from an object of one type
+to an object of another type is usually
+coupled to the implementation of both
+types.</LI></P>
+<P ALIGN="JUSTIFY"><LI>The C++ language
+lets the programmer associate such an
+implementation with only one of the
+participating types.</LI></P>
+<P ALIGN="JUSTIFY"><LI>The type
+containing the conversion
+implementation must be a class object
+type, since the implementation of
+built-in types cannot be redefined by
+the programmer.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Two language
+mechanisms support user-defined
+conversions: constructors and
+conversion operators.</LI></P>
+<P ALIGN="JUSTIFY"><LI>Individually,
+each is an equally suitable solution in
+some circumstances, but use of both
+leads to an irreconcilable ambiguity.</LI></P></UL>
+
+</FONT><B><FONT FACE="Helvetica" SIZE=4><P>Solution:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">A program should
+promote a class object type to a
+built-in type using a member conversion operator:</P>
+<P ALIGN="JUSTIFY"></P><DIR>
+<pre>
+
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">class RationalNumber {
+public:
+	operator float() const;
+	. . . .</P>
+};</P></pre>
+</DIR>
+
+</FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">A program should use
+constructors (as in </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#PromotionLadder"><FONT
+FACE="Times" SIZE=4>Promotion
+Ladder</FONT></A><FONT FACE="Times"
+SIZE=4>) for all other promotions:</P>
+<P ALIGN="JUSTIFY"></P><DIR>
+<pre>
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">class Complex {
+public:
+	Complex(const RationalNumber&amp;);
+	Complex(double);&nbsp;&nbsp;	// no double::operator
+				// Complex, so do it
+				// here
+	. . . .</P>
+};</P></pre>
+</DIR>
+
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Resulting Context</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">Coupling
+(and, in general, friend relationships)
+are still necessary between types;  the
+force is resolved only to the extent
+that the conversion is firmly
+associated with a single type. The
+pattern does guarantee that the type
+bearing the conversion is always a
+class object type, however.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">The pattern avoids
+most conversion ambiguities. An
+additional pattern must deal with the case:</P>
+<P ALIGN="JUSTIFY"></P><DIR>
+<pre>
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">struct S {
+	operator int() const;
+	operator float() const;
+};
+
+<P ALIGN="JUSTIFY">void f( int );</P>
+<P ALIGN="JUSTIFY">void f( float );</P>
+</FONT><FONT FACE="Courier" SIZE=4><P ALIGN="JUSTIFY">main() {
+	S s;
+	f(s);		// error: ambiguous call:
+			// f ( struct S )
+}
+</FONT><FONT FACE="Geneva"><P ALIGN="JUSTIFY">&nbsp;</P></pre>
+</DIR>
+
+</FONT><B><FONT FACE="Helvetica"
+SIZE=4><P>Design rationale:</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P
+ALIGN="JUSTIFY">A given type cannot
+know about every (more general) type in
+the universe whose instances might be
+created as generalizations of itself;
+the onus is on the type of the newly
+created object to understand its own
+initialization parameters.</P>
+<P ALIGN="JUSTIFY">Primitive types form
+an exceptional subpattern because
+their semantics are built into the
+compiler for efficiency, and their
+semantics are not as generally subject
+to change as those of user-defined types.</P>
+<H1>Acknowledgements</H1>
+<P ALIGN="JUSTIFY">Many thanks to Steve
+Berczuk who was the EuroPLoP '98
+shepherd for this paper.</P>
+<HR>
+<H1>References</H1>
+<B><P ALIGN="JUSTIFY"><A
+NAME="Cargill1996">[Cargill1996]</A></B>
+Cargill, Tom.  Localized Ownership:
+Managing Dynamic Objects in C<I>++.
+Pattern Languages of Program Design
+&#151; 2</I>.  John M. Vlissides et
+al., eds. Reading, MA:  Addison-Wesley,
+1996.</P>
+<B><P ALIGN="JUSTIFY"><A
+NAME="Coplien1992">[Coplien1992]</A></B>
+Coplien, J. O.  <I>Advanced C++
+Programming Styles and Idioms</I>.
+Reading, Ma:  Addison-Wesley, 1992.</P>
+<B><P ALIGN="JUSTIFY">
+<A NAME="GOF1995">[GOF1995]</A></B> 
+Gamma, E., et al.  Design
+Patterns:  Elements of Re-Usable
+Object-Oriented Software.  Reading,
+Ma.:  Addison-Wesley, 1995.</P>
+<B><P ALIGN="JUSTIFY"><A
+NAME="Ingalls1986">[Ingalls1986]</A></B>
+ Ingalls, Daniel H.  A Simple Technique
+for Handling Multiple Polymorphism.
+Proceedings of OOPSLA '86,
+September 1986, ACM Press.</P>
+<B><P ALIGN="JUSTIFY"><A
+NAME="Koenig1995">[Koenig1995]</A></B>
+Koenig, Andrew R. &quot;Variations on a
+Handle Theme.&quot;  JOOP 8(5), 1995,
+77-80.  New York:  SIGS Publications.</P>
+<B><P ALIGN="JUSTIFY"><A
+NAME="Martin1997">[Martin1997]</A></B>
+ Martin, R.  Design Patterns for
+Dealing with Dual Inheritance
+Hierarchies in C++. 
+In C++ Report 9(4), April, 1997.  New York:
+SIGS Publications.</P>
+<HR>
+<P ALIGN="JUSTIFY"><a href="/web/20101125222546/http://www.bell-labs.com/~cope/">Jim Coplien</a> is
+author of </FONT><A
+HREF="/web/20101125222546/http://users.rcn.com/jcoplien/Patterns/C++Idioms/EuroPLoP98.html#Coplien1992"><FONT
+FACE="Times"
+SIZE=4>[Coplien1992]</FONT></A><FONT
+FACE="Times" SIZE=4> on which these
+patterns are based.  He is a Researcher
+at Bell Laboratories near Chicago,
+Illinois, USA, where he does research
+into software architecture and design,
+including design and architecture
+patterns, and on organizational
+structure.</P>
+<P ALIGN="JUSTIFY">&nbsp;</P>
+<P ALIGN="JUSTIFY">&nbsp;</P>
+<P ALIGN="JUSTIFY">&nbsp;</P></FONT></BODY>
+</HTML>
+
+
+
+
+
+<!--
+     FILE ARCHIVED ON 22:25:46 Nov 25, 2010 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 13:24:07 Jan 18, 2013.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->

@@ -1,0 +1,17 @@
+transformation html2docbook;
+
+input {
+}
+
+output {
+}
+
+section HTML {
+	source-encoding = "UTF-8";
+}
+
+section DocBook {
+	destination-encoding = "UTF-8";
+	add-index = true;
+	emphasis-role-bold = "bold";
+}

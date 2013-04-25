@@ -1,0 +1,11 @@
+version=6.1.1
+Bundle-Name=org.dbdoclet.trafo
+Bundle-SymbolicName=org.dbdoclet.trafo
+Bundle-Version=${version}
+Service-Component: OSGI-INF/component-description.xml
+
+Include-Resource: \
+  OSGI-INF/component-description.xml=OSGI-INF/component-description.xml
+
+Export-Package: org.dbdoclet.trafo.* ;version=${version}
+

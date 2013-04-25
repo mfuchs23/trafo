@@ -1,0 +1,5 @@
+transformation html2docbook;
+
+section HTML {
+	encoding = "windows-1252";
+}

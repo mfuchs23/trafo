@@ -1,0 +1,5 @@
+transformation html2docbook;
+
+section section-detection {
+	section-numbering-pattern = "((\d\.)+)?\d?\.?\p{Z}*";
+}

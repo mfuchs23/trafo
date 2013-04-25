@@ -1,0 +1,12 @@
+transformation html2docbook;
+
+section list-detection  {
+	itemized-attribute-class = ["^MsoListBullet\w*$", "^Aufzhlung\w+$"];
+	itemized-strip-prefix = [ "\u00b7" ];
+	ordered-attribute-class = ["^MsoListNumbered\w*$"];
+	ordered-strip-prefix = [ "\d+\.\s+" ];
+}
+
+section DocBook {
+	collapse-protected-space = true;
+}

@@ -1,0 +1,9 @@
+transformation html2docbook;
+
+input {}
+
+Lalala
+
+section DocBook {
+	add-index = true;
+}

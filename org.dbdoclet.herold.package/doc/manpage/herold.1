@@ -1,0 +1,284 @@
+'\" t
+.\"     Title: herold
+.\"    Author: Michael Fuchs
+.\" Generator: DocBook XSL Stylesheets v1.77.1 <http://docbook.sf.net/>
+.\"      Date: 03/27/2013
+.\"    Manual: User Commands
+.\"    Source: herold
+.\"  Language: English
+.\"
+.TH "HEROLD" "1" "03/27/2013" "herold" "User Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+herold \- HTML to DocBook converter
+.SH "SYNOPSIS"
+.HP \w'\fBherold\fR\ 'u
+\fBherold\fR [OPTIONS]
+.SH "DESCRIPTION"
+.PP
+The reuse of HTML content in presentation\-neutral form is a frequent problem\&. One possible solution is to convert HTML to DocBook XML, because DocBook is a semantic markup language for documentation, which enables its users to create document content that captures the logical structure of the content\&. The command line tool
+herold
+can be used to convert HTML to DocBook\&. Because HTML elements are often used not as intended, the possibilities for such a transformation are somewhat limited\&. herold is part of the dbdoclet suite of tools\&. For more information visit
+\m[blue]\fBhttp://www\&.dbdoclet\&.org\fR\m[]\&.
+.SH "OPTIONS"
+.PP
+\-\-docbook\-add\-index, \-x
+.RS 4
+Automatically add an index element at the end of the document\&.
+.RE
+.PP
+\-\-docbook\-decompose\-tables, \-T
+.RS 4
+Decomposes the tables from the HTML code into single paragraphs\&. This can be useful, if a document contains a lot of tables for formatting reasons\&.
+.RE
+.PP
+\-\-docbook\-encoding, \-d
+.RS 4
+Specifies the encoding of the generated DocBook XML files\&.
+.RE
+.PP
+\-\-docbook\-root\-element, \-r
+.RS 4
+The root element of the document\&. Possible values are: book, article, reference, part, chapter or section\&. The default value for this option is \*(Aqarticle\*(Aq
+.RE
+.PP
+\-\-docbook\-title, \-t
+.RS 4
+The title for the resulting document\&.
+.RE
+.PP
+\-\-in, \-i
+.RS 4
+Specifies the HTML input file\&.
+.RE
+.PP
+\-\-help, \-h
+.RS 4
+Prints a help page on the console\&.
+.RE
+.PP
+\-\-html\-encoding, \-s
+.RS 4
+Specifies the encoding of the HTML source files, such as ISO\-8859\-1\&.
+.RE
+.PP
+\-\-out, \-o
+.RS 4
+Specifies the DocBook XML destination file\&.
+.RE
+.PP
+\-\-profile, \-p
+.RS 4
+A profile file with predefined settings\&.
+.RE
+.PP
+\-\-verbose, v
+.RS 4
+Enables the verbosity for the console output\&.
+.RE
+.PP
+\-\-version, \-V
+.RS 4
+Displays the version of herold\&.
+.RE
+.SH "CONFIGURATION"
+.PP
+The details of a transformation are controlled by a profile file\&. A profile file offers more possibilities to influence the transformation than the command line arguments\&. The following example shows a typical profile file\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+transformation html2docbook;
+
+section section\-detection  {
+    attribute\-class = ["^MsoHeading(\ed+)$"];
+    section\-numbering\-pattern = "((\ed+\e\&.)+)?\ed*\e\&.?\ep{Z}*";
+}
+
+section list\-detection {
+    itemized\-attribute\-class = ["^MsoListBullet(\ew*)$", "Aufzhlung(\ew+)$];
+    itemized\-strip\-prefix = [ "\-", "o", "\eu00b7" ];
+    ordered\-attribute\-class = ["^MsoListNumbered(\ew*)$"];
+    ordered\-strip\-prefix = [ "\ed+\e\&.\es+" ];
+}
+
+section HTML {
+    encoding = "windows\-1252";
+    exclude = [ "//p[starts\-with(@class, \*(AqMsoToc\*(Aq)]", "" ];
+}
+
+section DocBook {
+    abstract = """<title>Lorem ipsum</title>
+<para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed 
+do eiusmod tempor incididunt ut labore et dolore magna aliqua\&. Ut 
+enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+nisi ut aliquip ex ea commodo consequat\&. Duis aute irure dolor in 
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+pariatur\&. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum\&.sed, dolor 
+amet\&.</para>""";
+    add\-index = true;
+    author\-email = "me@somewhere\&.de";
+    author\-firstname = "Michael";
+    author\-surname = "Fuchs";
+    collapse\-protected\-space = "true";
+    copyright\-holder = "Ingenieurbüro Michael Fuchs";
+    copyright\-year = "2012";
+    corporation = "";
+    create\-condition\-attribute = false;
+    create\-prolog = true;
+    create\-remap\-attribute = false;
+    create\-xref\-label = false;
+    decompose\-tables = false;
+    detect\-trapped\-br = true;
+    documentation\-id = "doc01";
+    document\-element = "book";
+    encoding = "UTF\-8";
+    hyphenation\-char = "soft\-hyphen";
+    image\-data\-formats = [ "gif", "base64" ];
+    image\-path = "\&./figures";
+    language = "de";
+    release\-info = "Version 3\&.1";
+    table\-style = "all";
+    title = "Tutorial";
+    title\-normalize\-space = true;
+    use\-absolute\-image\-path = false;
+}
+    
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Syntax"
+.PP
+A profile file consists mainly of sections\&. Sections are used to group parameters which share the same context\&. Every section must start with the keyword
+\fIsection\fR
+followed by the name of the section\&. After the name comes the block of parameters, which is surrounded by curly braces\&. Parameters can be of type String, Number, Boolean or Array\&. Strings must be framed with double quotes\&. If the String contains newlines, use three double quotes instead of one\&. Arrays are framed with square brackets\&. Inside an array, the elements must be comma separated\&. Every assignment must be finished by a semicolon\&. Multi line comments have the form
+\fI/* my comment */\fR
+, single line comments look like
+\fI// my comment\en\fR\&.
+.SS "Mandatory Elements"
+.PP
+A profile for herold must start with the line
+transformation html2docbook;\&.
+.SS "Section section\-detection"
+.PP
+The section
+\fIsection\-detection\fR
+is used to detect section elements in HTML code and to strip off any numbering prefix from the titles\&.
+.PP
+Many authoring tools allow deeply nested sections\&. While exporting HTML, it happens, that the nesting becomes deeper than six levels\&. HTML provides header elements for up to six levels, h1\-h6, but no h7 or even more\&. At this point, the formatting is normally done with the help of CSS and div or p elements\&. herold is able to detect the header element of HTML, but it can not know about the export format of a specific tool\&. To solve this problem even for some cases, you can specify the parameter
+\fIattribute\-class\fR\&. It consists of a list of regular expressions, which are matched against the class attribute of each HTML element\&. If a match is found, the element is considered as a section element\&. The regular expression can have group, which is interpreted as level indicator\&. The group must be the first group and it must match against a number, e\&.g\&.
+^heading(\ed+)$\&. If the level can not be detected, a level of seven is assumed\&.
+.PP
+Because DocBook XSL stylesheets take care of the section numbering while transforming the DocBook XML to a specific output, it is often necessary to strip the numbering already defined in the HTML page\&. Otherwise you end up with two numbering texts in front of your titles\&. To help herold with the detection of numbering patterns, use the parameter
+\fIsection\-numbering\-pattern\fR\&.
+.PP
+.PP
+attribute\-class
+.RS 4
+A regular expression, which is applied to every p and div element\&. If the expression matches, the current element is handled as a section element\&. If the regular expression has groups, the first group will be used as nesting level, otherwise level seven is assumed\&.
+.RE
+.PP
+section\-numbering\-pattern
+.RS 4
+Normally you want to get rid of the section numbering that comes with the HTML data, because it becomes part of the title text in DocBook\&. The section numbers will the appear twice in your target media\&. One from HTML and one from the DocBook XSL processing\&. The parameter section\-numbering\-pattern defines a regular expression, which is matched against the beginning of every section title\&. If it matches, the matching part is removed\&.
+.RE
+.SS "Section list\-detection"
+.PP
+Sometimes lists are not represented with ul, ol or dl tags, but they are represented as p tags with additional css formatting\&. If you use a tool, which creates or exports HTML with such a construct, the conversion will end up with para elements, instead of the corresponding list elements in DocBook\&. To recreate the lists in some cases, you can use the section
+\fIlist\-detection\fR\&. The parameters
+\fIitemized\-attribute\-class\fR
+and
+\fIordered\-attribute\-class\fR
+let you define lists of regular expression, which match against listitems in the HTML\&. herold tries to rebuild the proper list structure from this information, even for nested lists\&.
+.SS "Section HTML"
+.PP
+The section HTML defines parameters, which control the loading and parsing of the HTML input data\&.
+.PP
+.PP
+encoding
+.RS 4
+The character set used to read the input stream\&.
+.RE
+.PP
+exclude
+.RS 4
+Defines an array of xpath expressions\&. All matches are removed from the HTML DOM tree before transformation\&.
+.RE
+.SS "Section DocBook"
+.PP
+.PP
+abstract
+.RS 4
+The text for the abstract element of the info section\&. If the text is structured with newlines, use three double quotes as delimiters\&. If the text starts with a "<" character, it is embedded into an abstract element, otherwise the text is embedded into an para element inside of an abstract element\&. The text will parsed and can contain DocBook elements\&.
+.RE
+.PP
+add\-index
+.RS 4
+If set to true, an index element is inserted at the end of the DocBook XML\&.
+.RE
+.PP
+create\-xref\-label
+.RS 4
+if set to false, anchor elements doesn\*(Aqt get a xreflabel attribute\&.
+.RE
+.PP
+decompose\-tables
+.RS 4
+If set to true, tables structures will be ignored\&. The content of the table cells will be inserted into the DocBook XML as a sequence of paragraphs\&. This parameter can be useful if your HTML contains tables for formatting purposes\&. Normally you want to get rid of them, because they tamper the logical structure\&.
+.RE
+.PP
+document\-element
+.RS 4
+The document element you want to use\&. Must be one of article, book, part or reference\&.
+.RE
+.PP
+encoding
+.RS 4
+The character set which will be used for writing the output file\&.
+.RE
+.PP
+image\-data\-formats
+.RS 4
+An array of image formats\&. These formats will be inserted as imageobject elements, additionally to the format found in the src attribute of the corresponding img element\&. The original format is inserted twice with the roles "html" and "fo"\&. The other formats are inserted as "html\-<FORMAT>" and "fo\-<FORMAT>"\&.
+.RE
+.PP
+title
+.RS 4
+The title of the resulting document\&. If this parameter is undefined, herold tries to dected the title from the head section of the HTML data\&.
+.RE
+.PP
+use\-absolute\-image\-path
+.RS 4
+If you want absolute image paths in the fileref attribute of the imagedata element, set this parameter to true\&.
+.RE
+.SH "COPYRIGHT"
+.PP
+Copyright 2001\-2013 Michael Fuchs\&. License GPLv3+: GNU GPL version 3 or later
+\m[blue]\fBhttp://gnu\&.org/licenses/gpl\&.html\fR\m[]\&. This is free software: you are free to change and redistribute it\&. There is NO WARRANTY, to the extent permitted by law\&.
+.SH "AUTHOR"
+.PP
+\fBMichael Fuchs\fR
+.RS 4
+Software Engineer
+.RE

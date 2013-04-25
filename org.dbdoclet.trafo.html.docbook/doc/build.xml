@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<project name="herold.doc" default="build">
+
+  <taskdef name="config" classname="org.dbdoclet.antol.task.Config"/>
+  <taskdef name="env" classname="org.dbdoclet.antol.task.Env"/>
+
+  <config/>
+
+  <property file="../build.properties"/>
+  <property file="../../../build.properties"/>
+
+  <!-- ========================================== -->
+  <!-- PREPARE                                    -->
+  <!-- ========================================== -->
+  <target name="prepare">
+    <mkdir dir="${build}"/>
+  </target>
+
+  <!-- ========================================== -->
+  <!-- CLEAN                                      -->
+  <!-- ========================================== -->
+
+  <target name="clean">
+    <delete dir="${build}" />
+  </target>
+
+  <!-- ========================================== -->
+  <!-- BUILD                                      -->
+  <!-- ========================================== -->
+  <target name="build" depends="prepare">
+
+    <mkdir dir="${build}/man/man1"/>
+    <mkdir dir="${assembly.root}/doc"/>
+    <xslt
+      in="man/man1/herold.xml"
+      style="${ode.docbook}/xsl/manpages/docbook.xsl"
+      out="${build}/man/man1/xslt.log">
+
+      <xmlcatalog>
+	<dtd 
+	  publicId="-//OASIS//DTD DocBook XML V4.3//EN"
+	  location="${ode.docbook}/dtd/4.3/docbookx.dtd"/>
+      </xmlcatalog>      
+    </xslt>
+
+    <gzip src="${build}/man/man1/herold.1" destfile="${build}/man/man1/herold.1.gz"/>
+
+    <delete>
+      <fileset dir="${build}/man/man1">
+        <include name="xslt.log"/>
+        <include name="herold.1"/>
+      </fileset>
+    </delete>
+
+    <copy todir="${assembly.root}/doc">
+      <fileset dir="${build}"/>
+    </copy>
+  </target>
+
+  <!-- ========================================== -->
+  <!-- INSTALL                                    -->
+  <!-- ========================================== -->
+  <target name="install" depends="build">
+  </target>
+
+</project>

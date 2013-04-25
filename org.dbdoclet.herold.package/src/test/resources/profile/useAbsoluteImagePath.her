@@ -1,0 +1,5 @@
+transformation html2docbook;
+
+section DocBook {
+	use-absolute-image-path = true;
+}

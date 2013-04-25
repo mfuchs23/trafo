@@ -1,0 +1,7 @@
+transformation html2docbook;
+
+section section-detection  {
+	attribute-class = ["^MsoHeading(\d+)$"];
+	section-numbering-pattern = "((\d+\.)+)?\d*\.?\p{Z}*";
+
+}

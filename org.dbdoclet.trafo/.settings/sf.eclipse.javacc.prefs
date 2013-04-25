@@ -1,0 +1,9 @@
+#Wed Dec 09 15:25:33 CET 2009
+CLEAR_CONSOLE=false
+JJ_NATURE=true
+JTB_OPTIONS=-p\=org.dbdoclet.trafo.xml.tokenizer.parser
+RUNTIME_JAR=/home/michael/java/eclipse-3.5/plugins/sf.eclipse.javacc_1.5.16/javacc.jar
+RUNTIME_JTBJAR=/home/michael/java/eclipse-3.5/plugins/sf.eclipse.javacc_1.5.16/jtb132.jar
+SHOW_CONSOLE=true
+SUPPRESS_WARNINGS=true
+eclipse.preferences.version=1

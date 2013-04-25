@@ -1,0 +1,43 @@
+herold Version {0}
+Copyright (C) 2001-2012 Michael Fuchs
+
+Syntax: herold [options]
+
+  --docbook-encoding
+  -d                     - Specifies the encoding of the generated DocBook XML files.
+                           Example: --destination-encoding=ISO-8859-1
+  
+  --help
+  -h                     - Print this message and quit.
+
+  --in=<FILE>
+  -i <FILE>              - Input HTML file.
+
+  --license
+  -L                     - Display the herold license and quit.
+
+  --out=<FILE>
+  -o <FILE>              - Output XML file.
+
+  --profile=<FILE>
+  -p <FILE>              - Profile file with predefined parameter settings.
+  
+  --docbook-document-element=<ROOT ELEMENT>
+  -r <ROOT ELEMENT>      - The root element of the document. Possible values are: book
+                           and article. The default value is 'article'.
+
+  --html-encoding
+  -s                     - Specifies the encoding of the source files, such as ISO-8859-1.
+
+  --docbook-title
+  -t                     - The title for the resulting document.
+
+  --docbook-decompose-tables
+  -T                     - Tables inside the HTML file are decomposed during
+    		                   the transformation.
+
+  --verbose
+  -v                     - Progress messages on the console.
+  
+  --version
+  -V                     - Version number

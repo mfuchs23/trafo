@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Trafo GUI (de,DE) Fragment
+Bundle-SymbolicName: org.dbdoclet.trafo.gui.deDE
+Bundle-Version: 1.0.0
+Bundle-Vendor: Michael Fuchs
+Fragment-Host: org.dbdoclet.trafo.gui;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

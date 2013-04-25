@@ -1,0 +1,11 @@
+transformation html2docbook;
+
+section HTML {
+	encoding = "UTF-8";
+	section-numbering-pattern = "((\d+\.)+)?\d*\.?\p{Z}*";
+}
+
+section DocBook {
+	document-element = "article";
+	encoding = "UTF-8";
+}

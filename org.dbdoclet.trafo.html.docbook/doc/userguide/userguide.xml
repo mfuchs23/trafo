@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book version="5.0" xml:lang="de" xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:m="http://www.w3.org/1998/Math/MathML"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>Herold</title>
+
+    <author>
+      <personname><firstname>Michael</firstname><surname>Fuchs</surname></personname>
+
+      <affiliation>
+        <orgname>Ingenieurbüro Michael Fuchs</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>13.09.2010</pubdate>
+  </info>
+
+  <chapter>
+    <title>Einführung</title>
+
+    <para>Herold ist ein Programm zur Transformation von HTML in das
+    DocBook-Format. Es hat sich als "Nebenprodukt" des JavaDoc-Doclets
+    dbdoclet entwicklet, da bei der Erstellung von DocBook aus JavaDoc
+    Kommentaren eine Transformation von HTML nach DocBook notwendig wurde.
+    Allerdings enthalten JavaDoc-Kommentare meist nur wenige HTML-Tags und
+    sind dadurch relativ einfach zu verarbeiten. Ganz anders sieht die
+    Situation bei HTML aus aus, dass für die Betrachtung im Browser entwicklet
+    wurde. Da sich HTML in vielen Punkten sowohl syntaktisch als auch
+    semantisch unterscheidet, mußeine derartige Transformation immer von
+    Annahmen bestimmt sein. Zum Beispiel werden in HTML Tabellen oft zur
+    Positionierung von Inhalten verwendet, also zur Formatierung und nicht zur
+    tabellarischen Darstellung von Daten. Trifft diese Annahme zu, so können
+    die Tabellen des HTML bei der Transformation unterdrückt werden.</para>
+
+    <section>
+      <title>Schnellstart</title>
+
+      <para>Um eine HTML-Datei von HTML nach DocBook zu konvertieren,
+      verwenden sie bitte folgendes Kommando auf der</para>
+    </section>
+  </chapter>
+</book>

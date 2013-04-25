@@ -1,0 +1,24 @@
+transformation tab2ly;
+
+section input {
+	file = "Werkbank/trafo5/org.dbdoclet.trafo.tab.lilypond/src/test/resources/Barock.tab";
+	format = "tab";
+}
+
+section output {
+	file = "Werkbank/trafo5/org.dbdoclet.trafo.tab.lilypond/src/test/resources/Barock.ly";
+	format = "lilypond";
+}
+
+section tab2ly {
+	dissolve-bass = true;
+	lute-tuning = "baroque";
+	key = "e";
+	transpose = 2;
+}
+
+section bassAnalyzer {
+	highest-bass-note = "e";
+	minimum-bass-note-length = "8";
+	fill-silence = false;
+}

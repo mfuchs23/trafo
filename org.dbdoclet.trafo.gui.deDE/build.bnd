@@ -1,0 +1,6 @@
+version=6.1.0
+Bundle-Name=org.dbdoclet.trafo.gui.deDE
+Bundle-SymbolicName=org.dbdoclet.trafo.gui.deDE
+Bundle-Version=${version}
+Fragment-Host: org.dbdoclet.trafo.gui
+Include-Resource: trafo_de_DE.properties=src/main/resources/trafo_de_DE.properties
