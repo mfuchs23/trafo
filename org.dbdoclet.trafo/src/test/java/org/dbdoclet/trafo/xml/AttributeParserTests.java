@@ -7,7 +7,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.antlr.runtime.Token;
+import org.dbdoclet.trafo.html.tokenizer.parser.HtmlTokenizer;
+import org.dbdoclet.trafo.html.tokenizer.Token;
 import org.junit.Test;
 
 public class AttributeParserTests {
