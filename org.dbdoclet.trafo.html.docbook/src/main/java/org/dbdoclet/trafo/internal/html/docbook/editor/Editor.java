@@ -21,8 +21,9 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.Table;
 import org.dbdoclet.tag.html.Td;
 import org.dbdoclet.tag.html.Th;
-import org.dbdoclet.trafo.html.docbook.DocBookTransformer;
+import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
@@ -41,7 +42,7 @@ public class Editor {
 	private CharacterDataImpl characterDataNode;
 	private boolean doIgnore;
 	private boolean doTraverse;
-	private DocBookTransformer.DocumentElementType codeContext;
+	private DocumentElementType codeContext;
 
 	public void copyCommonAttributes(HtmlElement html, DocBookElement dbk) {
 
@@ -145,7 +146,7 @@ public class Editor {
 		return characterDataNode;
 	}
 
-	public DocBookTransformer.DocumentElementType getCodeContext() {
+	public DocumentElementType getCodeContext() {
 		return codeContext;
 	}
 
@@ -227,9 +228,7 @@ public class Editor {
 		this.child = newChild;
 	}
 
-	public void setCodeContext(
-			DocBookTransformer.DocumentElementType newCodeContext) {
-
+	public void setCodeContext(DocumentElementType newCodeContext) {
 		this.codeContext = newCodeContext;
 	}
 

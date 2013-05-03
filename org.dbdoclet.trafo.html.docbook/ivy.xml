@@ -8,6 +8,7 @@
       revision="${module.version}">
   </info>
   <dependencies>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.trafo" rev="6.1.1" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.trafo" rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.html.parser" rev="latest.integration" />
   </dependencies>
 </ivy-module>

@@ -2,11 +2,13 @@ package org.dbdoclet.trafo.html.parser;
 
 import java.io.IOException;
 
+import org.dbdoclet.html.parser.HtmlParser;
+import org.dbdoclet.html.parser.ParserException;
+import org.dbdoclet.html.tokenizer.TokenizerException;
 import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.html.AbstractTests;
-import org.dbdoclet.trafo.html.tokenizer.TokenizerException;
 import org.junit.Test;
 
 public class ImgTests extends AbstractTests {

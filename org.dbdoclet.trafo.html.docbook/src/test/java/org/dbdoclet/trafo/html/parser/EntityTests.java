@@ -1,7 +1,7 @@
 package org.dbdoclet.trafo.html.parser;
 
 import org.dbdoclet.trafo.TrafoException;
-import org.dbdoclet.trafo.html.docbook.DocBookTransformer;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.junit.Test;
 
 public class EntityTests {

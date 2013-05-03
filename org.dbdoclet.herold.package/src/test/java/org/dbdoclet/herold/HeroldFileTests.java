@@ -13,8 +13,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.dbdoclet.service.FileServices;
 import org.dbdoclet.service.ResourceServices;
-import org.dbdoclet.trafo.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XmlServices;
 import org.junit.Before;

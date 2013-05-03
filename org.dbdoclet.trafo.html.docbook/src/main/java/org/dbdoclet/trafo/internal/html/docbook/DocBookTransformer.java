@@ -8,7 +8,7 @@
  * E-Mail: michael.fuchs@unico-group.com
  * URL:    http://www.michael-a-fuchs.de
  */
-package org.dbdoclet.trafo.html.docbook;
+package org.dbdoclet.trafo.internal.html.docbook;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,6 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.CanceledException;
 import org.dbdoclet.Sfv;
+import org.dbdoclet.html.parser.HtmlParser;
 import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.progress.ProgressManager;
@@ -49,15 +50,7 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.HtmlFragment;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoResult;
-import org.dbdoclet.trafo.html.parser.HtmlParser;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
-import org.dbdoclet.trafo.internal.html.docbook.LinkManager;
-import org.dbdoclet.trafo.internal.html.docbook.ListDetector;
-import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage1;
-import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage2;
-import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage3;
-import org.dbdoclet.trafo.internal.html.docbook.PreprocessStage1;
-import org.dbdoclet.trafo.internal.html.docbook.SectionDetector;
+import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
 import org.dbdoclet.trafo.internal.html.docbook.editor.EditorException;
 import org.dbdoclet.trafo.internal.html.docbook.editor.EditorFactory;
@@ -82,10 +75,6 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
 public class DocBookTransformer {
-
-	public enum DocumentElementType {
-		ARTICLE, BOOK, CHAPTER, OVERVIEW, PARAGRAPH, PART, REFERENCE, SECTION;
-	}
 
 	private static Log logger = LogFactory.getLog(DocBookTransformer.class);
 

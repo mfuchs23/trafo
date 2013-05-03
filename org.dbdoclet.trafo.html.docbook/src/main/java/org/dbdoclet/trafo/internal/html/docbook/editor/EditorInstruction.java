@@ -11,7 +11,8 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlElement;
-import org.dbdoclet.trafo.html.docbook.DocBookTransformer;
+import org.dbdoclet.trafo.html.docbook.DocumentElementType;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 
 public class EditorInstruction {
@@ -24,7 +25,7 @@ public class EditorInstruction {
 	private CharacterDataImpl characterDataNode;
 	private boolean doIgnore = false;
 	private boolean doTraverse = true;
-	private DocBookTransformer.DocumentElementType codeContext;
+	private DocumentElementType codeContext;
 
 	public boolean doIgnore() {
 
@@ -56,7 +57,7 @@ public class EditorInstruction {
 		return child;
 	}
 
-	public DocBookTransformer.DocumentElementType getCodeContext() {
+	public DocumentElementType getCodeContext() {
 		return codeContext;
 	}
 
@@ -94,7 +95,7 @@ public class EditorInstruction {
 		this.child = child;
 	}
 
-	public void setCodeContext(DocBookTransformer.DocumentElementType context) {
+	public void setCodeContext(DocumentElementType context) {
 
 		this.codeContext = context;
 	}

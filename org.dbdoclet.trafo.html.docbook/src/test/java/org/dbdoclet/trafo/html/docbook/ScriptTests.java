@@ -11,6 +11,7 @@ import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.html.AbstractTests;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
 import org.junit.Test;
 

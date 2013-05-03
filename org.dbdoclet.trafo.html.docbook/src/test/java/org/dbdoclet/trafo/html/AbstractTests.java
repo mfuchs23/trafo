@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.dbdoclet.html.parser.HtmlParser;
 import org.dbdoclet.tag.html.HtmlFragment;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoResult;
-import org.dbdoclet.trafo.html.docbook.DocBookTransformer;
-import org.dbdoclet.trafo.html.parser.HtmlParser;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XPathServices;
 import org.w3c.dom.Document;

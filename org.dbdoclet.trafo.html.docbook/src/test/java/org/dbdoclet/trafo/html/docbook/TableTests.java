@@ -7,7 +7,7 @@ import org.dbdoclet.service.FileServices;
 import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoResult;
-import org.dbdoclet.trafo.html.docbook.DocBookTransformer.DocumentElementType;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.junit.Test;
 
 public class TableTests {

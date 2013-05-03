@@ -37,8 +37,8 @@ import org.dbdoclet.service.StringServices;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoExceptionHandler;
 import org.dbdoclet.trafo.TrafoScriptManager;
-import org.dbdoclet.trafo.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
 
 /**

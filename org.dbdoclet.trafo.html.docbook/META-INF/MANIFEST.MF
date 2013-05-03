@@ -3,11 +3,14 @@ Service-Component: OSGI-INF/component-description.xml
 Bundle-ManifestVersion: 2
 Bundle-Name: org.dbdoclet.trafo.html.docbook
 Bundle-SymbolicName: org.dbdoclet.trafo.html.docbook
-Bundle-Version: 5.1.0
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Version: 7.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.antlr.runtime;version="3.4.0",
  org.apache.commons.logging,
  org.dbdoclet,
+ org.dbdoclet.html.parser,
+ org.dbdoclet.html.tokenizer,
+ org.dbdoclet.html.tokenizer.parser,
  org.dbdoclet.io,
  org.dbdoclet.jive,
  org.dbdoclet.jive.dialog,
@@ -23,9 +26,6 @@ Import-Package: org.antlr.runtime;version="3.4.0",
  org.dbdoclet.tag.html,
  org.dbdoclet.tag.javadoc,
  org.dbdoclet.trafo,
- org.dbdoclet.trafo.html.parser,
- org.dbdoclet.trafo.html.tokenizer,
- org.dbdoclet.trafo.html.tokenizer.parser,
  org.dbdoclet.trafo.param,
  org.dbdoclet.trafo.script,
  org.dbdoclet.xiphias,

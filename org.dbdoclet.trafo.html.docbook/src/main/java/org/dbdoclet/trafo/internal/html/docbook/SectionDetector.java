@@ -35,7 +35,7 @@ import org.dbdoclet.tag.docbook.Section;
 import org.dbdoclet.tag.docbook.Title;
 import org.dbdoclet.tag.html.HeaderElement;
 import org.dbdoclet.tag.html.HtmlElement;
-import org.dbdoclet.trafo.html.docbook.DocBookTransformer;
+import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
 import org.dbdoclet.trafo.internal.html.docbook.editor.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.editor.HeadingEditor;
@@ -185,8 +185,8 @@ public class SectionDetector {
 		levelParent = findParentForLevel(child, level);
 
 		if ((levelParent == null)
-				&& ((values.getCodeContext() == DocBookTransformer.DocumentElementType.OVERVIEW) || (values
-						.getCodeContext() == DocBookTransformer.DocumentElementType.BOOK))) {
+				&& ((values.getCodeContext() == DocumentElementType.OVERVIEW) || (values
+						.getCodeContext() == DocumentElementType.BOOK))) {
 
 			sect = dbfactory.createChapter();
 			sect.setRemap(child.getNodeName());
@@ -372,8 +372,8 @@ public class SectionDetector {
 		}
 
 		if (root instanceof Book
-				|| (values.getCodeContext() == DocBookTransformer.DocumentElementType.BOOK)
-				|| (values.getCodeContext() == DocBookTransformer.DocumentElementType.OVERVIEW)) {
+				|| (values.getCodeContext() == DocumentElementType.BOOK)
+				|| (values.getCodeContext() == DocumentElementType.OVERVIEW)) {
 			return true;
 		} else {
 			return false;

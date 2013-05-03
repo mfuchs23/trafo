@@ -10,15 +10,19 @@ import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.jive.PanelProvider;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.service.ResourceServices;
+import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.AbstractTrafoService;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.internal.html.docbook.HtmlDocBookPanel;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.trafo.script.ScriptEvent;
 import org.dbdoclet.trafo.script.ScriptEvent.Type;
 import org.dbdoclet.trafo.script.ScriptListener;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.osgi.service.component.ComponentContext;
 
 public class HtmlDocBookTrafo extends AbstractTrafoService implements
@@ -26,11 +30,16 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 
 	private final Log logger = LogFactory.getLog(HtmlDocBookTrafo.class);
 	private HtmlDocBookPanel htmlDocBookPanel;
+	private DocBookTagFactory dbfactory = new DocBookTagFactory();
 	private InputStream in;
+
 	private OutputStream out;
 
 	protected void activate(ComponentContext context) {
 		logger.info("Activierung des Bundles " + getId());
+	}
+	public DocBookTagFactory getTagFactory() {
+		return dbfactory;
 	}
 
 	@Override
@@ -53,6 +62,33 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		}
 	}
 
+	public void setTagFactory(DocBookTagFactory dbfactory) {
+		
+		if (dbfactory != null) {
+			this.dbfactory = dbfactory;
+		}
+	}
+
+	@Override
+	public void setInputStream(InputStream in) {
+		this.in = in;
+	}
+
+	@Override
+	public void setOutputStream(OutputStream out) {
+		this.out = out;
+	}
+
+	public NodeImpl transform(Script script, String buffer, NodeImpl parent)
+			throws Exception {
+		
+		DocBookTransformer trafo = new DocBookTransformer();
+		trafo.setTagFactory(dbfactory);
+		trafo.setScript(script);
+		
+		return trafo.transform(buffer, parent, null);
+	}
+
 	@Override
 	public TrafoResult transform(Script script, ProgressListener listener) {
 
@@ -62,6 +98,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 
 			DocBookTransformer trafo = new DocBookTransformer();
 			trafo.addProgressListener(listener);
+			trafo.setTagFactory(dbfactory);
 
 			if (htmlDocBookPanel != null) {
 
@@ -100,15 +137,5 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 
 		return result;
 
-	}
-
-	@Override
-	public void setInputStream(InputStream in) {
-		this.in = in;
-	}
-
-	@Override
-	public void setOutputStream(OutputStream out) {
-		this.out = out;
 	}
 }
