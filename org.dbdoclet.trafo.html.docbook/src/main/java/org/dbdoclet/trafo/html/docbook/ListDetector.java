@@ -1,4 +1,4 @@
-package org.dbdoclet.trafo.internal.html.docbook;
+package org.dbdoclet.trafo.html.docbook;
 
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -6,16 +6,16 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.ItemizedList;
 import org.dbdoclet.tag.docbook.ListItem;
 import org.dbdoclet.tag.docbook.OrderedList;
 import org.dbdoclet.tag.html.HtmlElement;
-import org.dbdoclet.trafo.internal.html.docbook.editor.EditorInstruction;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XmlServices;
+import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -35,9 +35,8 @@ public class ListDetector {
 		String cssClass = child.getCssClass();
 		logger.trace(String.format("Closing list %s, %s.", cssClass, child));
 
-		DocBookTransformer transformer = values.getTransformer();
-		DocBookElement parent = values.getParent();
-		Script script = transformer.getScript();
+		ElementImpl parent = values.getParent();
+		Script script = values.getScript();
 
 		if (isItemizedListElement(child, script)
 				|| isOrderedListElement(child, script)) {
@@ -62,12 +61,12 @@ public class ListDetector {
 		// (HtmlElement) previous, script))) {
 
 		if (parent instanceof ListItem) {
-			parent = (DocBookElement) parent.getParentNode();
+			parent = (ElementImpl) parent.getParentNode();
 		}
 
 		if (parent instanceof ItemizedList || parent instanceof OrderedList) {
-			values.setParent((DocBookElement) parent.getParentNode());
-			values.setCurrent((DocBookElement) parent.getParentNode());
+			values.setParent((ElementImpl) parent.getParentNode());
+			values.setCurrent((ElementImpl) parent.getParentNode());
 		}
 
 		cssClassStack.clear();
@@ -90,7 +89,7 @@ public class ListDetector {
 				&& currentCssClass.equals(cssClass) == false) {
 
 			cssClassStack.pop();
-			DocBookElement parent = values.getParent();
+			ElementImpl parent = values.getParent();
 
 			// Eingebettete Liste finden
 			while (parent != null && parent instanceof ItemizedList == false
@@ -98,7 +97,7 @@ public class ListDetector {
 
 				Node parentNode = parent.getParentNode();
 
-				if (parentNode instanceof DocBookElement == false) {
+				if (parentNode instanceof ElementImpl == false) {
 					logger.warn("Couldn't find nested list element for HTML element "
 							+ values.getHtmlElement()
 							+ ". DocBookParent = "
@@ -108,19 +107,19 @@ public class ListDetector {
 					break;
 				}
 
-				parent = (DocBookElement) parentNode;
+				parent = (ElementImpl) parentNode;
 			}
 
 			if (parent != null) {
 
 				// Übergeordnete Liste suchen
-				parent = (DocBookElement) parent.getParentNode();
+				parent = (ElementImpl) parent.getParentNode();
 				while (parent != null
 						&& parent instanceof ItemizedList == false
 						&& parent instanceof OrderedList == false) {
 
 					Node parentNode = parent.getParentNode();
-					if (parentNode instanceof DocBookElement == false) {
+					if (parentNode instanceof ElementImpl == false) {
 						logger.warn("Couldn't find parent list for a nested list for HTML element "
 								+ values.getHtmlElement()
 								+ ". DocBookParent = "
@@ -131,7 +130,7 @@ public class ListDetector {
 						break;
 					}
 
-					parent = (DocBookElement) parentNode;
+					parent = (ElementImpl) parentNode;
 				}
 
 				// Falls eine übergeordnete Liste gefunden wurde, wird diese zum
@@ -193,10 +192,10 @@ public class ListDetector {
 				htmlElement));
 
 		DocBookTagFactory dbfactory = values.getTagFactory();
-		DocBookElement parent = values.getParent();
+		ElementImpl parent = values.getParent();
 
 		if (isNestedList(cssClass) == false && parent instanceof ListItem) {
-			parent = (DocBookElement) parent.getParentNode();
+			parent = (ElementImpl) parent.getParentNode();
 		}
 
 		parent = createListElement(type, cssClass, dbfactory, parent);
@@ -212,8 +211,8 @@ public class ListDetector {
 		values.setCurrent(listItem);
 	}
 
-	private DocBookElement createListElement(ListType type, String cssClass,
-			DocBookTagFactory dbfactory, DocBookElement parent) {
+	private ElementImpl createListElement(ListType type, String cssClass,
+			DocBookTagFactory dbfactory, ElementImpl parent) {
 
 		if (type == ListType.ITEMIZED
 				&& parent instanceof ItemizedList == false) {

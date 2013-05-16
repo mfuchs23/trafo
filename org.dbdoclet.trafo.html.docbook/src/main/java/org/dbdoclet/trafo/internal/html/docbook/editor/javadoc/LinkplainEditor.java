@@ -36,8 +36,8 @@ import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.tag.docbook.Link;
 import org.dbdoclet.tag.docbook.XRef;
 import org.dbdoclet.tag.javadoc.Linkplain;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
-import org.dbdoclet.trafo.internal.html.docbook.editor.EditorInstruction;
 
 public class LinkplainEditor extends Editor {
 

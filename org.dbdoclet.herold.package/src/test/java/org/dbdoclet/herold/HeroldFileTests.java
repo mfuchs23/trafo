@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.dbdoclet.service.FileServices;
 import org.dbdoclet.service.ResourceServices;
+import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
@@ -53,7 +54,7 @@ public class HeroldFileTests extends AbstractTests {
 
 	@Test
 	public void testJohannSebastianBach_2() {
-		herold("JSB.html", DocBookTransformer.DocumentElementType.BOOK);
+		herold("JSB.html", DocumentElementType.BOOK);
 	}
 
 	@Test
@@ -78,11 +79,10 @@ public class HeroldFileTests extends AbstractTests {
 
 	@Test
 	public void testLink1() {
-		herold("html/a/Link1.html", DocBookTransformer.DocumentElementType.BOOK);
+		herold("html/a/Link1.html", DocumentElementType.BOOK);
 	}
 
-	private void herold(String resource,
-			DocBookTransformer.DocumentElementType rootType) {
+	private void herold(String resource, DocumentElementType rootType) {
 
 		try {
 

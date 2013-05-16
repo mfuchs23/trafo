@@ -12,6 +12,8 @@ import org.dbdoclet.tag.docbook.BlockQuote;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class BlockquoteEditor extends Editor {
 

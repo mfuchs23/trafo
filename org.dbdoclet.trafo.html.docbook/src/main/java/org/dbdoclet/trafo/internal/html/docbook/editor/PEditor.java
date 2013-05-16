@@ -21,6 +21,8 @@ import org.dbdoclet.tag.docbook.RefSection;
 import org.dbdoclet.tag.docbook.Reference;
 import org.dbdoclet.tag.docbook.SectionElement;
 import org.dbdoclet.tag.html.P;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 

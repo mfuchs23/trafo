@@ -20,7 +20,9 @@ import org.dbdoclet.tag.docbook.RefNameDiv;
 import org.dbdoclet.tag.docbook.RefSection;
 import org.dbdoclet.tag.docbook.Reference;
 import org.dbdoclet.tag.html.Div;
-import org.dbdoclet.trafo.internal.html.docbook.SectionDetector;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.trafo.html.docbook.SectionDetector;
 
 public class DivEditor extends Editor {
 

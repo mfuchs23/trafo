@@ -13,6 +13,8 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Term;
 import org.dbdoclet.tag.docbook.VarListEntry;
 import org.dbdoclet.tag.docbook.VariableList;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 
 public class DtEditor extends Editor {

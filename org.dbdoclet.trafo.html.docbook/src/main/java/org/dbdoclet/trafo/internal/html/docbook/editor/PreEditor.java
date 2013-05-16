@@ -15,6 +15,8 @@ import org.dbdoclet.tag.docbook.Example;
 import org.dbdoclet.tag.docbook.InformalExample;
 import org.dbdoclet.tag.docbook.SectionElement;
 import org.dbdoclet.tag.html.HtmlElement;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class PreEditor extends Editor {
 

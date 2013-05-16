@@ -14,8 +14,8 @@ import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.tag.docbook.Literal;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
-import org.dbdoclet.trafo.internal.html.docbook.editor.EditorInstruction;
 
 /**
  * The class <code>LinkEditor</code> is reponsible for transforming @link tags

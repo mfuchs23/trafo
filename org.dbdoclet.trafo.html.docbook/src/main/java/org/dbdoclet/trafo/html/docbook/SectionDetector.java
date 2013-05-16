@@ -1,4 +1,4 @@
-package org.dbdoclet.trafo.internal.html.docbook;
+package org.dbdoclet.trafo.html.docbook;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,9 +35,10 @@ import org.dbdoclet.tag.docbook.Section;
 import org.dbdoclet.tag.docbook.Title;
 import org.dbdoclet.tag.html.HeaderElement;
 import org.dbdoclet.tag.html.HtmlElement;
-import org.dbdoclet.trafo.html.docbook.DocumentElementType;
+import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
-import org.dbdoclet.trafo.internal.html.docbook.editor.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.editor.HeadingEditor;
 import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;

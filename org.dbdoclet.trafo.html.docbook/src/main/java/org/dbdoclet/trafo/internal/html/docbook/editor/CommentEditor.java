@@ -10,6 +10,8 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.service.StringServices;
 import org.dbdoclet.tag.docbook.DocBookElement;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.XmlServices;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.CommentImpl;

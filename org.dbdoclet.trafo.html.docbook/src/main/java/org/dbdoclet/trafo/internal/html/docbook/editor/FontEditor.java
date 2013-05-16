@@ -12,6 +12,8 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.tag.docbook.SimPara;
 import org.dbdoclet.tag.html.Font;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class FontEditor extends Editor {
 

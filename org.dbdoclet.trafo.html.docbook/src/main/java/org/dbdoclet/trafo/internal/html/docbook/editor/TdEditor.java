@@ -11,6 +11,8 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import java.util.Iterator;
 
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.ElementImpl;

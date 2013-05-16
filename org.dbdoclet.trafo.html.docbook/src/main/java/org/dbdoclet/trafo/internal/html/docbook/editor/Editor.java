@@ -21,6 +21,8 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.Table;
 import org.dbdoclet.tag.html.Td;
 import org.dbdoclet.tag.html.Th;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
@@ -126,7 +128,7 @@ public class Editor {
 
 			if (characterDataNode != null
 					&& characterDataNode instanceof TextImpl) {
-
+				••••••••
 				Para para = dbfactory.createPara();
 				parent.appendChild(dbfactory.createEntry().appendChild(para));
 				parent = para;

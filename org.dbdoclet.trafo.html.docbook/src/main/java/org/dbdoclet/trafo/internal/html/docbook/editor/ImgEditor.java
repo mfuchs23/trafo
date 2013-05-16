@@ -29,6 +29,8 @@ import org.dbdoclet.tag.docbook.Screen;
 import org.dbdoclet.tag.docbook.Term;
 import org.dbdoclet.tag.docbook.ULink;
 import org.dbdoclet.tag.html.Img;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.param.Param;
 import org.dbdoclet.trafo.script.Script;

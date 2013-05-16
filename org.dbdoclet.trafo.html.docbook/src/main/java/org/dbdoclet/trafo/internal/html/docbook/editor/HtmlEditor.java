@@ -11,6 +11,8 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.dbdoclet.tag.docbook.Article;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlElement;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class HtmlEditor extends Editor {
 

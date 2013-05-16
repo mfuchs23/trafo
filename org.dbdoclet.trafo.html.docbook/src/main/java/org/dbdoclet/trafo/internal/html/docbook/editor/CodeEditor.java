@@ -12,6 +12,8 @@ import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Literal;
 import org.dbdoclet.tag.html.Code;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class CodeEditor extends Editor {
 

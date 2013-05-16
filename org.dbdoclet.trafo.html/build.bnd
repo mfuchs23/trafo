@@ -1,6 +1,6 @@
 version=7.0.0
-Bundle-Name=org.dbdoclet.trafo.html.docbook
-Bundle-SymbolicName=org.dbdoclet.trafo.html.docbook
+Bundle-Name=org.dbdoclet.trafo.html
+Bundle-SymbolicName=org.dbdoclet.trafo.html
 Bundle-Version=${version}
 Service-Component: OSGI-INF/component-description.xml
 Export-Package: \

@@ -15,6 +15,8 @@ import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Term;
 import org.dbdoclet.tag.docbook.VarListEntry;
 import org.dbdoclet.tag.docbook.VariableList;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class DdEditor extends Editor {
 

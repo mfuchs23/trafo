@@ -24,6 +24,8 @@ import org.dbdoclet.tag.docbook.Subject;
 import org.dbdoclet.tag.docbook.Subjectset;
 import org.dbdoclet.tag.docbook.Subjectterm;
 import org.dbdoclet.tag.html.Meta;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 

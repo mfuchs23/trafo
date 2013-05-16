@@ -11,6 +11,8 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.dbdoclet.tag.docbook.BlockQuote;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class VarEditor extends Editor {
 

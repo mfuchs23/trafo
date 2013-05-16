@@ -8,8 +8,8 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor.javadoc;
 
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
-import org.dbdoclet.trafo.internal.html.docbook.editor.EditorInstruction;
 
 /**
  * The class <code>CodeEditor</code> is reponsible for transforming @literal

@@ -9,8 +9,8 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor.javadoc;
 
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
-import org.dbdoclet.trafo.internal.html.docbook.editor.EditorInstruction;
 
 public class CodeEditor extends Editor {
 

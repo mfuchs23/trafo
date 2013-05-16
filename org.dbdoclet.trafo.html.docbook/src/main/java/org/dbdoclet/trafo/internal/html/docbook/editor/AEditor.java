@@ -18,6 +18,8 @@ import org.dbdoclet.tag.docbook.SimPara;
 import org.dbdoclet.tag.docbook.ULink;
 import org.dbdoclet.tag.docbook.XRef;
 import org.dbdoclet.tag.html.A;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;

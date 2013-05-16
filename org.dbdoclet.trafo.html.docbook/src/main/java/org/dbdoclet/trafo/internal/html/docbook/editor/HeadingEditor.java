@@ -13,7 +13,9 @@ import java.util.HashMap;
 import org.dbdoclet.option.OptionException;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
-import org.dbdoclet.trafo.internal.html.docbook.SectionDetector;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.trafo.html.docbook.SectionDetector;
 
 public class HeadingEditor extends Editor {
 

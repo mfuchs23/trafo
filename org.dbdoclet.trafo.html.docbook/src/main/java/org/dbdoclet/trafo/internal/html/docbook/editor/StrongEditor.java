@@ -11,6 +11,8 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlElement;
+import org.dbdoclet.trafo.html.EditorException;
+import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
 
 public class StrongEditor extends Editor {

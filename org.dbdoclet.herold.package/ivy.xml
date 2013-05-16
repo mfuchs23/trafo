@@ -14,6 +14,7 @@
     <dependency org="org.dbdoclet" name="org.dbdoclet.tag" rev="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.xiphias" rev="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo" rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html" rev="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html.docbook" rev="latest.integration" />
   </dependencies>
 </ivy-module>

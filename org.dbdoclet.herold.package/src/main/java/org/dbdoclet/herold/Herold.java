@@ -37,8 +37,8 @@ import org.dbdoclet.service.StringServices;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoExceptionHandler;
 import org.dbdoclet.trafo.TrafoScriptManager;
+import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
 import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
-import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
 
 /**
@@ -404,14 +404,15 @@ public class Herold {
 	public void convert(InputStream in, OutputStream out, Script script)
 			throws TrafoException {
 
-		DocBookTransformer trafo = new DocBookTransformer();
-
+		HtmlDocBookTrafo trafo = new HtmlDocBookTrafo();
+		trafo.setInputStream(in);
+		trafo.setOutputStream(out);
+		
 		if (verbose == true) {
-			trafo.addProgressListener(new ConsoleProgressListener(false));
+			trafo.transform(script, new ConsoleProgressListener(false));
+		} else {
+			trafo.transform(script, null);
 		}
-
-		trafo.setScript(script);
-		trafo.transform(in, out);
 
 		if (verbose == true) {
 			System.out.println();
