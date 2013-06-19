@@ -14,14 +14,14 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class HtmlEditor extends Editor {
+public class HtmlEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
 		Article article = dbfactory.createArticle();
 

@@ -6,7 +6,7 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class DefaultEditor extends Editor {
+public class DefaultEditor extends DocBookEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
@@ -18,7 +18,7 @@ public class DefaultEditor extends Editor {
         
         if (htmlId != null) {
         
-            DocBookTagFactory dbf = evo.getTagFactory();
+            DocBookTagFactory dbf = getTagFactory();
             Anchor anchor = dbf.createAnchor();
             copyCommonAttributes(html, anchor);
             

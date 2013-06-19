@@ -62,14 +62,13 @@ public class BrEditorTests extends AbstractTests {
 	private EditorInstruction createEditorInstruction(HtmlElement html,
 			DocBookElement docbook) {
 
-		EditorInstruction ei = new EditorInstruction();
-		ei.setChild(html);
+		Script script = new Script();
+		EditorInstruction ei = new EditorInstruction(script);
+		ei.setHtmlElement(html);
 		ei.setCurrent(docbook);
 
 		DocBookTransformer transformer = new DocBookTransformer();
-		Script script = new Script();
 		transformer.setScript(script);
-		ei.setTransformer(transformer);
 		return ei;
 	}
 }

@@ -13,13 +13,13 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.NodeListImpl;
 
-public class DirEditor extends Editor {
+public class DirEditor extends DocBookEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	NodeListImpl children = getHtmlElement().getTrafoChildNodes();
 

@@ -31,12 +31,12 @@ import org.dbdoclet.tag.docbook.ULink;
 import org.dbdoclet.tag.html.Img;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.param.Param;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.ImageServices;
 
-public class ImgEditor extends Editor {
+public class ImgEditor extends DocBookEditor {
 
 	private static Log logger = LogFactory.getLog(ImgEditor.class);
 
@@ -230,7 +230,7 @@ public class ImgEditor extends Editor {
 
 		setValues(super.edit(values));
 
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 		Script script = getScript();
 
 		Img img = (Img) getHtmlElement();

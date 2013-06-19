@@ -12,7 +12,7 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
 
-public class SmallEditor extends Editor {
+public class SmallEditor extends DocBookEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {

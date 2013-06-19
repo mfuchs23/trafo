@@ -13,16 +13,16 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 
-public class StrongEditor extends Editor {
+public class StrongEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
 		HtmlElement child = getHtmlElement();
 		DocBookElement parent = getParent();

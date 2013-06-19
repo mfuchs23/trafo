@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Test;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class MiscTests extends AbstractTests {
@@ -22,8 +21,6 @@ public class MiscTests extends AbstractTests {
 				"-o", xmlFile.getPath() };
 
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-
-		Document doc = validateAndParse(xmlFile);
-
+		validateAndParse(xmlFile);
 	}
 }

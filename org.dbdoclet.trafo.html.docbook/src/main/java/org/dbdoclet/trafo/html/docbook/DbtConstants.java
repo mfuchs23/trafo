@@ -1,4 +1,4 @@
-package org.dbdoclet.trafo.internal.html.docbook;
+package org.dbdoclet.trafo.html.docbook;
 
 public class DbtConstants {
 
@@ -46,7 +46,6 @@ public class DbtConstants {
 	public static final String PARAM_ENCODING = "encoding";
 	public static final String PARAM_EXCLUDE = "exclude";
 	public static final String PARAM_FILE = "file";
-	public static final String PARAM_HTML_SOURCE_ENCODING = "encoding";
 	public static final String PARAM_HYPHENATION_CHAR = "hyphenation-char";
 	public static final String PARAM_IMAGEDATA_FORMATS = "image-data-formats";
 	public static final String PARAM_IMAGE_PATH = "image-path";

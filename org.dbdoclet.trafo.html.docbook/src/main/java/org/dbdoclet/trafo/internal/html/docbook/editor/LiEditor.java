@@ -14,13 +14,13 @@ import org.dbdoclet.tag.docbook.ListItem;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class LiEditor extends Editor {
+public class LiEditor extends DocBookEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
         setValues(super.edit(values));
-        DocBookTagFactory dbfactory = values.getTagFactory();
+        DocBookTagFactory dbfactory = getTagFactory();
 
         DocBookElement parent = getParent();
         

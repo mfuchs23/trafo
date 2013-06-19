@@ -13,13 +13,13 @@ import org.dbdoclet.tag.docbook.Subscript;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class SubEditor extends Editor {
+public class SubEditor extends DocBookEditor {
     
     @Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	Subscript candidate = dbfactory.createSubscript();
 	candidate.setParentNode(getParent());

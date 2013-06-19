@@ -11,20 +11,20 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 
-public class ThEditor extends Editor {
+public class ThEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
-		Script script = getTransformer().getScript();
+		Script script = getScript();
 		boolean decomposeTables = script.isParameterOn(
 				DbtConstants.SECTION_DOCBOOK,
 				DbtConstants.PARAM_DECOMPOSE_TABLES,

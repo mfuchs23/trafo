@@ -20,14 +20,14 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 
-public class SpanEditor extends Editor {
+public class SpanEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
 		Span span = (Span) getHtmlElement();
 		DocBookElement parent = getParent();
@@ -82,9 +82,8 @@ public class SpanEditor extends Editor {
 
 		if (id != null) {
 
-			DocBookTransformer transformer = getTransformer();
 			Anchor anchor = dbfactory.createAnchor();
-			anchor.setId(transformer.getLinkManager().createUniqueId(id));
+			anchor.setId(getLinkManager().createUniqueId(id));
 			parent.appendChild(anchor);
 		}
 

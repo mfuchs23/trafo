@@ -13,25 +13,26 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class AbbrEditor extends Editor {
+public class AbbrEditor extends DocBookEditor {
 
-    @Override
-	public EditorInstruction edit(EditorInstruction values) throws EditorException {
+	@Override
+	public EditorInstruction edit(EditorInstruction values)
+			throws EditorException {
 
-	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+		setValues(super.edit(values));
+		DocBookTagFactory dbfactory = getTagFactory();
 
-	Abbrev candidate = dbfactory.createAbbrev();
-	candidate.setParentNode(getParent());
+		Abbrev candidate = dbfactory.createAbbrev();
+		candidate.setParentNode(getParent());
 
-	if (candidate.validate()) {
+		if (candidate.validate()) {
 
-	    setCurrent(candidate);
-	    getParent().appendChild(getCurrent());
+			setCurrent(candidate);
+			getParent().appendChild(getCurrent());
+		}
+
+		traverse(true);
+
+		return finalizeValues();
 	}
-
-	traverse(true);
-
-	return finalizeValues();
-    }
 }

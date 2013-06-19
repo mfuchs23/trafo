@@ -14,13 +14,13 @@ import org.dbdoclet.tag.docbook.SimPara;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class StrikeEditor extends Editor {
+public class StrikeEditor extends DocBookEditor {
 
     @Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	traverse(true);
 	Emphasis emphasis = dbfactory.createEmphasis();

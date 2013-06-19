@@ -53,17 +53,20 @@ import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorFactoryException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.trafo.html.IEditor;
+import org.dbdoclet.trafo.html.IEditorFactory;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.html.docbook.ListDetector;
 import org.dbdoclet.trafo.html.docbook.SectionDetector;
-import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
-import org.dbdoclet.trafo.internal.html.docbook.editor.EditorFactory;
+import org.dbdoclet.trafo.internal.html.docbook.editor.DocBookEditorFactory;
 import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.NodeSerializer;
 import org.dbdoclet.xiphias.XPathServices;
 import org.dbdoclet.xiphias.XmlServices;
 import org.dbdoclet.xiphias.dom.CommentImpl;
+import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeCountVisitor;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.NodeListImpl;
@@ -173,7 +176,7 @@ public class DocBookTransformer {
 		try {
 			htmlCode = FileServices.readToString(file, script.getTextParameter(
 					DbtConstants.SECTION_HTML,
-					DbtConstants.PARAM_HTML_SOURCE_ENCODING,
+					DbtConstants.PARAM_ENCODING,
 					DbtConstants.DEFAULT_SOURCE_ENCODING));
 			return transform(htmlCode);
 		} catch (IOException oops) {
@@ -205,7 +208,7 @@ public class DocBookTransformer {
 
 			String encoding = script.getTextParameter(
 					DbtConstants.SECTION_HTML,
-					DbtConstants.PARAM_HTML_SOURCE_ENCODING, "UTF-8");
+					DbtConstants.PARAM_ENCODING, "UTF-8");
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					in, encoding));
@@ -652,12 +655,12 @@ public class DocBookTransformer {
 
 	private boolean beforeEdit(EditorInstruction values) {
 
-		listDetector.edit(values);
+		listDetector.edit(values, dbfactory);
 
 		SectionDetector sectionDetector = new SectionDetector();
 		HtmlElement htmlElement = values.getHtmlElement();
-		if (sectionDetector.isSection(htmlElement, getScript())) {
-			sectionDetector.edit(values);
+		if (sectionDetector.isSection(htmlElement)) {
+			sectionDetector.edit(values, dbfactory);
 			return false;
 		}
 
@@ -768,7 +771,7 @@ public class DocBookTransformer {
 	 * @return a <code>Element</code>. The root node of the created DocBook
 	 *         document tree.
 	 */
-	private DocBookElement edit(NodeImpl htmlNode, DocBookElement dbParent) {
+	private ElementImpl edit(NodeImpl htmlNode, ElementImpl dbParent) {
 
 		logger.debug("-> edit " + htmlNode);
 
@@ -784,21 +787,22 @@ public class DocBookTransformer {
 
 		NodeListImpl htmlChildren = htmlNode.getTrafoChildNodes();
 		Iterator<NodeImpl> iterator = htmlChildren.iterator();
-
+		IEditorFactory editorFactory = new DocBookEditorFactory();
+		
 		boolean doTraverse = true;
 		boolean doIgnore = false;
 
 		NodeImpl child = null;
 		HtmlElement htmlElement;
 
-		DocBookElement dbElement;
-		DocBookElement dbOldParent = dbParent;
-		DocBookElement dbChildParent = null;
+		ElementImpl dbElement;
+		ElementImpl dbOldParent = dbParent;
+		ElementImpl dbChildParent = null;
 
 		Object anything = null;
-		Editor editor;
+		IEditor editor;
 
-		DocBookElement dbelem; // for temporay use only!
+		ElementImpl dbelem; // for temporay use only!
 
 		int index = 0;
 
@@ -830,16 +834,14 @@ public class DocBookTransformer {
 
 					if (isInstruction(comment)) {
 
-						EditorInstruction values = new EditorInstruction();
+						EditorInstruction values = new EditorInstruction(script);
 						values.setAnything(null);
-						values.setChild(null);
-						values.setCodeContext(documentType);
+						values.setHtmlElement(null);
 						values.setCurrent(dbParent);
 						values.setParent(dbParent);
 						values.setCharacterDataNode((CommentImpl) child);
-						values.setTransformer(this);
 
-						editor = EditorFactory.getCommentEditor();
+						editor = editorFactory.getCommentEditor();
 
 						logger.debug(indent + " Vor der Kommentarbearbeitung: "
 								+ child + ".\n");
@@ -880,17 +882,15 @@ public class DocBookTransformer {
 
 				try {
 
-					EditorInstruction values = new EditorInstruction();
+					EditorInstruction values = new EditorInstruction(script);
 
 					values.setAnything(null);
-					values.setChild(null);
-					values.setCodeContext(documentType);
+					values.setHtmlElement(null);
 					values.setCurrent(dbParent);
 					values.setParent(dbParent);
 					values.setCharacterDataNode((TextImpl) child);
-					values.setTransformer(this);
 
-					editor = EditorFactory.getTextEditor();
+					editor = editorFactory.getTextEditor();
 
 					logger.debug(indent + " Vor der Textbearbeitung: " + child
 							+ ".\n");
@@ -932,19 +932,17 @@ public class DocBookTransformer {
 						continue;
 					}
 
-					editor = EditorFactory.getChildEditor(htmlElement);
+					editor = editorFactory.getChildEditor(htmlElement);
 
 					logger.debug("Setting editor values.");
 
-					EditorInstruction values = new EditorInstruction();
+					EditorInstruction values = new EditorInstruction(script);
 
 					values.setAnything(anything);
-					values.setChild((HtmlElement) child);
-					values.setCodeContext(documentType);
+					values.setHtmlElement((HtmlElement) child);
 					values.setCurrent(dbParent);
 					values.setParent(dbParent);
 					values.setCharacterDataNode(null);
-					values.setTransformer(this);
 
 					logger.debug(indent + " Vor der Transformation: " + child
 							+ ".\n" + "Editor " + editor + "\n" + values);
@@ -954,7 +952,7 @@ public class DocBookTransformer {
 						TransformInstruction transformInstruction = child
 								.getTransformInstruction();
 
-						DocBookElement parent = values.getParent();
+						ElementImpl parent = values.getParent();
 						parent.appendChild(transformInstruction
 								.getReplacement());
 
@@ -1047,7 +1045,7 @@ public class DocBookTransformer {
 				logger.debug(indent + "Closing old parent " + dbelem
 						+ ". HTML Element is " + child + ".");
 				dbelem.closed();
-				dbelem.isNew(false);
+				// dbelem.isNew(false);
 
 				dbOldParent = dbParent;
 			}
@@ -1061,8 +1059,6 @@ public class DocBookTransformer {
 
 		logger.debug(indent + "[Vaterknoten bearbeitet] HTML: " + child
 				+ ", Vaterknoten: " + dbParent);
-		dbParent.closed();
-		dbParent.isNew(false);
 
 		logger.debug("<- edit ");
 		return dbParent;

@@ -20,7 +20,7 @@ public class EmEditor extends AbstractInlineEditor {
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
-        DocBookTagFactory dbfactory = values.getTagFactory();
+        DocBookTagFactory dbfactory = getTagFactory();
         emphasis = dbfactory.createEmphasis();
         
         setInlineElement(emphasis);

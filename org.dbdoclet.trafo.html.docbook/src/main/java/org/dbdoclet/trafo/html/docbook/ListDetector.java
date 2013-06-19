@@ -143,15 +143,15 @@ public class ListDetector {
 		}
 	}
 
-	public void edit(EditorInstruction values) {
+	public void edit(EditorInstruction values, DocBookTagFactory dbfactory) {
 
 		HtmlElement htmlElement = values.getHtmlElement();
-		Script script = values.getTransformer().getScript();
+		Script script = values.getScript();
 
 		if (isItemizedListElement(htmlElement, script)) {
-			edit(values, ListDetector.ListType.ITEMIZED);
+			edit(values, dbfactory, ListDetector.ListType.ITEMIZED);
 		} else if (isOrderedListElement(htmlElement, script)) {
-			edit(values, ListDetector.ListType.ORDERED);
+			edit(values, dbfactory,ListDetector.ListType.ORDERED);
 		} else if (isEndOfList(values, script)) {
 			closeList(values);
 		}
@@ -184,14 +184,13 @@ public class ListDetector {
 		return true;
 	}
 
-	public void edit(EditorInstruction values, ListType type) {
+	public void edit(EditorInstruction values, DocBookTagFactory dbfactory, ListType type) {
 
 		HtmlElement htmlElement = values.getHtmlElement();
 		String cssClass = htmlElement.getCssClass();
 		logger.trace(String.format("Editing list element %s, %s.", cssClass,
 				htmlElement));
 
-		DocBookTagFactory dbfactory = values.getTagFactory();
 		ElementImpl parent = values.getParent();
 
 		if (isNestedList(cssClass) == false && parent instanceof ListItem) {

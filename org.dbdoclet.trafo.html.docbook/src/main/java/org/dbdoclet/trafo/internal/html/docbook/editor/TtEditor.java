@@ -18,7 +18,7 @@ public class TtEditor extends AbstractInlineEditor {
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
-        DocBookTagFactory dbfactory = values.getTagFactory();
+        DocBookTagFactory dbfactory = getTagFactory();
         Literal literal = dbfactory.createLiteral();
         setInlineElement(literal);
 

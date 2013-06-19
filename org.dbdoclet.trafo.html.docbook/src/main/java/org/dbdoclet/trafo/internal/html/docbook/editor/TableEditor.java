@@ -17,21 +17,21 @@ import org.dbdoclet.tag.docbook.EntryTbl;
 import org.dbdoclet.tag.html.Td;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.w3c.dom.Element;
 
-public class TableEditor extends Editor {
+public class TableEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
-		Script script = getTransformer().getScript();
+		Script script = getScript();
 		boolean decomposeTables = script.isParameterOn(
 				DbtConstants.SECTION_DOCBOOK,
 				DbtConstants.PARAM_DECOMPOSE_TABLES,
@@ -140,7 +140,7 @@ public class TableEditor extends Editor {
 
 		copyCommonAttributes(htmlTable, table);
 
-		Script script = getTransformer().getScript();
+		Script script = getScript();
 
 		String tableStyle = script.getTextParameter(
 				DbtConstants.SECTION_DOCBOOK,

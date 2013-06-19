@@ -15,20 +15,21 @@ import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.html.Br;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
+import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-public class BrEditor extends Editor {
+public class BrEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 		traverse(false);
 
 		Br brElement = (Br) values.getHtmlElement();
@@ -64,7 +65,7 @@ public class BrEditor extends Editor {
 		return finalizeValues();
 	}
 
-	private boolean isTrapped(Br brElement, DocBookElement current) {
+	private boolean isTrapped(Br brElement, ElementImpl elementImpl) {
 
 		Node prevSibling = brElement.getPreviousSibling();
 		Node nextSibling = brElement.getNextSibling();
@@ -95,7 +96,7 @@ public class BrEditor extends Editor {
 
 		if (prevText.endsWith("-")) {
 
-			Node lastChild = current.getLastChild();
+			Node lastChild = elementImpl.getLastChild();
 
 			if (lastChild instanceof Text) {
 

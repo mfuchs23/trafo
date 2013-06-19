@@ -15,29 +15,30 @@ import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class BlockquoteEditor extends Editor {
+public class BlockquoteEditor extends DocBookEditor {
 
-    @Override
-	public EditorInstruction edit(EditorInstruction values) throws EditorException {
+	@Override
+	public EditorInstruction edit(EditorInstruction values)
+			throws EditorException {
 
-	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+		setValues(super.edit(values));
+		DocBookTagFactory dbfactory = getTagFactory();
 
-	BlockQuote blockquote = dbfactory.createBlockQuote();
+		BlockQuote blockquote = dbfactory.createBlockQuote();
 
-	DocBookElement parent = getParent();
+		DocBookElement parent = getParent();
 
-	parent.appendChild(blockquote);
-	blockquote.setParentNode(parent);
+		parent.appendChild(blockquote);
+		blockquote.setParentNode(parent);
 
-	Para para = dbfactory.createPara();
+		Para para = dbfactory.createPara();
 
-	blockquote.appendChild(para);
-	para.setParentNode(blockquote);
+		blockquote.appendChild(para);
+		para.setParentNode(blockquote);
 
-	setCurrent(para);
-	traverse(true);
+		setCurrent(para);
+		traverse(true);
 
-	return finalizeValues();
-    }
+		return finalizeValues();
+	}
 }

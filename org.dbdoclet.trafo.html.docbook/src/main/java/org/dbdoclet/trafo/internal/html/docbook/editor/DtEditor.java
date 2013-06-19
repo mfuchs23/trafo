@@ -17,7 +17,7 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 
-public class DtEditor extends Editor {
+public class DtEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
@@ -26,7 +26,7 @@ public class DtEditor extends Editor {
 		DocBookElement entry = null;
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
 		if (getParent() instanceof VariableList) {
 

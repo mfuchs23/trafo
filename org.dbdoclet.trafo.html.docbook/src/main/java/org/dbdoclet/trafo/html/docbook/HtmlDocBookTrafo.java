@@ -2,6 +2,7 @@ package org.dbdoclet.trafo.html.docbook;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import javax.swing.JPanel;
 
@@ -15,15 +16,17 @@ import org.dbdoclet.trafo.AbstractTrafoService;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
 import org.dbdoclet.trafo.html.HtmlProvider;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
-import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.internal.html.docbook.DocBookVisitor;
 import org.dbdoclet.trafo.internal.html.docbook.HtmlDocBookPanel;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.trafo.script.ScriptEvent;
 import org.dbdoclet.trafo.script.ScriptEvent.Type;
 import org.dbdoclet.trafo.script.ScriptListener;
+import org.dbdoclet.xiphias.NodeSerializer;
+import org.dbdoclet.xiphias.dom.DocumentImpl;
+import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.osgi.service.component.ComponentContext;
+import org.w3c.dom.Document;
 
 public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		PanelProvider, ScriptListener {
@@ -106,23 +109,9 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		TrafoResult result = new TrafoResult();
 
 		try {
-
 			String encoding = script.getTextParameter(
 					DbtConstants.SECTION_HTML,
-					DbtConstants.PARAM_HTML_SOURCE_ENCODING, "UTF-8");
-
-			DocBookVisitor visitor = new DocBookVisitor();
-			visitor.addProgressListener(listener);
-			visitor.setTagFactory(dbfactory);
-			visitor.setScript(script);
-			
-			HtmlProvider htmlProvider = new HtmlProvider();
-			htmlProvider.parse(in, encoding);
-			htmlProvider.traverse(visitor);
-			
-			DocBookTransformer trafo = new DocBookTransformer();
-			trafo.addProgressListener(listener);
-			trafo.setTagFactory(dbfactory);
+					DbtConstants.PARAM_ENCODING, "UTF-8");
 
 			if (htmlDocBookPanel != null) {
 
@@ -141,7 +130,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 				}
 
 				script.selectSection(DbtConstants.SECTION_HTML);
-				script.setTextParameter(DbtConstants.PARAM_HTML_SOURCE_ENCODING,
+				script.setTextParameter(DbtConstants.PARAM_ENCODING,
 						htmlDocBookPanel.getSourceEncoding());
 
 				script.selectSection(DbtConstants.SECTION_DOCBOOK);
@@ -152,9 +141,29 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 						htmlDocBookPanel.getDocumentType());
 			}
 
-			trafo.setScript(script);
-			trafo.transform(in, out);
-
+			DocBookVisitor visitor = new DocBookVisitor();
+			visitor.addProgressListener(listener);
+			visitor.setTagFactory(dbfactory);
+			visitor.setScript(script);
+			
+			HtmlProvider htmlProvider = new HtmlProvider();
+			htmlProvider.parse(in, encoding);
+			htmlProvider.traverse(visitor);
+			
+			ElementImpl documentElement = visitor.getDocumentElement();
+			DocumentImpl document = new DocumentImpl();
+			document.setDocumentElement(documentElement);
+			
+			encoding = script.getTextParameter(
+					DbtConstants.SECTION_DOCBOOK,
+					DbtConstants.PARAM_ENCODING, "UTF-8");
+			
+			NodeSerializer serializer = new NodeSerializer();
+			serializer.addProgressListener(listener);
+			OutputStreamWriter writer = new OutputStreamWriter(out, encoding);
+			serializer.write(document, writer);
+			writer.close();
+			
 		} catch (Throwable oops) {
 			result.setThrowable(oops);
 		}

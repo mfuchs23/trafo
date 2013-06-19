@@ -13,11 +13,11 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 
-public class TextEditor extends Editor {
+public class TextEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
@@ -26,11 +26,11 @@ public class TextEditor extends Editor {
 		try {
 
 			setValues(super.edit(values));
-			DocBookTagFactory dbfactory = values.getTagFactory();
+			DocBookTagFactory dbfactory = getTagFactory();
 
 			DocBookElement parent = getParent();
 			DocBookElement current = getCurrent();
-			Script script = getTransformer().getScript();
+			Script script = getScript();
 
 			if (parent.isContentModel()) {
 

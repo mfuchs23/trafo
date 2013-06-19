@@ -16,7 +16,7 @@ import org.dbdoclet.xiphias.XmlServices;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.CommentImpl;
 
-public class CommentEditor extends Editor {
+public class CommentEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {

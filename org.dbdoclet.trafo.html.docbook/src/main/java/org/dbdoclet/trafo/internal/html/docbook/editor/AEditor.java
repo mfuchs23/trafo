@@ -20,24 +20,23 @@ import org.dbdoclet.tag.docbook.XRef;
 import org.dbdoclet.tag.html.A;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
 
-public class AEditor extends Editor {
+public class AEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
-		Script script = getTransformer().getScript();
+		Script script = getScript();
 
 		DocBookElement ancestor;
 		DocBookElement parent = getParent();
-		DocBookTransformer transformer = getTransformer();
 
 		traverse(true);
 
@@ -62,7 +61,7 @@ public class AEditor extends Editor {
 		if (name != null && name.length() > 0) {
 
 			Anchor anchor = dbfactory.createAnchor();
-			anchor.setId(transformer.getLinkManager().createUniqueId(name));
+			anchor.setId(getLinkManager().createUniqueId(name));
 
 			boolean createXrefLabel = script.isParameterOn(
 					DbtConstants.SECTION_DOCBOOK,
@@ -82,16 +81,16 @@ public class AEditor extends Editor {
 
 			if ((label != null) && (label.length() > 0)) {
 
-				Link link = dbfactory.createLink(transformer.getLinkManager()
-						.getUniqueId(href));
+				Link link = dbfactory.createLink(getLinkManager().getUniqueId(
+						href));
 				link.setParentNode(ancestor);
 				ancestor.appendChild(link);
 				setCurrent(link);
 
 			} else {
 
-				XRef xref = dbfactory.createXRef(transformer.getLinkManager()
-						.getUniqueId(href));
+				XRef xref = dbfactory.createXRef(getLinkManager().getUniqueId(
+						href));
 				xref.setParentNode(ancestor);
 				ancestor.appendChild(xref);
 				setCurrent(ancestor);
@@ -126,7 +125,7 @@ public class AEditor extends Editor {
 
 				setCurrent(linkElement);
 				ancestor.appendChild(getCurrent());
-				transformer.getLinkManager().addLink(linkElement);
+				getLinkManager().addLink(linkElement);
 
 			} else {
 

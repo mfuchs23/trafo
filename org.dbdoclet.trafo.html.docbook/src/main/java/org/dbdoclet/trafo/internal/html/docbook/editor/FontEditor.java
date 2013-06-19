@@ -15,13 +15,13 @@ import org.dbdoclet.tag.html.Font;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class FontEditor extends Editor {
+public class FontEditor extends DocBookEditor {
 
     @Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	traverse(true);
 	Font font = (Font) values.getHtmlElement();

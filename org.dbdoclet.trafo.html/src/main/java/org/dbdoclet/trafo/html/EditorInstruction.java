@@ -17,12 +17,16 @@ public class EditorInstruction {
 
 	private ElementImpl current;
 	private ElementImpl parent;
-	private HtmlElement child;
+	private HtmlElement htmlElement;
 	private Object anything;
 	private CharacterDataImpl characterDataNode;
 	private boolean doIgnore = false;
 	private boolean doTraverse = true;
 	private Script script;
+
+	public EditorInstruction(Script script) {
+		this.script = script;
+	}
 
 	public boolean doIgnore() {
 		return doIgnore;
@@ -45,7 +49,7 @@ public class EditorInstruction {
 	}
 
 	public HtmlElement getHtmlElement() {
-		return child;
+		return htmlElement;
 	}
 
 	public ElementImpl getCurrent() {
@@ -66,8 +70,8 @@ public class EditorInstruction {
 		this.anything = anything;
 	}
 
-	public void setChild(HtmlElement child) {
-		this.child = child;
+	public void setHtmlElement(HtmlElement htmlElement) {
+		this.htmlElement = htmlElement;
 	}
 
 	public void setCurrent(ElementImpl current) {
@@ -92,7 +96,7 @@ public class EditorInstruction {
 
 		buffer += ("\nEditor values:\n" + "current.........: " + current + "\n"
 				+ "parent..........: " + parent + "\n" + "child...........: "
-				+ child + "\n" +"do ignore.......: " + doIgnore + "\n"
+				+ htmlElement + "\n" +"do ignore.......: " + doIgnore + "\n"
 				+ "do traverse.....: " + doTraverse + "\n");
 
 		return buffer;
@@ -100,9 +104,5 @@ public class EditorInstruction {
 
 	public Script getScript() {
 		return script;
-	}
-
-	public void setScript(Script script) {
-		this.script = script;
 	}
 }

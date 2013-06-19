@@ -60,13 +60,15 @@ public class HtmlProvider implements IHtmlProvider {
 	}
 
 	@Override
-	public void parse(InputStream in, String encoding) throws IOException,
+	public HtmlDocument parse(InputStream in, String encoding) throws IOException,
 			ParserException, TokenizerException {
 
 		HtmlParser parser = new HtmlParser();
 
 		String htmlCode = retrieveHtmlCode(in, encoding);
 		htmlDocument = parser.parseDocument(htmlCode);
+		
+		return htmlDocument;
 	}
 
 	private String retrieveHtmlCode(InputStream in, String encoding)
@@ -138,14 +140,12 @@ public class HtmlProvider implements IHtmlProvider {
 		NodeImpl child = null;
 		HtmlElement htmlElement;
 
-		ElementImpl dbElement;
-		ElementImpl dbOldParent = targetNode;
-		ElementImpl dbChildParent = null;
+		ElementImpl element;
+		ElementImpl oldParent = targetNode;
+		ElementImpl childParent = null;
 
 		Object anything = null;
 		IEditor editor;
-
-		ElementImpl dbelem; // for temporay use only!
 
 		int index = 0;
 
@@ -167,7 +167,7 @@ public class HtmlProvider implements IHtmlProvider {
 
 			logger.debug(indent + " HTML element is " + child + ".");
 
-			dbElement = targetNode;
+			element = targetNode;
 			doTraverse = true;
 
 			if (child instanceof CommentImpl) {
@@ -178,9 +178,9 @@ public class HtmlProvider implements IHtmlProvider {
 
 					if (isInstruction(comment)) {
 
-						EditorInstruction values = new EditorInstruction();
+						EditorInstruction values = new EditorInstruction(visitor.getScript());
 						values.setAnything(null);
-						values.setChild(null);
+						values.setHtmlElement(null);
 						values.setCurrent(targetNode);
 						values.setParent(targetNode);
 						values.setCharacterDataNode((CommentImpl) child);
@@ -204,7 +204,7 @@ public class HtmlProvider implements IHtmlProvider {
 									+ child + "' is null!");
 						}
 
-						dbElement = values.getCurrent();
+						element = values.getCurrent();
 						doTraverse = values.doTraverse();
 
 					} else {
@@ -226,10 +226,10 @@ public class HtmlProvider implements IHtmlProvider {
 
 				try {
 
-					EditorInstruction values = new EditorInstruction();
+					EditorInstruction values = new EditorInstruction(visitor.getScript());
 
 					values.setAnything(null);
-					values.setChild(null);
+					values.setHtmlElement(null);
 					values.setCurrent(targetNode);
 					values.setParent(targetNode);
 					values.setCharacterDataNode((TextImpl) child);
@@ -251,7 +251,7 @@ public class HtmlProvider implements IHtmlProvider {
 								+ child + "' is null!");
 					}
 
-					dbElement = values.getCurrent();
+					element = values.getCurrent();
 					doTraverse = values.doTraverse();
 
 				} catch (EditorException oops) {
@@ -280,10 +280,10 @@ public class HtmlProvider implements IHtmlProvider {
 
 					logger.debug("Setting editor values.");
 
-					EditorInstruction values = new EditorInstruction();
+					EditorInstruction values = new EditorInstruction(visitor.getScript());
 
 					values.setAnything(anything);
-					values.setChild((HtmlElement) child);
+					values.setHtmlElement((HtmlElement) child);
 					values.setCurrent(targetNode);
 					values.setParent(targetNode);
 					values.setCharacterDataNode(null);
@@ -322,7 +322,7 @@ public class HtmlProvider implements IHtmlProvider {
 						}
 					}
 
-					dbElement = values.getCurrent();
+					element = values.getCurrent();
 					// editor.copyCommonAttributes((HtmlElement) child,
 					// dbElement);
 
@@ -355,13 +355,13 @@ public class HtmlProvider implements IHtmlProvider {
 
 			if (doTraverse == true) {
 
-				dbChildParent = edit(child, dbElement);
+				childParent = edit(child, element);
 
 				logger.debug(indent
 						+ "\n<<<==================================================");
 
 				if (doIgnore == true) {
-					targetNode = dbChildParent;
+					targetNode = childParent;
 				}
 
 			} else {
@@ -377,18 +377,18 @@ public class HtmlProvider implements IHtmlProvider {
 			}
 
 			logger.debug(indent + "[Teilbaum bearbeitet] HTML: " + child
-					+ ", DocBook: " + dbElement + ", Vater: " + targetNode);
+					+ ", DocBook: " + element + ", Vater: " + targetNode);
 
-			if (targetNode != dbOldParent) {
+			if (targetNode != oldParent) {
 
 				logger.debug(indent + "Parent changed. Old parent was "
-						+ dbOldParent + ". New parent is " + targetNode + ".");
+						+ oldParent + ". New parent is " + targetNode + ".");
 
-				dbelem = dbOldParent;
+				ElementImpl dbelem = oldParent;
 				logger.debug(indent + "Closing old parent " + dbelem
 						+ ". HTML Element is " + child + ".");
 
-				dbOldParent = targetNode;
+				oldParent = targetNode;
 			}
 
 		}

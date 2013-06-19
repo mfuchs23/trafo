@@ -36,9 +36,10 @@ import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.service.StringServices;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoExceptionHandler;
+import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 
 /**
@@ -320,7 +321,7 @@ public class Herold {
 
 		// source-encoding
 		sopt = new StringOption(DbtConstants.SECTION_HTML.toLowerCase() + "-"
-				+ DbtConstants.PARAM_HTML_SOURCE_ENCODING, "s");
+				+ DbtConstants.PARAM_ENCODING, "s");
 		sopt.setDefault("UTF-8");
 		options.add(sopt);
 
@@ -408,12 +409,17 @@ public class Herold {
 		trafo.setInputStream(in);
 		trafo.setOutputStream(out);
 		
+		TrafoResult result = null;
 		if (verbose == true) {
-			trafo.transform(script, new ConsoleProgressListener(false));
+			result = trafo.transform(script, new ConsoleProgressListener(false));
 		} else {
-			trafo.transform(script, null);
+			result = trafo.transform(script, null);
 		}
 
+		if (result.isFailed()) {
+			System.err.print(result.toString());
+		}
+		
 		if (verbose == true) {
 			System.out.println();
 		}

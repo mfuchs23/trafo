@@ -26,14 +26,14 @@ import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 
-public class PEditor extends Editor {
+public class PEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
 		P p = (P) getHtmlElement();
 

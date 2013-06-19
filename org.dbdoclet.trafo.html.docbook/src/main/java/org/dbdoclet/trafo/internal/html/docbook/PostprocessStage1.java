@@ -15,6 +15,7 @@ import org.dbdoclet.tag.docbook.ListItem;
 import org.dbdoclet.tag.docbook.OrderedList;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Table;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.HtmlServices;
 import org.dbdoclet.xiphias.dom.AbstractNodeVisitor;

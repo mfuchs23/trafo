@@ -10,7 +10,7 @@ import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 
-public abstract class AbstractInlineEditor extends Editor {
+public abstract class AbstractInlineEditor extends DocBookEditor {
 
 	private DocBookElement inlineElement;
 
@@ -30,7 +30,7 @@ public abstract class AbstractInlineEditor extends Editor {
 		setCurrent(inlineElement);
 		copyCommonAttributes(getHtmlElement(), inlineElement);
 
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 		traverse(true);
 
 		DocBookElement parent = getParent();

@@ -36,12 +36,12 @@ import org.dbdoclet.tag.docbook.Title;
 import org.dbdoclet.tag.html.HeaderElement;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
-import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
-import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
+import org.dbdoclet.trafo.internal.html.docbook.LinkManager;
+import org.dbdoclet.trafo.internal.html.docbook.editor.DefaultEditor;
 import org.dbdoclet.trafo.internal.html.docbook.editor.HeadingEditor;
 import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;
+import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -87,11 +87,19 @@ public class SectionDetector {
 	private Class<?>[] map;
 	private EditorInstruction values;
 
-	public boolean isSection(HtmlElement element, Script script) {
-		return getSectionLevel(element, script) > 0 ? true : false;
+	private Script script;
+
+	private DocumentElementType documentElementType;
+
+	private DocBookTagFactory dbfactory;
+
+	private LinkManager linkManager;
+
+	public boolean isSection(HtmlElement element) {
+		return getSectionLevel(element) > 0 ? true : false;
 	}
 
-	public int getSectionLevel(HtmlElement element, Script script) {
+	public int getSectionLevel(HtmlElement element) {
 
 		if (element == null) {
 			return 0;
@@ -156,16 +164,14 @@ public class SectionDetector {
 		return 0;
 	}
 
-	public void edit(EditorInstruction values) {
+	public void edit(EditorInstruction values, DocBookTagFactory dbfactory) {
 
 		this.values = values;
 
-		DocBookTagFactory dbfactory = values.getTagFactory();
 		DocBookElement sect;
 
-		DocBookTransformer transformer = values.getTransformer();
 		HtmlElement child = values.getHtmlElement();
-		DocBookElement parent = values.getParent();
+		DocBookElement parent = (DocBookElement) values.getParent();
 
 		if (parent != null) {
 			values.setCurrent(parent);
@@ -179,15 +185,14 @@ public class SectionDetector {
 		if (child instanceof HeaderElement) {
 			level = ((HeaderElement) child).getLevel();
 		} else {
-			level = getSectionLevel(child, transformer.getScript());
+			level = getSectionLevel(child);
 		}
 
 		Element root = initMap();
 		levelParent = findParentForLevel(child, level);
 
 		if ((levelParent == null)
-				&& ((values.getCodeContext() == DocumentElementType.OVERVIEW) || (values
-						.getCodeContext() == DocumentElementType.BOOK))) {
+				&& ((documentElementType == DocumentElementType.OVERVIEW) || (documentElementType == DocumentElementType.BOOK))) {
 
 			sect = dbfactory.createChapter();
 			sect.setRemap(child.getNodeName());
@@ -251,14 +256,13 @@ public class SectionDetector {
 
 		} else {
 
-			sect = values.getCurrent();
+			sect = (DocBookElement) values.getCurrent();
 		}
 
 		String id = child.getId();
 
 		if ((id != null) && (id.length() > 0)) {
-
-			sect.setId(transformer.getLinkManager().createUniqueId(id));
+			sect.setId(linkManager.createUniqueId(id));
 		}
 
 		if (root != null) {
@@ -373,8 +377,8 @@ public class SectionDetector {
 		}
 
 		if (root instanceof Book
-				|| (values.getCodeContext() == DocumentElementType.BOOK)
-				|| (values.getCodeContext() == DocumentElementType.OVERVIEW)) {
+				|| (documentElementType == DocumentElementType.BOOK)
+				|| (documentElementType == DocumentElementType.OVERVIEW)) {
 			return true;
 		} else {
 			return false;
@@ -406,12 +410,10 @@ public class SectionDetector {
 		return root;
 	}
 
-	public DocBookElement findParentForLevel(HtmlElement header, int level) {
+	public ElementImpl findParentForLevel(HtmlElement header, int level) {
 
-		DocBookElement parent = null;
+		ElementImpl parent = null;
 		Class<?> parentClass = null;
-
-		Script script = values.getTransformer().getScript();
 
 		if (level < 0) {
 			level = 0;
@@ -429,9 +431,9 @@ public class SectionDetector {
 
 			if (parent != null) {
 
-				int tagLevel = getSectionLevel(header, script);
+				int tagLevel = getSectionLevel(header);
 				int parentLevel = getSectionLevel(
-						(HtmlElement) parent.getUserData("html"), script);
+						(HtmlElement) parent.getUserData("html"));
 
 				while (tagLevel != -1 && parentLevel != -1
 						&& parentLevel >= tagLevel) {
@@ -446,7 +448,7 @@ public class SectionDetector {
 					parent = ancestor;
 
 					parentLevel = getSectionLevel(
-							(HtmlElement) parent.getUserData("html"), script);
+							(HtmlElement) parent.getUserData("html"));
 				}
 
 				break;
@@ -459,7 +461,6 @@ public class SectionDetector {
 	public DocBookElement createSectionChild(HtmlElement header, Element parent)
 			throws OptionException {
 
-		DocBookTagFactory dbfactory = values.getTagFactory();
 		DocBookElement section = null;
 
 		if (parent == null || parent instanceof Para
@@ -532,7 +533,10 @@ public class SectionDetector {
 		}
 
 		if (section != null) {
-			Editor editor = new Editor();
+			DefaultEditor editor = new DefaultEditor();
+			editor.setLinkManager(linkManager);
+			editor.setScript(script);
+			editor.setTagFactory(dbfactory);
 			editor.setValues(values);
 			editor.copyCommonAttributes(header, section);
 		}
@@ -545,8 +549,6 @@ public class SectionDetector {
 
 		DocBookElement para;
 
-		DocBookTagFactory dbfactory = values.getTagFactory();
-
 		if ((parent != null) && parent instanceof Para) {
 
 			para = (DocBookElement) parent;
@@ -555,10 +557,10 @@ public class SectionDetector {
 
 			para = dbfactory.createPara();
 
-			if (((Para) para).isValidParent(values.getParent())) {
+			if (((Para) para).isValidParent((DocBookElement) values.getParent())) {
 				values.getParent().appendChild(para);
 			} else {
-				para = values.getParent();
+				para = (DocBookElement) values.getParent();
 			}
 		}
 
@@ -581,5 +583,27 @@ public class SectionDetector {
 		boolean rc = header
 				.validateParentPath(HeadingEditor.validHtmlParentPathMap);
 		return rc;
+	}
+
+	public void setScript(Script script) {
+		
+		this.script = script;
+		
+		if (script != null) {
+
+			String value = script.getTextParameter(
+					DbtConstants.SECTION_DOCBOOK,
+					DbtConstants.PARAM_DOCUMENT_ELEMENT, "article");
+
+			documentElementType = DocumentElementType.valueOf(value.toUpperCase());
+		}
+	}
+
+	public void setTagFactory(DocBookTagFactory dbfactory) {
+		this.dbfactory = dbfactory;
+	}
+
+	public void setLinkManager(LinkManager linkManager) {
+		this.linkManager = linkManager;
 	}
 }

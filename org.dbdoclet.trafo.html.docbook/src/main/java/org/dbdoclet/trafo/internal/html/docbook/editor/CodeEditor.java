@@ -15,13 +15,13 @@ import org.dbdoclet.tag.html.Code;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class CodeEditor extends Editor {
+public class CodeEditor extends DocBookEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	Code code = (Code) getHtmlElement();
 	DocBookElement parent = getParent();

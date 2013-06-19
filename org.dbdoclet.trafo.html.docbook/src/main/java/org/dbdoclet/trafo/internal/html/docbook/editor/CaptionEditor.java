@@ -13,13 +13,13 @@ import org.dbdoclet.tag.docbook.Title;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class CaptionEditor extends Editor {
+public class CaptionEditor extends DocBookEditor {
 
     @Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	Title title = dbfactory.createTitle();
 

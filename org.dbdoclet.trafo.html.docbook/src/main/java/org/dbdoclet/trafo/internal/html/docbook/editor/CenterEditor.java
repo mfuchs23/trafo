@@ -13,7 +13,7 @@ import org.dbdoclet.trafo.html.EditorInstruction;
 
 
 
-public class CenterEditor extends Editor {
+public class CenterEditor extends DocBookEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {

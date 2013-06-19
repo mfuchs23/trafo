@@ -29,14 +29,14 @@ import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 
-public class MetaEditor extends Editor {
+public class MetaEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 		traverse(false);
 
 		DocBookElement current = getCurrent();

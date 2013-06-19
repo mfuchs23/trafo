@@ -11,15 +11,15 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
+public class BodyEditor extends DocBookEditor {
 
-public class BodyEditor extends Editor {
+	@Override
+	public EditorInstruction edit(EditorInstruction values)
+			throws EditorException {
 
-    @Override
-    public EditorInstruction edit(EditorInstruction values) throws EditorException {
+		setValues(super.edit(values));
+		traverse(true);
 
-	setValues(super.edit(values));
-	traverse(true);
-
-	return finalizeValues();
-    }
+		return finalizeValues();
+	}
 }

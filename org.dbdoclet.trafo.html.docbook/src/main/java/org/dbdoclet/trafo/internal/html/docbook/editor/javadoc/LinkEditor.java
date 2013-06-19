@@ -15,7 +15,7 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.tag.docbook.Literal;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
+import org.dbdoclet.trafo.internal.html.docbook.editor.DocBookEditor;
 
 /**
  * The class <code>LinkEditor</code> is reponsible for transforming @link tags
@@ -24,7 +24,7 @@ import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
  * @author <a href="mailto:michael.fuchs@unico-group.com">Michael Fuchs</a>
  * @version $Revision$
  */
-public class LinkEditor extends Editor {
+public class LinkEditor extends DocBookEditor {
 
 	private static Log logger = LogFactory.getLog(LinkEditor.class);
 
@@ -32,7 +32,7 @@ public class LinkEditor extends Editor {
 	public EditorInstruction edit(EditorInstruction values) {
 
 		setValues(values);
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 		DocBookElement parent = getParent();
 
 		org.dbdoclet.tag.javadoc.Link link = (org.dbdoclet.tag.javadoc.Link) getHtmlElement();

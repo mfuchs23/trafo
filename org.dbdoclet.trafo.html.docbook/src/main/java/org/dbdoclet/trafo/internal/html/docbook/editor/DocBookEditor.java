@@ -23,29 +23,33 @@ import org.dbdoclet.tag.html.Td;
 import org.dbdoclet.tag.html.Th;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.trafo.html.IEditor;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.html.docbook.DocumentElementType;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
-import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
+import org.dbdoclet.trafo.internal.html.docbook.LinkManager;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 
-public class Editor {
+public abstract class DocBookEditor implements IEditor {
 
 	protected static final String FSEP = System.getProperty("file.separator");
-	protected static final Log logger = LogFactory.getLog(Editor.class);
-	protected static final String AUTOMATICALLY_INSERTED = "Automatically inserted";
+	protected static final Log logger = LogFactory.getLog(DocBookEditor.class);
 
+	protected static final String AUTOMATICALLY_INSERTED = "Automatically inserted";
 	private DocBookElement current;
 	private DocBookElement parent;
+
 	private HtmlElement child;
 	private Object anything;
-	private DocBookTransformer transformer;
 	private CharacterDataImpl characterDataNode;
 	private boolean doIgnore;
 	private boolean doTraverse;
-	private DocumentElementType codeContext;
-
+	private LinkManager linkManager;
+	private DocumentElementType documentElementType;
+	private Script script;
+	private DocBookTagFactory tagFactory;
+	
 	public void copyCommonAttributes(HtmlElement html, DocBookElement dbk) {
 
 		logger.debug("Copy common attributes from " + html + " to " + dbk);
@@ -57,7 +61,11 @@ public class Editor {
 		String htmlId = html.getId();
 
 		if (htmlId != null) {
-			dbk.setId(transformer.getLinkManager().createUniqueId(htmlId));
+			if (linkManager != null) {
+				dbk.setId(linkManager.createUniqueId(htmlId));
+			} else {
+				logger.warn("Attribute linkManager must not be null! " + html + ", " + toString());
+			}
 		}
 
 		Script script = getScript();
@@ -99,7 +107,7 @@ public class Editor {
 
 		dbk.setUserData("html", html, null);
 	}
-
+	
 	private void createRemapAttribute(HtmlElement html, DocBookElement dbk) {
 		String remap = String.format("%s:%d:%d", html.getTagName(),
 				html.getLine(), html.getColumn());
@@ -113,7 +121,7 @@ public class Editor {
 		}
 
 		setValues(vo);
-		DocBookTagFactory dbfactory = transformer.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
 		if (parent instanceof Row) {
 
@@ -128,7 +136,7 @@ public class Editor {
 
 			if (characterDataNode != null
 					&& characterDataNode instanceof TextImpl) {
-				••••••••
+			
 				Para para = dbfactory.createPara();
 				parent.appendChild(dbfactory.createEntry().appendChild(para));
 				parent = para;
@@ -137,6 +145,21 @@ public class Editor {
 		}
 
 		return finalizeValues();
+	}
+
+	protected EditorInstruction finalizeValues() {
+
+		EditorInstruction values = new EditorInstruction(script);
+
+		values.doIgnore(doIgnore);
+		values.doTraverse(doTraverse);
+		values.setAnything(anything);
+		values.setHtmlElement(child);
+		values.setCurrent(current);
+		values.setParent(parent);
+		values.setCharacterDataNode(characterDataNode);
+
+		return values;
 	}
 
 	public Object getAnything() {
@@ -148,13 +171,31 @@ public class Editor {
 		return characterDataNode;
 	}
 
-	public DocumentElementType getCodeContext() {
-		return codeContext;
+	public DocBookElement getCurrent() {
+		return current;
 	}
 
-	public DocBookElement getCurrent() {
+	private DocBookVersion getDocBookVersion() {
 
-		return current;
+		DocBookTagFactory dbfactory = getTagFactory();
+
+		if (dbfactory == null) {
+			throw new IllegalStateException(
+					"The field dbfactory must not be null!");
+		}
+
+		DocBookVersion docBookVersion = dbfactory.getDocBookVersion();
+
+		if (docBookVersion == null) {
+			throw new IllegalStateException(
+					"The field docBookVersion must not be null!");
+		}
+
+		return docBookVersion;
+	}
+
+	public DocumentElementType getDocumentElementType() {
+		return documentElementType;
 	}
 
 	public HtmlElement getHtmlElement() {
@@ -162,26 +203,25 @@ public class Editor {
 		return child;
 	}
 
+	public LinkManager getLinkManager() {
+		return linkManager;
+	}
+
 	public DocBookElement getParent() {
 		return parent;
 	}
 
+	public Script getScript() {
+		return script;
+	}
+
 	public DocBookTagFactory getTagFactory() {
 
-		if (transformer == null) {
-			throw new IllegalStateException(
-					"The field \"transformer\" must not be null!");
+		if (tagFactory == null) {
+			tagFactory = new DocBookTagFactory();
 		}
-
-		return transformer.getTagFactory();
-	}
-
-	public Script getScript() {
-		return transformer.getScript();
-	}
-
-	public DocBookTransformer getTransformer() {
-		return transformer;
+		
+		return tagFactory;
 	}
 
 	public boolean ignore() {
@@ -230,16 +270,24 @@ public class Editor {
 		this.child = newChild;
 	}
 
-	public void setCodeContext(DocumentElementType newCodeContext) {
-		this.codeContext = newCodeContext;
-	}
-
 	public void setCurrent(DocBookElement newCurrent) {
 		this.current = newCurrent;
 	}
 
+	public void setLinkManager(LinkManager linkManager) {
+		this.linkManager = linkManager;
+	}
+
 	public void setParent(DocBookElement newParent) {
 		this.parent = newParent;
+	}
+
+	public void setScript(Script script) {
+		this.script = script;
+	}
+
+	public void setTagFactory(DocBookTagFactory tagFactory) {
+		this.tagFactory = tagFactory;
 	}
 
 	public void setTextNode(TextImpl newTextNode) {
@@ -247,8 +295,15 @@ public class Editor {
 		this.characterDataNode = newTextNode;
 	}
 
-	public void setTransformer(DocBookTransformer transformer) {
-		this.transformer = transformer;
+	public void setValues(EditorInstruction values) {
+
+		anything = values.getAnything();
+		child = values.getHtmlElement();
+		current = (DocBookElement) values.getCurrent();
+		doIgnore = values.doIgnore();
+		doTraverse = values.doTraverse();
+		parent = (DocBookElement) values.getParent();
+		characterDataNode = values.getCharacterDataNode();
 	}
 
 	@Override
@@ -259,70 +314,6 @@ public class Editor {
 		buffer += ("editor[" + getClass().getName() + "]");
 
 		return buffer;
-	}
-
-	public boolean traverse() {
-
-		return doTraverse;
-	}
-
-	public void traverse(boolean newDoTraverse) {
-
-		this.doTraverse = newDoTraverse;
-	}
-
-	private DocBookVersion getDocBookVersion() {
-
-		if (transformer == null) {
-			throw new IllegalStateException(
-					"The field transformer must not be null!");
-		}
-
-		DocBookTagFactory dbfactory = transformer.getTagFactory();
-
-		if (dbfactory == null) {
-			throw new IllegalStateException(
-					"The field dbfactory must not be null!");
-		}
-
-		DocBookVersion docBookVersion = dbfactory.getDocBookVersion();
-
-		if (docBookVersion == null) {
-			throw new IllegalStateException(
-					"The field docBookVersion must not be null!");
-		}
-
-		return docBookVersion;
-	}
-
-	protected EditorInstruction finalizeValues() {
-
-		EditorInstruction values = new EditorInstruction();
-
-		values.doIgnore(doIgnore);
-		values.doTraverse(doTraverse);
-		values.setAnything(anything);
-		values.setChild(child);
-		values.setCodeContext(codeContext);
-		values.setCurrent(current);
-		values.setParent(parent);
-		values.setCharacterDataNode(characterDataNode);
-		values.setTransformer(transformer);
-
-		return values;
-	}
-
-	public void setValues(EditorInstruction values) {
-
-		anything = values.getAnything();
-		child = values.getHtmlElement();
-		codeContext = values.getCodeContext();
-		current = values.getCurrent();
-		doIgnore = values.doIgnore();
-		doTraverse = values.doTraverse();
-		parent = values.getParent();
-		characterDataNode = values.getCharacterDataNode();
-		transformer = values.getTransformer();
 	}
 
 	protected void transferId(HtmlElement html, DocBookElement db) {
@@ -342,6 +333,16 @@ public class Editor {
 		if (id != null && id.length() > 0) {
 			db.setId(id);
 		}
+	}
+
+	public boolean traverse() {
+
+		return doTraverse;
+	}
+
+	public void traverse(boolean newDoTraverse) {
+
+		this.doTraverse = newDoTraverse;
 	}
 
 	protected String validateAlign(String align) {

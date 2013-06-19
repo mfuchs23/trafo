@@ -29,6 +29,7 @@ public class TrafoResult implements ErrorListener {
 	private StringBuffer buffer;
 	private byte[] data;
 	private Throwable throwable;
+	private boolean failed = false;
 
 	public TrafoResult() {
 		super();
@@ -47,6 +48,23 @@ public class TrafoResult implements ErrorListener {
 		buffer = new StringBuffer();
 	}
 
+	public void append(String line) {
+		buffer.append(line);
+	}
+
+	public void error(TransformerException exception)
+			throws TransformerException {
+		buffer.append("[error] " + exception.getMessage());
+		buffer.append('\n');
+	}
+
+	public void fatalError(TransformerException exception)
+			throws TransformerException {
+		buffer.append("[fatal] " + exception.getMessage());
+		buffer.append('\n');
+		failed = true;
+	}
+
 	public String getBuffer() {
 		return buffer.toString();
 	}
@@ -59,8 +77,12 @@ public class TrafoResult implements ErrorListener {
 		return file;
 	}
 
-	public void append(String line) {
-		buffer.append(line);
+	public Throwable getThrowable() {
+		return throwable;
+	}
+
+	public boolean isFailed() {
+		return failed;
 	}
 
 	public void setData(byte[] data) {
@@ -69,10 +91,9 @@ public class TrafoResult implements ErrorListener {
 
 	public void setThrowable(Throwable throwable) {
 		this.throwable = throwable;
-	}
-
-	public Throwable getThrowable() {
-		return throwable;
+		if (throwable != null) {
+			failed = true;
+		}
 	}
 
 	/**
@@ -114,18 +135,6 @@ public class TrafoResult implements ErrorListener {
 	public void warning(TransformerException exception)
 			throws TransformerException {
 		buffer.append(exception.getMessage());
-		buffer.append('\n');
-	}
-
-	public void error(TransformerException exception)
-			throws TransformerException {
-		buffer.append("[error] " + exception.getMessage());
-		buffer.append('\n');
-	}
-
-	public void fatalError(TransformerException exception)
-			throws TransformerException {
-		buffer.append("[fatal] " + exception.getMessage());
 		buffer.append('\n');
 	}
 }

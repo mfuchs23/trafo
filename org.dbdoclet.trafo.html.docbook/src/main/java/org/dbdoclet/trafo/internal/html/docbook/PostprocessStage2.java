@@ -8,6 +8,7 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.SectionElement;
 import org.dbdoclet.trafo.SectionNumberRemover;
 import org.dbdoclet.trafo.SpaceNormalizer;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.AbstractNodeVisitor;
 import org.dbdoclet.xiphias.dom.ElementImpl;

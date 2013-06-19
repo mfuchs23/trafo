@@ -82,6 +82,6 @@ public class InfoTests extends AbstractTests {
 		String[] cmd = { "-p", "src/test/resources/profile/book.her", "-i",
 				htmlFile.getPath(), "-o", xmlFile.getPath() };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		validateAndParse(xmlFile);
 	}
 }

@@ -12,13 +12,13 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class MenuEditor extends Editor {
+public class MenuEditor extends DocBookEditor {
     
     @Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	if (getParent().isList()) {
 

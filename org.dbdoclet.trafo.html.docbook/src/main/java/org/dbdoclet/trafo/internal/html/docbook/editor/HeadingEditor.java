@@ -11,13 +11,14 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import java.util.HashMap;
 
 import org.dbdoclet.option.OptionException;
+import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.docbook.SectionDetector;
 
-public class HeadingEditor extends Editor {
+public class HeadingEditor extends DocBookEditor {
 
 	public static HashMap<String, HashMap<String, String>> validHtmlParentPathMap;
 
@@ -46,8 +47,11 @@ public class HeadingEditor extends Editor {
 
 		try {
 
-			SectionDetector sectionManager = new SectionDetector();
-			sectionManager.edit(values);
+			DocBookTagFactory dbfactory = getTagFactory();
+			SectionDetector sectionDetector = new SectionDetector();
+			sectionDetector.setScript(getScript());
+			sectionDetector.setTagFactory(dbfactory);
+			sectionDetector.edit(values, dbfactory);
 
 			setValues(super.edit(values));
 			return finalizeValues();

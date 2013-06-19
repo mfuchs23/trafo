@@ -37,9 +37,9 @@ import org.dbdoclet.tag.docbook.Link;
 import org.dbdoclet.tag.docbook.XRef;
 import org.dbdoclet.tag.javadoc.Linkplain;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.editor.Editor;
+import org.dbdoclet.trafo.internal.html.docbook.editor.DocBookEditor;
 
-public class LinkplainEditor extends Editor {
+public class LinkplainEditor extends DocBookEditor {
 
 	private static Log logger = LogFactory.getLog(LinkplainEditor.class);
 
@@ -47,7 +47,7 @@ public class LinkplainEditor extends Editor {
 	public EditorInstruction edit(EditorInstruction values) {
 
 		setValues(values);
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
 		Linkplain linkplain = (Linkplain) getHtmlElement();
 

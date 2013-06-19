@@ -24,7 +24,7 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.docbook.SectionDetector;
 
-public class DivEditor extends Editor {
+public class DivEditor extends DocBookEditor {
 
 	private static final int TIP = 1;
 	private static final int NOTE = 2;
@@ -78,17 +78,21 @@ public class DivEditor extends Editor {
 			throws EditorException {
 
 		setValues(super.edit(values));
+
+		DocBookTagFactory dbfactory = getTagFactory();
+		
 		Div div = (Div) getHtmlElement();
 
 		SectionDetector sectionDetector = new SectionDetector();
+		sectionDetector.setScript(getScript());
+		sectionDetector.setTagFactory(dbfactory);
 
-		if (sectionDetector.isSection(div, getScript())) {
-			sectionDetector.edit(values);
+		if (sectionDetector.isSection(div)) {
+			sectionDetector.edit(values, dbfactory);
 			setValues(values);
 			return finalizeValues();
 		}
 
-		DocBookTagFactory dbfactory = values.getTagFactory();
 
 		String type = null;
 

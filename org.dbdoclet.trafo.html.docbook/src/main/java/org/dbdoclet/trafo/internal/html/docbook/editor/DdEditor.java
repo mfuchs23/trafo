@@ -18,7 +18,7 @@ import org.dbdoclet.tag.docbook.VariableList;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class DdEditor extends Editor {
+public class DdEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
@@ -27,7 +27,7 @@ public class DdEditor extends Editor {
 		DocBookElement list = null;
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
 		// Try to detect two sequenced dd tags.
 		if (getParent() instanceof VariableList) {

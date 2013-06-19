@@ -13,13 +13,13 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.NodeListImpl;
 
-public class DlEditor extends Editor {
+public class DlEditor extends DocBookEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	org.dbdoclet.tag.html.Dl dl = (org.dbdoclet.tag.html.Dl) getHtmlElement();
 	String title = dl.getTitle();

@@ -13,13 +13,13 @@ import org.dbdoclet.tag.docbook.Superscript;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class SupEditor extends Editor {
+public class SupEditor extends DocBookEditor {
     
     @Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = values.getTagFactory();
+	DocBookTagFactory dbfactory = getTagFactory();
 
 	Superscript candidate = dbfactory.createSuperscript();
 	candidate.setParentNode(getParent());

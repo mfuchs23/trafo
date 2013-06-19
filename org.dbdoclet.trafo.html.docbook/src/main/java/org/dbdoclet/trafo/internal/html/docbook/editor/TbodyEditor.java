@@ -14,19 +14,19 @@ import org.dbdoclet.tag.docbook.Tbody;
 import org.dbdoclet.tag.docbook.Tgroup;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 
-public class TbodyEditor extends Editor {
+public class TbodyEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = values.getTagFactory();
+		DocBookTagFactory dbfactory = getTagFactory();
 
-		Script script = getTransformer().getScript();
+		Script script = getScript();
 		boolean decomposeTables = script.isParameterOn(DbtConstants.SECTION_DOCBOOK,
 				DbtConstants.PARAM_DECOMPOSE_TABLES, DbtConstants.DEFAULT_DECOMPOSE_TABLES);
 
