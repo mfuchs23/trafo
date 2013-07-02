@@ -25,7 +25,7 @@ public class CommentTests extends AbstractTests {
 	public void testInvalidEscapeCharacter() throws TrafoException, IOException {
 
 		String buffer = ResourceServices
-				.getResourceAsString("InvalidEscapeCharacterInComment.html");
+				.getResourceAsString("html/InvalidEscapeCharacterInComment.html");
 		transform(buffer);
 	}
 }

@@ -29,9 +29,9 @@ import org.dbdoclet.tag.docbook.Screen;
 import org.dbdoclet.tag.docbook.Term;
 import org.dbdoclet.tag.docbook.ULink;
 import org.dbdoclet.tag.html.Img;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.param.Param;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.ImageServices;
@@ -231,32 +231,31 @@ public class ImgEditor extends DocBookEditor {
 		setValues(super.edit(values));
 
 		DocBookTagFactory dbfactory = getTagFactory();
-		Script script = getScript();
 
 		Img img = (Img) getHtmlElement();
 
 		Boolean useAbsoluteImagePath = script.isParameterOn(
-				DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_USE_ABSOLUTE_IMAGE_PATH, false);
+				TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_USE_ABSOLUTE_IMAGE_PATH, false);
 
 		logger.debug("Parameter use-absolute-image-path is set to "
 				+ useAbsoluteImagePath);
 
 		ArrayList<String> imageDataFormats = createImageDataFormatList(
-				script.getTextParameterList(DbtConstants.SECTION_DOCBOOK,
-						DbtConstants.PARAM_IMAGEDATA_FORMATS,
+				script.getTextParameterList(TrafoConstants.SECTION_DOCBOOK,
+						TrafoConstants.PARAM_IMAGEDATA_FORMATS,
 						new ArrayList<String>()), img.getSrc());
 
 		String imagePath = "./img";
 
 		Param<?> param = script
-				.getVariable(DbtConstants.PARAM_IMAGE_PATH);
+				.getVariable(TrafoConstants.PARAM_IMAGE_PATH);
 
 		if (param != null) {
 			imagePath = param.getValueAsText();
 		} else {
-			imagePath = script.getTextParameter(DbtConstants.SECTION_DOCBOOK,
-					DbtConstants.PARAM_IMAGE_PATH, "");
+			imagePath = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+					TrafoConstants.PARAM_IMAGE_PATH, "");
 		}
 
 		logger.debug("Configuration property imagePath is set to " + imagePath);

@@ -15,7 +15,7 @@ import org.dbdoclet.tag.docbook.ListItem;
 import org.dbdoclet.tag.docbook.OrderedList;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Table;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.HtmlServices;
 import org.dbdoclet.xiphias.dom.AbstractNodeVisitor;
@@ -73,16 +73,16 @@ public class PostprocessStage1 extends AbstractNodeVisitor {
 				&& elem.getParentNode() instanceof ItemizedList) {
 
 			stripPrefixesList = script.getTextParameterList(
-					DbtConstants.SECTION_LIST_DETECTION,
-					DbtConstants.PARAM_ITEMIZED_STRIP_PREFIX);
+					TrafoConstants.SECTION_LIST_DETECTION,
+					TrafoConstants.PARAM_ITEMIZED_STRIP_PREFIX);
 		}
 
 		if (elem instanceof ListItem
 				&& elem.getParentNode() instanceof OrderedList) {
 
 			stripPrefixesList = script.getTextParameterList(
-					DbtConstants.SECTION_LIST_DETECTION,
-					DbtConstants.PARAM_ORDERED_STRIP_PREFIX);
+					TrafoConstants.SECTION_LIST_DETECTION,
+					TrafoConstants.PARAM_ORDERED_STRIP_PREFIX);
 		}
 
 		for (String stripPrefix : stripPrefixesList) {

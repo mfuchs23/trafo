@@ -1,6 +1,6 @@
-package org.dbdoclet.trafo.html.docbook;
+package org.dbdoclet.trafo;
 
-public class DbtConstants {
+public class TrafoConstants {
 
 	public static final String DEFAULT_DESTINATION_ENCODING = "UTF-8";
 	public static final String DEFAULT_EMPHASIS_ROLE_BOLD = "bold";

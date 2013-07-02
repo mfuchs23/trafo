@@ -1,12 +1,12 @@
 package org.dbdoclet.trafo.html;
 
+import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.trafo.script.Script;
-import org.dbdoclet.xiphias.dom.ElementImpl;
-import org.dbdoclet.xiphias.dom.INodeVisitor;
+import org.w3c.dom.Document;
 
 public interface IHtmlVisitor {
 
-	public ElementImpl getDocumentElement();
+	public Document createDocument(HtmlDocument htmlDoc);
 	public IEditorFactory getEditorFactory();
 	public boolean beforeEdit(EditorInstruction values);
 	public Script getScript();

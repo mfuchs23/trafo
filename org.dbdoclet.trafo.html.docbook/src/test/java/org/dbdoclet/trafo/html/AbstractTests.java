@@ -3,6 +3,8 @@ package org.dbdoclet.trafo.html;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -10,14 +12,31 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dbdoclet.html.parser.HtmlParser;
 import org.dbdoclet.tag.html.HtmlFragment;
-import org.dbdoclet.trafo.TrafoException;
+import org.dbdoclet.trafo.AbstractTrafoService;
 import org.dbdoclet.trafo.TrafoResult;
-import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
+import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XPathServices;
 import org.w3c.dom.Document;
 
 public class AbstractTests {
+
+	protected ArrayList<String> getValues(String xmlCode, String query) {
+
+		try {
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+					.newDocumentBuilder();
+			ByteArrayInputStream stream = new ByteArrayInputStream(
+					xmlCode.getBytes());
+			Document doc = builder.parse(stream);
+			return XPathServices.getValues(doc, query);
+		} catch (Exception oops) {
+			oops.printStackTrace();
+			fail();
+		}
+
+		return null;
+	}
 
 	/**
 	 * @param htmlCode
@@ -39,38 +58,32 @@ public class AbstractTests {
 		return null;
 	}
 
-	protected String transform(String htmlCode) throws TrafoException {
+	protected String transform(String htmlCode) {
 
-		DocBookTransformer trafo = new DocBookTransformer();
-		return trafo.transformFragment(htmlCode);
-	}
-
-	protected ArrayList<String> getValues(String xmlCode, String query) {
-
-		try {
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder();
-			ByteArrayInputStream stream = new ByteArrayInputStream(
-					xmlCode.getBytes());
-			Document doc = builder.parse(stream);
-			return XPathServices.getValues(doc, query);
-		} catch (Exception oops) {
-			oops.printStackTrace();
-			fail();
+		if (htmlCode == null) {
+			throw new IllegalArgumentException("Der Parameter htmlCode darf nicht null sein!");
 		}
-
-		return null;
-	}
-
-	protected String transformFragment(String htmlCode) throws TrafoException {
-		DocBookTransformer transformer = new DocBookTransformer();
-
-		Script script = new Script();
-		transformer.setScript(script);
-
-		TrafoResult result = new TrafoResult();
-		String xmlCode = transformer.transformFragment(htmlCode, result);
-		return xmlCode;
+		
+		try {
+			
+			AbstractTrafoService trafo = new HtmlDocBookTrafo();
+			Script script = new Script();
+			trafo.setInputStream(new ByteArrayInputStream(htmlCode.getBytes()));
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+			trafo.setOutputStream(buffer);
+			TrafoResult result = trafo.transform(script);
+			
+			if (result.isFailed()) {
+				fail(result.toString());
+			}
+			
+			return buffer.toString("UTF-8");
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			fail();
+			return null;
+		}
 	}
 
 }

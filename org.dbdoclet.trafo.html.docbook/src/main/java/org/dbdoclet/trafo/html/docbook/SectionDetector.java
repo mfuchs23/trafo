@@ -35,6 +35,7 @@ import org.dbdoclet.tag.docbook.Section;
 import org.dbdoclet.tag.docbook.Title;
 import org.dbdoclet.tag.html.HeaderElement;
 import org.dbdoclet.tag.html.HtmlElement;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.LinkManager;
 import org.dbdoclet.trafo.internal.html.docbook.editor.DefaultEditor;
@@ -128,8 +129,8 @@ public class SectionDetector {
 		}
 
 		TextParam paramClasses = (TextParam) script.getParameter(
-				DbtConstants.SECTION_SECTION_DETECTION,
-				DbtConstants.PARAM_ATTRIBUTE_CLASS);
+				TrafoConstants.SECTION_SECTION_DETECTION,
+				TrafoConstants.PARAM_ATTRIBUTE_CLASS);
 
 		String cssClass = element.getCssClass();
 
@@ -535,7 +536,6 @@ public class SectionDetector {
 		if (section != null) {
 			DefaultEditor editor = new DefaultEditor();
 			editor.setLinkManager(linkManager);
-			editor.setScript(script);
 			editor.setTagFactory(dbfactory);
 			editor.setValues(values);
 			editor.copyCommonAttributes(header, section);
@@ -592,8 +592,8 @@ public class SectionDetector {
 		if (script != null) {
 
 			String value = script.getTextParameter(
-					DbtConstants.SECTION_DOCBOOK,
-					DbtConstants.PARAM_DOCUMENT_ELEMENT, "article");
+					TrafoConstants.SECTION_DOCBOOK,
+					TrafoConstants.PARAM_DOCUMENT_ELEMENT, "article");
 
 			documentElementType = DocumentElementType.valueOf(value.toUpperCase());
 		}

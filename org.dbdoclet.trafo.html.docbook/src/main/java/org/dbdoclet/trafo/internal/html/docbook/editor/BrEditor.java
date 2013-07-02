@@ -13,9 +13,9 @@ import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.html.Br;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
@@ -34,10 +34,10 @@ public class BrEditor extends DocBookEditor {
 
 		Br brElement = (Br) values.getHtmlElement();
 
-		Script script = getScript();
+		Script script = values.getScript();
 		boolean detectTrappedBrEnabled = script.isParameterOn(
-				DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_DETECT_TRAPPED_BR, true);
+				TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_DETECT_TRAPPED_BR, true);
 
 		if (detectTrappedBrEnabled && isTrapped(brElement, values.getCurrent())) {
 			return finalizeValues();

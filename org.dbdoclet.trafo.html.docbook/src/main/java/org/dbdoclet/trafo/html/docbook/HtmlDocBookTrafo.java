@@ -1,23 +1,38 @@
 package org.dbdoclet.trafo.html.docbook;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dbdoclet.Sfv;
 import org.dbdoclet.jive.PanelProvider;
+import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
+import org.dbdoclet.progress.ProgressManager;
 import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.html.HtmlDocument;
+import org.dbdoclet.tag.html.HtmlFragment;
 import org.dbdoclet.trafo.AbstractTrafoService;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
 import org.dbdoclet.trafo.html.HtmlProvider;
 import org.dbdoclet.trafo.internal.html.docbook.DocBookVisitor;
 import org.dbdoclet.trafo.internal.html.docbook.HtmlDocBookPanel;
+import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage1;
+import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage2;
+import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage3;
+import org.dbdoclet.trafo.internal.html.docbook.PreprocessStage1;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.trafo.script.ScriptEvent;
 import org.dbdoclet.trafo.script.ScriptEvent.Type;
@@ -25,8 +40,11 @@ import org.dbdoclet.trafo.script.ScriptListener;
 import org.dbdoclet.xiphias.NodeSerializer;
 import org.dbdoclet.xiphias.dom.DocumentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
+import org.dbdoclet.xiphias.dom.NodeCountVisitor;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.osgi.service.component.ComponentContext;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
 
 public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		PanelProvider, ScriptListener {
@@ -35,14 +53,13 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 	private HtmlDocBookPanel htmlDocBookPanel;
 	private DocBookTagFactory dbfactory = new DocBookTagFactory();
 	private Script script;
-	
 	private InputStream in;
-
 	private OutputStream out;
-
+	private ArrayList<ProgressListener> listeners = new ArrayList<ProgressListener>();
 	protected void activate(ComponentContext context) {
 		logger.info("Activierung des Bundles " + getId());
 	}
+
 	@Override
 	public String getId() {
 		return "html2docbook";
@@ -54,7 +71,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		htmlDocBookPanel = new HtmlDocBookPanel();
 		return htmlDocBookPanel;
 	}
-	
+
 	public Script getScript() {
 		return script;
 	}
@@ -86,32 +103,32 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 	}
 
 	public void setTagFactory(DocBookTagFactory dbfactory) {
-		
+
 		if (dbfactory != null) {
 			this.dbfactory = dbfactory;
 		}
 	}
 
-//	public NodeImpl transform(Script script, String buffer, NodeImpl parent)
-//			throws Exception {
-//		
-//		
-//		DocBookTransformer trafo = new DocBookTransformer();
-//		trafo.setTagFactory(dbfactory);
-//		trafo.setScript(script);
-//		
-//		return trafo.transform(buffer, parent, null);
-//	}
+	// public NodeImpl transform(Script script, String buffer, NodeImpl parent)
+	// throws Exception {
+	//
+	//
+	// DocBookTransformer trafo = new DocBookTransformer();
+	// trafo.setTagFactory(dbfactory);
+	// trafo.setScript(script);
+	//
+	// return trafo.transform(buffer, parent, null);
+	// }
 
 	@Override
-	public TrafoResult transform(Script script, ProgressListener listener) {
+	public TrafoResult transform(Script script) {
 
 		TrafoResult result = new TrafoResult();
 
 		try {
 			String encoding = script.getTextParameter(
-					DbtConstants.SECTION_HTML,
-					DbtConstants.PARAM_ENCODING, "UTF-8");
+					TrafoConstants.SECTION_HTML, TrafoConstants.PARAM_ENCODING,
+					"UTF-8");
 
 			if (htmlDocBookPanel != null) {
 
@@ -129,46 +146,158 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 					}
 				}
 
-				script.selectSection(DbtConstants.SECTION_HTML);
-				script.setTextParameter(DbtConstants.PARAM_ENCODING,
+				script.selectSection(TrafoConstants.SECTION_HTML);
+				script.setTextParameter(TrafoConstants.PARAM_ENCODING,
 						htmlDocBookPanel.getSourceEncoding());
 
-				script.selectSection(DbtConstants.SECTION_DOCBOOK);
-				script.setTextParameter(DbtConstants.PARAM_LANGUAGE,
+				script.selectSection(TrafoConstants.SECTION_DOCBOOK);
+				script.setTextParameter(TrafoConstants.PARAM_LANGUAGE,
 						htmlDocBookPanel.getLanguage());
-				script.setTextParameter(
-						DbtConstants.PARAM_DOCUMENT_ELEMENT,
+				script.setTextParameter(TrafoConstants.PARAM_DOCUMENT_ELEMENT,
 						htmlDocBookPanel.getDocumentType());
 			}
 
 			DocBookVisitor visitor = new DocBookVisitor();
-			visitor.addProgressListener(listener);
+			visitor.addProgressListeners(listeners);
 			visitor.setTagFactory(dbfactory);
 			visitor.setScript(script);
+
+			HtmlProvider htmlProvider = new HtmlProvider(script);
 			
-			HtmlProvider htmlProvider = new HtmlProvider();
-			htmlProvider.parse(in, encoding);
-			htmlProvider.traverse(visitor);
+			NodeImpl htmlDoc = null;
+			ElementImpl documentElement = null;
 			
-			ElementImpl documentElement = visitor.getDocumentElement();
-			DocumentImpl document = new DocumentImpl();
-			document.setDocumentElement(documentElement);
+			String htmlCode = retrieveHtmlCode(in, encoding);
+			boolean isFragment = htmlProvider.isFragment(htmlCode);
+			if (isFragment) {
+				htmlDoc = htmlProvider.parseFragment(htmlCode);
+			} else {
+				htmlDoc = htmlProvider.parseDocument(htmlCode);				
+			}
 			
-			encoding = script.getTextParameter(
-					DbtConstants.SECTION_DOCBOOK,
-					DbtConstants.PARAM_ENCODING, "UTF-8");
+			ProgressManager pm = new ProgressManager(listeners);
+			pm.nextStage();
+			NodeCountVisitor nodeCounter = new NodeCountVisitor(listeners);
+			htmlDoc.traverse(nodeCounter);
+			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
+			pm.fireProgressEvent(new ProgressEvent("Preprocess HTML tree...",
+					false));
+			PreprocessStage1 preprocessStage1 = new PreprocessStage1(listeners);
+			htmlDoc.traverse(preprocessStage1);
+			preprocessStage1.finish();
+
+			pm.nextStage();
+			pm.fireProgressEvent(new ProgressEvent("Transformation...", false));
+			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
 			
+			if (isFragment) {
+				DocumentFragment fragment = htmlProvider.traverse((HtmlFragment) htmlDoc, visitor);
+				documentElement = (ElementImpl) fragment;
+			} else {
+				Document document = htmlProvider.traverse((HtmlDocument) htmlDoc, visitor);
+				documentElement = (ElementImpl) document.getDocumentElement();
+			}
+			
+			pm.nextStage();
+			nodeCounter = new NodeCountVisitor(listeners);
+			pm.fireProgressEvent(new ProgressEvent("Postprocess stage 1...",
+					false));
+			documentElement.traverse(nodeCounter);
+			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
+			
+			PostprocessStage1 postprocessStage1 = new PostprocessStage1(
+					dbfactory, script, listeners);
+			documentElement.traverse(postprocessStage1);
+			postprocessStage1.finish();
+
+			pm.nextStage();
+			pm.fireProgressEvent(new ProgressEvent("Postprocess stage 2...",
+					false));
+			documentElement.traverse(nodeCounter.reset());
+			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
+			
+			PostprocessStage2 postprocessStage2 = new PostprocessStage2(
+					dbfactory, script, listeners);
+			documentElement.traverse(postprocessStage2);
+			postprocessStage2.finish();
+
+			new PostprocessStage3(dbfactory, postprocessStage1.getSubtables())
+					.process();
+
+			boolean addIndex = script.isParameterOn(
+					TrafoConstants.SECTION_DOCBOOK,
+					TrafoConstants.PARAM_ADD_INDEX, false);
+
+			if (addIndex == true) {
+				documentElement.appendChild(dbfactory.createIndex());
+			}
+
+			encoding = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+					TrafoConstants.PARAM_ENCODING, "UTF-8");
+
 			NodeSerializer serializer = new NodeSerializer();
-			serializer.addProgressListener(listener);
+			serializer.addProgressListeners(listeners);
 			OutputStreamWriter writer = new OutputStreamWriter(out, encoding);
-			serializer.write(document, writer);
-			writer.close();
+
+			if (isFragment) {
+				serializer.write(documentElement, writer);
+			} else {
+				DocumentImpl document = documentElement.getDocument();
+				document.setXmlEncoding(encoding);
+				serializer.write(document, writer);
+			}
 			
+			writer.close();
+
 		} catch (Throwable oops) {
 			result.setThrowable(oops);
 		}
 
 		return result;
 
+	}
+
+	private String retrieveHtmlCode(InputStream in, String encoding)
+			throws IOException {
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in,
+				encoding));
+
+		StringWriter buffer = new StringWriter();
+		String line = reader.readLine();
+
+		while (line != null) {
+			buffer.append(line);
+			buffer.append(Sfv.LSEP);
+			line = reader.readLine();
+		}
+
+		reader.close();
+
+		return buffer.toString();
+	}
+
+	@Override
+	public void addProgressListener(ProgressListener listener) {
+
+		if (listener == null) {
+			return;
+		}
+
+		if (listeners == null) {
+			listeners = new ArrayList<ProgressListener>();
+		}
+
+		listeners.add(listener);
+	}
+
+	@Override
+	public void removeProgressListener(ProgressListener listener) {
+
+		if (listener == null) {
+			return;
+		}
+
+		listeners.remove(listener);
 	}
 }

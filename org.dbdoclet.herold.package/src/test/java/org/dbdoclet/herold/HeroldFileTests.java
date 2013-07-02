@@ -13,7 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.dbdoclet.service.FileServices;
 import org.dbdoclet.service.ResourceServices;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XmlServices;
@@ -99,8 +99,8 @@ public class HeroldFileTests extends AbstractTests {
 
 			Herold herold = new Herold();
 
-			script.selectSection(DbtConstants.SECTION_DOCBOOK);
-			script.addTextParam(DbtConstants.PARAM_DOCUMENT_ELEMENT,
+			script.selectSection(TrafoConstants.SECTION_DOCBOOK);
+			script.addTextParam(TrafoConstants.PARAM_DOCUMENT_ELEMENT,
 					rootType.toString());
 
 			herold.convert(new FileInputStream(htmlFile), new FileOutputStream(

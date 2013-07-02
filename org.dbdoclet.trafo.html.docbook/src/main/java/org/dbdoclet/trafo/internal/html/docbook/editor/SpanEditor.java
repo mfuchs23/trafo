@@ -18,7 +18,6 @@ import org.dbdoclet.tag.docbook.Secondary;
 import org.dbdoclet.tag.html.Span;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 
 public class SpanEditor extends DocBookEditor {
 

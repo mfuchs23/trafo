@@ -15,7 +15,7 @@ public class IdTests extends AbstractTests {
 	public void testId_1() throws IOException, TrafoException {
 
 		String htmlCode = "<dl><dt id='refsXML'>[XML]</dt><dd>Lorem ipsum</dd></dl>";
-		String xmlCode = transformFragment(htmlCode);
+		String xmlCode = transform(htmlCode);
 		assertTrue("Attribute id nicht gefunden.",
 				xmlCode.contains("xml:id=\"refsXML\""));
 
@@ -25,7 +25,7 @@ public class IdTests extends AbstractTests {
 	public void testId_2() throws IOException, TrafoException {
 
 		String htmlCode = "<html><head><link href='XXX' title='XYZ'></head><body><p>Lorem</p></body></html>";
-		String xmlCode = transformFragment(htmlCode);
+		String xmlCode = transform(htmlCode);
 		assertFalse("Ungültiges Element link gefunden.",
 				xmlCode.contains("<link"));
 	}

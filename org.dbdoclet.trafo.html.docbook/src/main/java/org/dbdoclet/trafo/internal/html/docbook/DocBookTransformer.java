@@ -48,6 +48,7 @@ import org.dbdoclet.tag.docbook.Section;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.HtmlFragment;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.html.EditorException;
@@ -55,7 +56,6 @@ import org.dbdoclet.trafo.html.EditorFactoryException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.IEditor;
 import org.dbdoclet.trafo.html.IEditorFactory;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.html.docbook.ListDetector;
 import org.dbdoclet.trafo.html.docbook.SectionDetector;
@@ -79,7 +79,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
-public class DocBookTransformer {
+public abstract class DocBookTransformer {
 
 	private static Log logger = LogFactory.getLog(DocBookTransformer.class);
 
@@ -136,8 +136,8 @@ public class DocBookTransformer {
 		if (script != null) {
 
 			String value = script.getTextParameter(
-					DbtConstants.SECTION_DOCBOOK,
-					DbtConstants.PARAM_DOCUMENT_ELEMENT, "article");
+					TrafoConstants.SECTION_DOCBOOK,
+					TrafoConstants.PARAM_DOCUMENT_ELEMENT, "article");
 
 			documentType = DocumentElementType.valueOf(value.toUpperCase());
 		}
@@ -175,9 +175,9 @@ public class DocBookTransformer {
 
 		try {
 			htmlCode = FileServices.readToString(file, script.getTextParameter(
-					DbtConstants.SECTION_HTML,
-					DbtConstants.PARAM_ENCODING,
-					DbtConstants.DEFAULT_SOURCE_ENCODING));
+					TrafoConstants.SECTION_HTML,
+					TrafoConstants.PARAM_ENCODING,
+					TrafoConstants.DEFAULT_SOURCE_ENCODING));
 			return transform(htmlCode);
 		} catch (IOException oops) {
 			throw new TrafoException(oops);
@@ -193,8 +193,8 @@ public class DocBookTransformer {
 			String buffer = transform(inFile);
 			FileServices.createParentDir(destinationFile);
 			FileServices.writeFromString(destinationFile, buffer, script
-					.getTextParameter(DbtConstants.SECTION_DOCBOOK,
-							DbtConstants.PARAM_ENCODING, "UTF-8"));
+					.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+							TrafoConstants.PARAM_ENCODING, "UTF-8"));
 			return buffer;
 
 		} catch (IOException oops) {
@@ -207,8 +207,8 @@ public class DocBookTransformer {
 		try {
 
 			String encoding = script.getTextParameter(
-					DbtConstants.SECTION_HTML,
-					DbtConstants.PARAM_ENCODING, "UTF-8");
+					TrafoConstants.SECTION_HTML,
+					TrafoConstants.PARAM_ENCODING, "UTF-8");
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					in, encoding));
@@ -226,8 +226,8 @@ public class DocBookTransformer {
 
 			String docBookCode = transform(buffer.toString());
 
-			encoding = script.getTextParameter(DbtConstants.SECTION_DOCBOOK,
-					DbtConstants.PARAM_ENCODING, "UTF-8");
+			encoding = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+					TrafoConstants.PARAM_ENCODING, "UTF-8");
 
 			PrintWriter writer = new PrintWriter(new OutputStreamWriter(out,
 					encoding));
@@ -265,7 +265,7 @@ public class DocBookTransformer {
 		}
 
 		TextParam excludeParam = (TextParam) script.getParameter(
-				DbtConstants.SECTION_HTML, DbtConstants.PARAM_EXCLUDE);
+				TrafoConstants.SECTION_HTML, TrafoConstants.PARAM_EXCLUDE);
 
 		if (excludeParam != null) {
 
@@ -340,8 +340,8 @@ public class DocBookTransformer {
 		new PostprocessStage3(dbfactory, postprocessStage1.getSubtables())
 				.process();
 
-		boolean addIndex = script.isParameterOn(DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_ADD_INDEX, false);
+		boolean addIndex = script.isParameterOn(TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_ADD_INDEX, false);
 
 		if (addIndex == true) {
 			root.appendChild(dbfactory.createIndex());
@@ -410,8 +410,8 @@ public class DocBookTransformer {
 			logger.debug("Transformer out=" + xml);
 
 			String destinationEncoding = script.getTextParameter(
-					DbtConstants.SECTION_DOCBOOK, DbtConstants.PARAM_ENCODING,
-					DbtConstants.DEFAULT_DESTINATION_ENCODING);
+					TrafoConstants.SECTION_DOCBOOK, TrafoConstants.PARAM_ENCODING,
+					TrafoConstants.DEFAULT_DESTINATION_ENCODING);
 			byte[] data = XmlServices.validate(xml, destinationEncoding);
 			result.setData(data);
 
@@ -502,7 +502,7 @@ public class DocBookTransformer {
 				serializer.write(htmlDoc, new File("__trace__herold.html"));
 			}
 
-			HtmlElement documentElement = htmlDoc.getDocumentElement();
+			HtmlElement documentElement = (HtmlElement) htmlDoc.getDocumentElement();
 
 			String lang = null;
 
@@ -513,10 +513,10 @@ public class DocBookTransformer {
 			documentElement.removeAttribute("xmlns");
 
 			String language = script.getTextParameter(
-					DbtConstants.SECTION_DOCBOOK, DbtConstants.PARAM_LANGUAGE,
+					TrafoConstants.SECTION_DOCBOOK, TrafoConstants.PARAM_LANGUAGE,
 					null);
 
-			logger.debug("Profile: Parameter language = " + language);
+			logger.debug("Profile: Parameter language = " + language);	
 
 			if (language == null) {
 
@@ -534,8 +534,8 @@ public class DocBookTransformer {
 
 			DocBookDocument doc = new DocBookDocument();
 			doc.setXmlEncoding(script.getTextParameter(
-					DbtConstants.SECTION_DOCBOOK, DbtConstants.PARAM_ENCODING,
-					DbtConstants.DEFAULT_DESTINATION_ENCODING));
+					TrafoConstants.SECTION_DOCBOOK, TrafoConstants.PARAM_ENCODING,
+					TrafoConstants.DEFAULT_DESTINATION_ENCODING));
 
 			DocBookTagFactory dbf = getTagFactory();
 			DocBookElement rootElement;
@@ -544,6 +544,7 @@ public class DocBookTransformer {
 
 			if (documentType == DocumentElementType.BOOK) {
 				rootElement = dbf.createBook();
+
 			} else if (documentType == DocumentElementType.REFERENCE) {
 				rootElement = dbf.createReference();
 			} else if (documentType == DocumentElementType.PART) {
@@ -569,7 +570,7 @@ public class DocBookTransformer {
 			rootElement.appendChild(info);
 
 			String title = script.getTextParameter(
-					DbtConstants.SECTION_DOCBOOK, DbtConstants.PARAM_TITLE,
+					TrafoConstants.SECTION_DOCBOOK, TrafoConstants.PARAM_TITLE,
 					null);
 
 			if (title != null && title.trim().length() > 0) {
@@ -579,7 +580,7 @@ public class DocBookTransformer {
 			}
 
 			String abstractText = script.getTextParameter(
-					DbtConstants.SECTION_DOCBOOK, DbtConstants.PARAM_ABSTRACT,
+					TrafoConstants.SECTION_DOCBOOK, TrafoConstants.PARAM_ABSTRACT,
 					null);
 
 			if (abstractText != null) {
@@ -619,8 +620,8 @@ public class DocBookTransformer {
 			script = new Script();
 		}
 
-		script.setEnabled(DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_ADD_INDEX, false);
+		script.setEnabled(TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_ADD_INDEX, false);
 
 		try {
 

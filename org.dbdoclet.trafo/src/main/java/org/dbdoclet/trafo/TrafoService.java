@@ -17,9 +17,10 @@ public interface TrafoService {
 	 * @param listener
 	 * @return TrafoResult
 	 */
-	public TrafoResult transform(Script script, ProgressListener listener);
+	public TrafoResult transform(Script script);
 
+	public void addProgressListener(ProgressListener listener);
+	public void removeProgressListener(ProgressListener listener);
 	public void setInputStream(InputStream in);
-
 	public void setOutputStream(OutputStream out);
 }

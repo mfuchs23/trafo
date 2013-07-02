@@ -104,8 +104,8 @@ public class TrafoConsole extends JFrame implements ActionListener,
 				Script script = new Script();
 				trafo.setInputStream(new FileInputStream(source.getText()));
 				trafo.setOutputStream(new FileOutputStream(dest.getText()));
-
-				TrafoResult result = trafo.transform(script, this);
+				trafo.addProgressListener(this);
+				TrafoResult result = trafo.transform(script);
 
 				if (result.getThrowable() != null) {
 					result.getThrowable().printStackTrace();

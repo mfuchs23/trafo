@@ -18,10 +18,9 @@ import org.dbdoclet.tag.docbook.SimPara;
 import org.dbdoclet.tag.docbook.ULink;
 import org.dbdoclet.tag.docbook.XRef;
 import org.dbdoclet.tag.html.A;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
-import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.script.Script;
 
 public class AEditor extends DocBookEditor {
@@ -32,8 +31,6 @@ public class AEditor extends DocBookEditor {
 
 		setValues(super.edit(values));
 		DocBookTagFactory dbfactory = getTagFactory();
-
-		Script script = getScript();
 
 		DocBookElement ancestor;
 		DocBookElement parent = getParent();
@@ -64,8 +61,8 @@ public class AEditor extends DocBookEditor {
 			anchor.setId(getLinkManager().createUniqueId(name));
 
 			boolean createXrefLabel = script.isParameterOn(
-					DbtConstants.SECTION_DOCBOOK,
-					DbtConstants.PARAM_CREATE_XREF_LABEL, true);
+					TrafoConstants.SECTION_DOCBOOK,
+					TrafoConstants.PARAM_CREATE_XREF_LABEL, true);
 
 			if (createXrefLabel == true) {
 				anchor.setXrefLabel(StringServices.replace(
@@ -90,7 +87,10 @@ public class AEditor extends DocBookEditor {
 			} else {
 
 				XRef xref = dbfactory.createXRef(getLinkManager().getUniqueId(
-						href));
+						href));//	public Script getScript() {
+//				return script;
+//				}
+
 				xref.setParentNode(ancestor);
 				ancestor.appendChild(xref);
 				setCurrent(ancestor);
@@ -117,7 +117,10 @@ public class AEditor extends DocBookEditor {
 
 				ULink ulink = dbfactory.createULink();
 				ulink.setParentNode(ancestor);
-				ulink.setUrl(href);
+				ulink.setUrl(href);//	public Script getScript() {
+//				return script;
+//				}
+
 				linkElement = ulink;
 			}
 

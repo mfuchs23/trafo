@@ -49,7 +49,7 @@ public class HeadingEditor extends DocBookEditor {
 
 			DocBookTagFactory dbfactory = getTagFactory();
 			SectionDetector sectionDetector = new SectionDetector();
-			sectionDetector.setScript(getScript());
+			sectionDetector.setScript(script);
 			sectionDetector.setTagFactory(dbfactory);
 			sectionDetector.edit(values, dbfactory);
 

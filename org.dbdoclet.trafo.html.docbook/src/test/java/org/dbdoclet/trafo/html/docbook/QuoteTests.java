@@ -14,7 +14,7 @@ public class QuoteTests extends AbstractTests {
 	public void testQuote_1() throws IOException, TrafoException {
 
 		String htmlCode = "<p>Da \"<b>Fett</b>\"</p><p>WEG!!!</p>";
-		String xmlCode = transformFragment(htmlCode);
+		String xmlCode = transform(htmlCode);
 		System.out.println(xmlCode);
 		assertTrue("Anführungszeichen nicht gefunden.",
 				xmlCode.contains("&quot;<emphasis"));

@@ -9,9 +9,9 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.Emphasis;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
 
 public class UEditor extends EmEditor {
     
@@ -23,7 +23,7 @@ public class UEditor extends EmEditor {
         Emphasis emphasis = getEmphasis();
         
 		if (emphasis != null) {
-            emphasis.setRole(DbtConstants.DEFAULT_EMPHASIS_ROLE_UNDERLINE);
+            emphasis.setRole(TrafoConstants.DEFAULT_EMPHASIS_ROLE_UNDERLINE);
         }
         
         return evo;

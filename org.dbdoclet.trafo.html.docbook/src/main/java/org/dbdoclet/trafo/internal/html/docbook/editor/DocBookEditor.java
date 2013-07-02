@@ -21,10 +21,10 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.Table;
 import org.dbdoclet.tag.html.Td;
 import org.dbdoclet.tag.html.Th;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.IEditor;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.internal.html.docbook.LinkManager;
 import org.dbdoclet.trafo.script.Script;
@@ -47,8 +47,8 @@ public abstract class DocBookEditor implements IEditor {
 	private boolean doTraverse;
 	private LinkManager linkManager;
 	private DocumentElementType documentElementType;
-	private Script script;
 	private DocBookTagFactory tagFactory;
+	protected Script script;
 	
 	public void copyCommonAttributes(HtmlElement html, DocBookElement dbk) {
 
@@ -68,10 +68,8 @@ public abstract class DocBookEditor implements IEditor {
 			}
 		}
 
-		Script script = getScript();
-
-		if (script.isParameterOn(DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_CREATE_CONDITION_ATTRIBUTE, false)) {
+		if (script.isParameterOn(TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_CREATE_CONDITION_ATTRIBUTE, false)) {
 
 			StringBuilder buffer = new StringBuilder();
 
@@ -97,8 +95,8 @@ public abstract class DocBookEditor implements IEditor {
 			}
 		}
 
-		if (script.isParameterOn(DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_CREATE_REMAP_ATTRIBUTE, false)) {
+		if (script.isParameterOn(TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_CREATE_REMAP_ATTRIBUTE, false)) {
 
 			createRemapAttribute(html, dbk);
 			dbk.setLine(html.getLine());
@@ -211,10 +209,6 @@ public abstract class DocBookEditor implements IEditor {
 		return parent;
 	}
 
-	public Script getScript() {
-		return script;
-	}
-
 	public DocBookTagFactory getTagFactory() {
 
 		if (tagFactory == null) {
@@ -282,10 +276,6 @@ public abstract class DocBookEditor implements IEditor {
 		this.parent = newParent;
 	}
 
-	public void setScript(Script script) {
-		this.script = script;
-	}
-
 	public void setTagFactory(DocBookTagFactory tagFactory) {
 		this.tagFactory = tagFactory;
 	}
@@ -297,7 +287,13 @@ public abstract class DocBookEditor implements IEditor {
 
 	public void setValues(EditorInstruction values) {
 
-		anything = values.getAnything();
+		script = values.getScript();
+		
+		if (script == null) {
+			throw new IllegalStateException("Der Parameter Script darf nicht null sein!");
+		}
+		
+ 		anything = values.getAnything();
 		child = values.getHtmlElement();
 		current = (DocBookElement) values.getCurrent();
 		doIgnore = values.doIgnore();

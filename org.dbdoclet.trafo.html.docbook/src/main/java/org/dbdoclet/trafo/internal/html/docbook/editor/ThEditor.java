@@ -9,9 +9,9 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 
@@ -24,11 +24,10 @@ public class ThEditor extends DocBookEditor {
 		setValues(super.edit(values));
 		DocBookTagFactory dbfactory = getTagFactory();
 
-		Script script = getScript();
 		boolean decomposeTables = script.isParameterOn(
-				DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_DECOMPOSE_TABLES,
-				DbtConstants.DEFAULT_DECOMPOSE_TABLES);
+				TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_DECOMPOSE_TABLES,
+				TrafoConstants.DEFAULT_DECOMPOSE_TABLES);
 
 		if (decomposeTables || getHtmlElement().isMute()) {
 
@@ -64,7 +63,7 @@ public class ThEditor extends DocBookEditor {
 		org.dbdoclet.tag.docbook.Emphasis emph = dbfactory
 				.createEmphasis();
 
-		emph.setRole(DbtConstants.DEFAULT_EMPHASIS_ROLE_BOLD);
+		emph.setRole(TrafoConstants.DEFAULT_EMPHASIS_ROLE_BOLD);
 
 		entry.appendChild(para);
 		para.appendChild(emph);

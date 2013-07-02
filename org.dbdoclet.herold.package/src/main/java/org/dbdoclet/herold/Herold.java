@@ -34,11 +34,12 @@ import org.dbdoclet.option.StringOption;
 import org.dbdoclet.service.FileServices;
 import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.service.StringServices;
+import org.dbdoclet.trafo.AbstractTrafoService;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoExceptionHandler;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
 import org.dbdoclet.trafo.script.Script;
 
@@ -286,26 +287,26 @@ public class Herold {
 		OptionList options = new OptionList(args);
 
 		// docbook-add-index
-		bopt = new BooleanOption(DbtConstants.SECTION_DOCBOOK.toLowerCase()
-				+ "-" + DbtConstants.PARAM_ADD_INDEX, "x");
+		bopt = new BooleanOption(TrafoConstants.SECTION_DOCBOOK.toLowerCase()
+				+ "-" + TrafoConstants.PARAM_ADD_INDEX, "x");
 		bopt.setValue(false);
 		options.add(bopt);
 
 		// docbook-encoding
-		sopt = new StringOption(DbtConstants.SECTION_DOCBOOK.toLowerCase()
-				+ "-" + DbtConstants.PARAM_ENCODING, "d");
+		sopt = new StringOption(TrafoConstants.SECTION_DOCBOOK.toLowerCase()
+				+ "-" + TrafoConstants.PARAM_ENCODING, "d");
 		sopt.setDefault("UTF-8");
 		options.add(sopt);
 
 		// decompose-tables
-		bopt = new BooleanOption(DbtConstants.SECTION_DOCBOOK.toLowerCase()
-				+ "-" + DbtConstants.PARAM_DECOMPOSE_TABLES, "T");
+		bopt = new BooleanOption(TrafoConstants.SECTION_DOCBOOK.toLowerCase()
+				+ "-" + TrafoConstants.PARAM_DECOMPOSE_TABLES, "T");
 		bopt.setDefault(false);
 		options.add(bopt);
 
 		// document-element
-		selopt = new SelectOption(DbtConstants.SECTION_DOCBOOK.toLowerCase()
-				+ "-" + DbtConstants.PARAM_DOCUMENT_ELEMENT, "r");
+		selopt = new SelectOption(TrafoConstants.SECTION_DOCBOOK.toLowerCase()
+				+ "-" + TrafoConstants.PARAM_DOCUMENT_ELEMENT, "r");
 
 		String[] optv2 = { "article", "book", "reference", "part", "chapter",
 				"section" };
@@ -314,14 +315,14 @@ public class Herold {
 		options.add(selopt);
 
 		// title
-		sopt = new StringOption(DbtConstants.SECTION_DOCBOOK.toLowerCase()
-				+ "-" + DbtConstants.PARAM_TITLE, "t");
+		sopt = new StringOption(TrafoConstants.SECTION_DOCBOOK.toLowerCase()
+				+ "-" + TrafoConstants.PARAM_TITLE, "t");
 		sopt.setDefault("http://www.dbdoclet.org/herold");
 		options.add(sopt);
 
 		// source-encoding
-		sopt = new StringOption(DbtConstants.SECTION_HTML.toLowerCase() + "-"
-				+ DbtConstants.PARAM_ENCODING, "s");
+		sopt = new StringOption(TrafoConstants.SECTION_HTML.toLowerCase() + "-"
+				+ TrafoConstants.PARAM_ENCODING, "s");
 		sopt.setDefault("UTF-8");
 		options.add(sopt);
 
@@ -405,15 +406,16 @@ public class Herold {
 	public void convert(InputStream in, OutputStream out, Script script)
 			throws TrafoException {
 
-		HtmlDocBookTrafo trafo = new HtmlDocBookTrafo();
+		AbstractTrafoService trafo = new HtmlDocBookTrafo();
 		trafo.setInputStream(in);
 		trafo.setOutputStream(out);
 		
 		TrafoResult result = null;
 		if (verbose == true) {
-			result = trafo.transform(script, new ConsoleProgressListener(false));
+			trafo.addProgressListener(new ConsoleProgressListener(false));
+			result = trafo.transform(script);
 		} else {
-			result = trafo.transform(script, null);
+			result = trafo.transform(script);
 		}
 
 		if (result.isFailed()) {
@@ -435,15 +437,15 @@ public class Herold {
 
 			String name = option.getLongName();
 
-			if (name.startsWith(DbtConstants.SECTION_DOCBOOK.toLowerCase())) {
-				script.selectSection(DbtConstants.SECTION_DOCBOOK);
+			if (name.startsWith(TrafoConstants.SECTION_DOCBOOK.toLowerCase())) {
+				script.selectSection(TrafoConstants.SECTION_DOCBOOK);
 				name = StringServices.cutPrefix(name,
-						DbtConstants.SECTION_DOCBOOK.toLowerCase());
+						TrafoConstants.SECTION_DOCBOOK.toLowerCase());
 
-			} else if (name.startsWith(DbtConstants.SECTION_HTML.toLowerCase())) {
-				script.selectSection(DbtConstants.SECTION_HTML);
+			} else if (name.startsWith(TrafoConstants.SECTION_HTML.toLowerCase())) {
+				script.selectSection(TrafoConstants.SECTION_HTML);
 				name = StringServices.cutPrefix(name,
-						DbtConstants.SECTION_HTML.toLowerCase());
+						TrafoConstants.SECTION_HTML.toLowerCase());
 			}
 
 			name = StringServices.cutPrefix(name, "-");

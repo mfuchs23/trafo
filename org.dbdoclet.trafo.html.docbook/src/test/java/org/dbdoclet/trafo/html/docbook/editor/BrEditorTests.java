@@ -16,7 +16,6 @@ import org.dbdoclet.tag.html.P;
 import org.dbdoclet.trafo.html.AbstractTests;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.DocBookTransformer;
 import org.dbdoclet.trafo.internal.html.docbook.editor.BrEditor;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.NodeSerializer;
@@ -67,8 +66,6 @@ public class BrEditorTests extends AbstractTests {
 		ei.setHtmlElement(html);
 		ei.setCurrent(docbook);
 
-		DocBookTransformer transformer = new DocBookTransformer();
-		transformer.setScript(script);
 		return ei;
 	}
 }

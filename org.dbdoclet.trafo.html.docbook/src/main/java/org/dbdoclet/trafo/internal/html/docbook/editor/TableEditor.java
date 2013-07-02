@@ -15,9 +15,9 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Entry;
 import org.dbdoclet.tag.docbook.EntryTbl;
 import org.dbdoclet.tag.html.Td;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.w3c.dom.Element;
@@ -31,11 +31,10 @@ public class TableEditor extends DocBookEditor {
 		setValues(super.edit(values));
 		DocBookTagFactory dbfactory = getTagFactory();
 
-		Script script = getScript();
 		boolean decomposeTables = script.isParameterOn(
-				DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_DECOMPOSE_TABLES,
-				DbtConstants.DEFAULT_DECOMPOSE_TABLES);
+				TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_DECOMPOSE_TABLES,
+				TrafoConstants.DEFAULT_DECOMPOSE_TABLES);
 
 		if (decomposeTables || getHtmlElement().isMute()) {
 			traverse(true);
@@ -140,12 +139,10 @@ public class TableEditor extends DocBookEditor {
 
 		copyCommonAttributes(htmlTable, table);
 
-		Script script = getScript();
-
 		String tableStyle = script.getTextParameter(
-				DbtConstants.SECTION_DOCBOOK,
-				DbtConstants.PARAM_TABLE_STYLE,
-				DbtConstants.DEFAULT_TABLE_STYLE);
+				TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_TABLE_STYLE,
+				TrafoConstants.DEFAULT_TABLE_STYLE);
 
 		table.setFrame(tableStyle);
 

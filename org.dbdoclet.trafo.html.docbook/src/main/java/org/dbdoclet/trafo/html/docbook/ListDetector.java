@@ -11,6 +11,7 @@ import org.dbdoclet.tag.docbook.ItemizedList;
 import org.dbdoclet.tag.docbook.ListItem;
 import org.dbdoclet.tag.docbook.OrderedList;
 import org.dbdoclet.tag.html.HtmlElement;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;
@@ -245,8 +246,8 @@ public class ListDetector {
 	public boolean isItemizedListElement(HtmlElement element, Script script) {
 
 		TextParam paramClasses = (TextParam) script.getParameter(
-				DbtConstants.SECTION_LIST_DETECTION,
-				DbtConstants.PARAM_ITEMIZED_ATTRIBUTE_CLASS);
+				TrafoConstants.SECTION_LIST_DETECTION,
+				TrafoConstants.PARAM_ITEMIZED_ATTRIBUTE_CLASS);
 
 		String cssClass = element.getCssClass();
 
@@ -281,8 +282,8 @@ public class ListDetector {
 	public boolean isOrderedListElement(HtmlElement element, Script script) {
 
 		TextParam paramClasses = (TextParam) script.getParameter(
-				DbtConstants.SECTION_LIST_DETECTION,
-				DbtConstants.PARAM_ORDERED_ATTRIBUTE_CLASS);
+				TrafoConstants.SECTION_LIST_DETECTION,
+				TrafoConstants.PARAM_ORDERED_ATTRIBUTE_CLASS);
 
 		String cssClass = element.getCssClass();
 

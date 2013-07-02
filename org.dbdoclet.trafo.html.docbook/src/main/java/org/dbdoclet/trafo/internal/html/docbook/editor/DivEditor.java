@@ -23,6 +23,7 @@ import org.dbdoclet.tag.html.Div;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.docbook.SectionDetector;
+import org.dbdoclet.trafo.script.Script;
 
 public class DivEditor extends DocBookEditor {
 
@@ -79,12 +80,13 @@ public class DivEditor extends DocBookEditor {
 
 		setValues(super.edit(values));
 
+		Script script = values.getScript();
 		DocBookTagFactory dbfactory = getTagFactory();
 		
 		Div div = (Div) getHtmlElement();
 
 		SectionDetector sectionDetector = new SectionDetector();
-		sectionDetector.setScript(getScript());
+		sectionDetector.setScript(script);
 		sectionDetector.setTagFactory(dbfactory);
 
 		if (sectionDetector.isSection(div)) {
@@ -154,7 +156,7 @@ public class DivEditor extends DocBookEditor {
 			}
 
 			if (type.startsWith("note")) {
-
+				
 				addAdmonition(dbfactory, NOTE, title);
 				return finalizeValues();
 			}

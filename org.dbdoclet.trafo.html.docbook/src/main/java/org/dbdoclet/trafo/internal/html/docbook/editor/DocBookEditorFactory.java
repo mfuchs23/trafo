@@ -64,14 +64,12 @@ public class DocBookEditorFactory implements IEditorFactory {
 
 			DocBookEditor editor = (DocBookEditor) o;
 			editor.setLinkManager(linkManager);
-			editor.setScript(script);
 			editor.setTagFactory(tagFactory);
 
 		} catch (ClassNotFoundException oops) {
 
 			DefaultEditor editor = new DefaultEditor();
 			editor.setLinkManager(linkManager);
-			editor.setScript(script);
 			editor.setTagFactory(tagFactory);
 			return editor;
 
@@ -100,7 +98,6 @@ public class DocBookEditorFactory implements IEditorFactory {
 
 		CommentEditor editor = new CommentEditor();
 		editor.setLinkManager(linkManager);
-		editor.setScript(script);
 		editor.setTagFactory(tagFactory);
 		return editor;
 
@@ -118,7 +115,6 @@ public class DocBookEditorFactory implements IEditorFactory {
 
 		TextEditor editor = new TextEditor();
 		editor.setLinkManager(linkManager);
-		editor.setScript(script);
 		editor.setTagFactory(tagFactory);
 		return editor;
 	}

@@ -8,7 +8,7 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.SectionElement;
 import org.dbdoclet.trafo.SectionNumberRemover;
 import org.dbdoclet.trafo.SpaceNormalizer;
-import org.dbdoclet.trafo.html.docbook.DbtConstants;
+import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.AbstractNodeVisitor;
 import org.dbdoclet.xiphias.dom.ElementImpl;
@@ -53,12 +53,12 @@ public class PostprocessStage2 extends AbstractNodeVisitor {
 
 					SectionNumberRemover snr = new SectionNumberRemover();
 					snr.setRegex(script.getTextParameter(
-							DbtConstants.SECTION_SECTION_DETECTION,
-							DbtConstants.PARAM_SECTION_NUMBERING_PATTERN, null));
+							TrafoConstants.SECTION_SECTION_DETECTION,
+							TrafoConstants.PARAM_SECTION_NUMBERING_PATTERN, null));
 					title.traverse(snr);
 
-					if (script.isParameterOn(DbtConstants.SECTION_DOCBOOK,
-							DbtConstants.PARAM_TITLE_NORMALIZE_SPACE,
+					if (script.isParameterOn(TrafoConstants.SECTION_DOCBOOK,
+							TrafoConstants.PARAM_TITLE_NORMALIZE_SPACE,
 							false)) {
 
 						SpaceNormalizer sn = new SpaceNormalizer();

@@ -37,7 +37,8 @@ public class TrafoTransformer extends SwingWorker<TrafoResult, Object> {
 	protected TrafoResult doInBackground() {
 
 		ProgressManager pm = new ProgressManager(listener);
-		result = trafoService.transform(script, listener);
+		trafoService.addProgressListener(listener);
+		result = trafoService.transform(script);
 
 
 		if (result.getThrowable() != null) {

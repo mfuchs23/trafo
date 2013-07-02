@@ -71,7 +71,8 @@ public class TrafoComponent implements ScriptService {
 			}
 
 			TrafoService trafo = trafoServiceList.get(0);
-			return trafo.transform(script, listener);
+			trafo.addProgressListener(listener);
+			return trafo.transform(script);
 
 		} catch (Throwable oops) {
 			result.setThrowable(oops);
