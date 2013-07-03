@@ -76,126 +76,7 @@ public class ImgEditor extends DocBookEditor {
 		validFormatMap.put("WPG", "WPG");
 	}
 
-	public void createFoImageData(DocBookElement parent,
-			DocBookTagFactory dbfactory, List<String> imageDataFormats,
-			Img img, File file) throws IOException {
-
-		String fileRef = FileServices.normalizePath(file.getPath());
-		fileRef = FileServices.getFileBase(fileRef);
-
-		if (FileServices.isAbsolutePath(fileRef)) {
-
-			fileRef = FileServices.normalizePath(fileRef);
-
-			if (fileRef.startsWith("/")) {
-				fileRef = "file://" + fileRef;
-			} else {
-				fileRef = "file:///" + fileRef;
-			}
-		}
-
-		int index = 0;
-
-		for (String format : imageDataFormats) {
-
-			ImageObject image = dbfactory.createImageObject();
-
-			if (index == 0) {
-				image.setRole("fo");
-			} else {
-				image.setRole("fo-" + format.toLowerCase());
-			}
-
-			String align = img.getAlign();
-
-			ImageData data = dbfactory.createImageData();
-
-			data.setScaleFit(true);
-			data.setWidth("100%");
-			data.setContentDepth("100%");
-			data.setFormat(format);
-
-			if (align != null && align.length() > 0) {
-				data.setAlign(validateAlign(align));
-			}
-
-			data.setFileRef(fileRef + "." + format.toLowerCase());
-
-			image.appendChild(data);
-			parent.appendChild(image);
-			index++;
-		}
-	}
-
-	public void createHtmlImageData(DocBookElement parent,
-			DocBookTagFactory dbfactory, List<String> imageDataFormats,
-			Img img, File file) throws IOException {
-
-		String fileRef = FileServices.normalizePath(file.getPath());
-		logger.debug("Parameter fileRef=" + fileRef);
-
-		if (FileServices.isAbsolutePath(fileRef)) {
-
-			fileRef = FileServices.normalizePath(fileRef);
-
-			if (fileRef.startsWith("/")) {
-				fileRef = "file://" + fileRef;
-			} else {
-				fileRef = "file:///" + fileRef;
-			}
-		}
-
-		fileRef = FileServices.getFileBase(fileRef);
-		int index = 0;
-
-		for (String format : imageDataFormats) {
-
-			String width = img.getWidth();
-			String height = img.getHeight();
-			String align = img.getAlign();
-
-			ImageObject image = dbfactory.createImageObject();
-
-			if (index == 0) {
-				image.setRole("html");
-			} else {
-				image.setRole("html-" + format.toLowerCase());
-			}
-
-			ImageData data = dbfactory.createImageData();
-			data.setScaleFit(true);
-
-			if (width != null && width.length() > 0) {
-				data.setContentWidth(width);
-			}
-
-			if (height != null && height.length() > 0) {
-				data.setContentDepth(height);
-			}
-
-			if (file.exists() && format.equalsIgnoreCase("BASE64")) {
-
-				String fileName = FileServices.getFileBase(file) + ".base64";
-				FileServices.writeFromString(new File(fileName),
-						ImageServices.toXml(file));
-			}
-
-			data.setFormat(format);
-
-			if (align != null && align.length() > 0) {
-				data.setAlign(validateAlign(align));
-			}
-
-			String attr = fileRef + "." + format.toLowerCase();
-			logger.debug("XML attribute fileRef=" + attr);
-			data.setFileRef(attr);
-			image.appendChild(data);
-			parent.appendChild(image);
-			index++;
-		}
-	}
-
-	public ArrayList<String> createImageDataFormatList(
+	private ArrayList<String> createImageDataFormatList(
 			ArrayList<String> paramList, String src) {
 
 		ArrayList<String> formatList = new ArrayList<String>();
@@ -329,8 +210,8 @@ public class ImgEditor extends DocBookEditor {
 
 		try {
 
-			createHtmlImageData(media, dbfactory, imageDataFormats, img, file);
-			createFoImageData(media, dbfactory, imageDataFormats, img, file);
+			dbfactory.createHtmlImageData(media, dbfactory, imageDataFormats, img, file);
+			dbfactory.createFoImageData(media, dbfactory, imageDataFormats, img, file);
 
 		} catch (IOException oops) {
 			throw new EditorException(oops);

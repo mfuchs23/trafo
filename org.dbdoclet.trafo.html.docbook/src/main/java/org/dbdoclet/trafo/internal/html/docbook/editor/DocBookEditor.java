@@ -342,20 +342,7 @@ public abstract class DocBookEditor implements IEditor {
 	}
 
 	protected String validateAlign(String align) {
-
-		if (align == null) {
-			return align;
-		}
-
-		align = align.toLowerCase();
-
-		try {
-			AttributeAlign.valueOf(align.toUpperCase());
-		} catch (IllegalArgumentException oops) {
-			return AttributeAlign.CENTER.toString().toLowerCase();
-		}
-
-		return align;
+		return tagFactory.validateAlign(align);
 	}
 
 	protected String validateSrc(String src) {

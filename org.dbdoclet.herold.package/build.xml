@@ -32,6 +32,7 @@
 			<zipgroupfileset dir="lib">
 				<include name="org.dbdoclet.commons_*.jar"/>
 				<include name="org.dbdoclet.getopts_*.jar"/>
+				<include name="org.dbdoclet.html.parser_*.jar"/>
 				<include name="org.dbdoclet.jive_*.jar"/>
 				<include name="org.dbdoclet.xiphias_*.jar"/>
 				<include name="org.dbdoclet.tag_*.jar"/>
@@ -73,11 +74,13 @@
 			<fileset dir="lib">
 				<include name="resolver_*.jar" />
 				<include name="org.antlr.runtime_*.jar" />
-				<include name="org.apache.commons.codec_*.jar" />
 				<include name="org.apache.commons.jxpath_*.jar" />
 				<include name="org.apache.commons.logging_*.jar" />
 				<include name="org.apache.log4j_*.jar" />
+			<!--
+				<include name="org.apache.commons.codec_*.jar" />
 				<include name="org.apache.xmlgraphics_*.jar" />
+				<include name="org.dbdoclet.html.parser_*.jar" />
 				<include name="org.dbdoclet.tag_*.jar" />
 				<include name="org.dbdoclet.trafo_*.jar" />
 				<include name="org.dbdoclet.trafo.html_*.jar" />
@@ -86,6 +89,7 @@
 				<include name="org.dbdoclet.getopts_*.jar" />
 				<include name="org.dbdoclet.jive_*.jar" />
 				<include name="org.dbdoclet.xiphias_*.jar" />
+			-->
 			</fileset>
 			<mapper type="regexp" from="^(.*)[_-][0-9\.]+\.jar" to="\1.jar" />
 		</copy>
