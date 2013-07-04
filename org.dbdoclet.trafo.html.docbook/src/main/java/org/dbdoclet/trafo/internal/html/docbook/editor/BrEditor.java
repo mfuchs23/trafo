@@ -18,6 +18,7 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.ElementImpl;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
@@ -65,7 +66,7 @@ public class BrEditor extends DocBookEditor {
 		return finalizeValues();
 	}
 
-	private boolean isTrapped(Br brElement, ElementImpl elementImpl) {
+	private boolean isTrapped(Br brElement, NodeImpl nodeImpl) {
 
 		Node prevSibling = brElement.getPreviousSibling();
 		Node nextSibling = brElement.getNextSibling();
@@ -96,7 +97,7 @@ public class BrEditor extends DocBookEditor {
 
 		if (prevText.endsWith("-")) {
 
-			Node lastChild = elementImpl.getLastChild();
+			Node lastChild = nodeImpl.getLastChild();
 
 			if (lastChild instanceof Text) {
 

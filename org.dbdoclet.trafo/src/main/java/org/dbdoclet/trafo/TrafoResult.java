@@ -15,6 +15,8 @@ import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerException;
 
 import org.dbdoclet.service.StringServices;
+import org.dbdoclet.xiphias.dom.ElementImpl;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 /**
  * Die Klasse <code>TrafoResult</code> speichert das Protokoll einer
@@ -30,6 +32,7 @@ public class TrafoResult implements ErrorListener {
 	private byte[] data;
 	private Throwable throwable;
 	private boolean failed = false;
+	private NodeImpl rootNode;
 
 	public TrafoResult() {
 		super();
@@ -77,6 +80,10 @@ public class TrafoResult implements ErrorListener {
 		return file;
 	}
 
+	public NodeImpl getRootNode() {
+		return rootNode;
+	}
+
 	public Throwable getThrowable() {
 		return throwable;
 	}
@@ -87,6 +94,10 @@ public class TrafoResult implements ErrorListener {
 
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+
+	public void setRootNode(NodeImpl rootNode) {
+		this.rootNode = rootNode;
 	}
 
 	public void setThrowable(Throwable throwable) {

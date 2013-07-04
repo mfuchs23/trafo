@@ -24,7 +24,7 @@ public class CodeEditor extends DocBookEditor {
 	DocBookTagFactory dbfactory = getTagFactory();
 
 	Code code = (Code) getHtmlElement();
-	DocBookElement parent = getParent();
+	DocBookElement parent = getDocBookElementParent();
 
 	if (parent.isContentModel() == true) {
 

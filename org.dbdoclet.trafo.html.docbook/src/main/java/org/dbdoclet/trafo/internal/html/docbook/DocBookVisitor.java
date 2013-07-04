@@ -16,6 +16,7 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Info;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
+import org.dbdoclet.tag.html.HtmlFragment;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.IEditorFactory;
@@ -26,6 +27,7 @@ import org.dbdoclet.trafo.html.docbook.SectionDetector;
 import org.dbdoclet.trafo.internal.html.docbook.editor.DocBookEditorFactory;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XPathServices;
+import org.dbdoclet.xiphias.dom.DocumentFragmentImpl;
 import org.dbdoclet.xiphias.dom.DocumentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.w3c.dom.Document;
@@ -44,7 +46,6 @@ public class DocBookVisitor implements IHtmlVisitor {
 	private DocBookTagFactory dbfactory;
 	private Script script;
 	private ListDetector listDetector;
-	private ElementImpl documentElement;
 	private DocBookEditorFactory docBookEditorFactory;
 
 	public DocBookVisitor() {
@@ -85,10 +86,53 @@ public class DocBookVisitor implements IHtmlVisitor {
 	}
 
 	@Override
-	public Document createDocument(HtmlDocument htmlDoc) {
+	public DocumentFragmentImpl createDocumentFragment(HtmlFragment htmlFragment) {
+		
+		DocumentFragmentImpl fragment = new DocumentFragmentImpl();
+		// ElementImpl documentElement = createDocumentElement();
+		// fragment.appendChild(documentElement);
+		return fragment;
+	}
+	
+	@Override
+	public DocumentImpl createDocument(HtmlDocument htmlDoc) {
 
+
+		ElementImpl documentElement = createDocumentElement();
 		DocumentImpl document = new DocumentImpl();
 
+		Info info = dbfactory.createInfo();
+		documentElement.appendChild(info);
+
+		String title = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_TITLE, null);
+
+		if (title != null && title.trim().length() > 0) {
+			info.appendChild(dbfactory.createTitle(title));
+		} else {
+			generateTitle(htmlDoc, dbfactory, info);
+		}
+
+		String abstractText = script
+				.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+						TrafoConstants.PARAM_ABSTRACT, null);
+
+		if (abstractText != null) {
+			Abstract abstractElement = dbfactory.createAbstract();
+			info.appendChild(abstractElement);
+			createAbstract(document, abstractElement, abstractText);
+		}
+
+		document.setDocumentElement(documentElement);
+		documentElement.setDocument(document);
+		
+		return document;
+	}
+
+	private ElementImpl createDocumentElement() {
+		
+		ElementImpl documentElement = dbfactory.createSection();
+		
 		DocumentElementType documentType = DocumentElementType.valueOf("ARTICLE");
 
 		if (script != null) {
@@ -157,33 +201,8 @@ public class DocBookVisitor implements IHtmlVisitor {
 					"http://www.w3.org/XML/1998/namespace", "xml:lang",
 					language);
 		}
-
-		Info info = dbfactory.createInfo();
-		documentElement.appendChild(info);
-
-		String title = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
-				TrafoConstants.PARAM_TITLE, null);
-
-		if (title != null && title.trim().length() > 0) {
-			info.appendChild(dbfactory.createTitle(title));
-		} else {
-			generateTitle(htmlDoc, dbfactory, info);
-		}
-
-		String abstractText = script
-				.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
-						TrafoConstants.PARAM_ABSTRACT, null);
-
-		if (abstractText != null) {
-			Abstract abstractElement = dbfactory.createAbstract();
-			info.appendChild(abstractElement);
-			createAbstract(document, abstractElement, abstractText);
-		}
-
-		document.setDocumentElement(documentElement);
-		documentElement.setDocument(document);
 		
-		return document;
+		return documentElement;
 	}
 
 	@Override

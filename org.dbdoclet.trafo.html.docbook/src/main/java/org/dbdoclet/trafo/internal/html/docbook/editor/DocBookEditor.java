@@ -11,7 +11,6 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.service.StringServices;
-import org.dbdoclet.tag.docbook.AttributeAlign;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.DocBookVersion;
@@ -29,6 +28,7 @@ import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.internal.html.docbook.LinkManager;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 
 public abstract class DocBookEditor implements IEditor {
@@ -37,9 +37,8 @@ public abstract class DocBookEditor implements IEditor {
 	protected static final Log logger = LogFactory.getLog(DocBookEditor.class);
 
 	protected static final String AUTOMATICALLY_INSERTED = "Automatically inserted";
-	private DocBookElement current;
-	private DocBookElement parent;
-
+	private NodeImpl current;
+	private NodeImpl parent;
 	private HtmlElement child;
 	private Object anything;
 	private CharacterDataImpl characterDataNode;
@@ -169,7 +168,7 @@ public abstract class DocBookEditor implements IEditor {
 		return characterDataNode;
 	}
 
-	public DocBookElement getCurrent() {
+	public NodeImpl getCurrent() {
 		return current;
 	}
 
@@ -205,7 +204,7 @@ public abstract class DocBookEditor implements IEditor {
 		return linkManager;
 	}
 
-	public DocBookElement getParent() {
+	public NodeImpl getParent() {
 		return parent;
 	}
 
@@ -264,15 +263,15 @@ public abstract class DocBookEditor implements IEditor {
 		this.child = newChild;
 	}
 
-	public void setCurrent(DocBookElement newCurrent) {
-		this.current = newCurrent;
+	public void setCurrent(NodeImpl current) {
+		this.current = current;
 	}
 
 	public void setLinkManager(LinkManager linkManager) {
 		this.linkManager = linkManager;
 	}
 
-	public void setParent(DocBookElement newParent) {
+	public void setParent(NodeImpl newParent) {
 		this.parent = newParent;
 	}
 
@@ -295,10 +294,10 @@ public abstract class DocBookEditor implements IEditor {
 		
  		anything = values.getAnything();
 		child = values.getHtmlElement();
-		current = (DocBookElement) values.getCurrent();
+		current = values.getCurrent();
 		doIgnore = values.doIgnore();
 		doTraverse = values.doTraverse();
-		parent = (DocBookElement) values.getParent();
+		parent = values.getParent();
 		characterDataNode = values.getCharacterDataNode();
 	}
 
@@ -356,5 +355,44 @@ public abstract class DocBookEditor implements IEditor {
 		}
 
 		return src;
+	}
+
+	protected boolean isList(NodeImpl parentNode) {
+		
+		if (parentNode instanceof DocBookElement) {
+	
+			DocBookElement parent = (DocBookElement) parentNode;
+	
+			if (parent.isList()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	protected DocBookElement getDocBookElementParent() {
+
+		NodeImpl parent = getParent();
+		
+		if (parent instanceof DocBookElement) {
+			return (DocBookElement) parent;
+		}
+		
+		return null;
+	}
+
+	protected boolean isSection(NodeImpl parentNode) {
+
+		if (parentNode instanceof DocBookElement) {
+	
+			DocBookElement parent = (DocBookElement) parentNode;
+	
+			if (parent.isSection()) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

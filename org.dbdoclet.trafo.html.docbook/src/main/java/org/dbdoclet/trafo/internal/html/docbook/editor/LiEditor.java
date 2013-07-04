@@ -14,6 +14,7 @@ import org.dbdoclet.tag.docbook.ListItem;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.script.Script;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class LiEditor extends DocBookEditor {
 
@@ -22,10 +23,9 @@ public class LiEditor extends DocBookEditor {
 
         setValues(super.edit(values));
 
-        Script script = values.getScript();
         DocBookTagFactory dbfactory = getTagFactory();
 
-        DocBookElement parent = getParent();
+        NodeImpl parent = getParent();
         
         if (parent instanceof ListItem) {
             

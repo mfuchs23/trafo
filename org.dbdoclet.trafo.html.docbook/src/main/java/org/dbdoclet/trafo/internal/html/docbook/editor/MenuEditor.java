@@ -20,7 +20,7 @@ public class MenuEditor extends DocBookEditor {
 	setValues(super.edit(values));
 	DocBookTagFactory dbfactory = getTagFactory();
 
-	if (getParent().isList()) {
+	if (isList(getParent())) {
 
 	    setCurrent(dbfactory.createListItem());
 	    getCurrent().setParentNode(getParent());

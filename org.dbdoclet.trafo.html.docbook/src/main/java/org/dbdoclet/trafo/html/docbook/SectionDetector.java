@@ -42,7 +42,6 @@ import org.dbdoclet.trafo.internal.html.docbook.editor.DefaultEditor;
 import org.dbdoclet.trafo.internal.html.docbook.editor.HeadingEditor;
 import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;
-import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -180,7 +179,7 @@ public class SectionDetector {
 
 		values.doTraverse(true);
 
-		Element levelParent = null;
+		NodeImpl levelParent = null;
 		int level = 7;
 
 		if (child instanceof HeaderElement) {
@@ -198,7 +197,7 @@ public class SectionDetector {
 			sect = dbfactory.createChapter();
 			sect.setRemap(child.getNodeName());
 
-			levelParent = root;
+			levelParent = (NodeImpl) root;
 
 		} else {
 
@@ -411,9 +410,9 @@ public class SectionDetector {
 		return root;
 	}
 
-	public ElementImpl findParentForLevel(HtmlElement header, int level) {
+	public NodeImpl findParentForLevel(HtmlElement header, int level) {
 
-		ElementImpl parent = null;
+		NodeImpl parent = null;
 		Class<?> parentClass = null;
 
 		if (level < 0) {
@@ -459,77 +458,77 @@ public class SectionDetector {
 		return parent;
 	}
 
-	public DocBookElement createSectionChild(HtmlElement header, Element parent)
+	public DocBookElement createSectionChild(HtmlElement header, NodeImpl levelParent)
 			throws OptionException {
 
 		DocBookElement section = null;
 
-		if (parent == null || parent instanceof Para
+		if (levelParent == null || levelParent instanceof Para
 				|| isValidHeader(header) == false) {
 			section = dbfactory.createBridgeHead();
 		}
 
-		if (parent instanceof Book || parent instanceof Part) {
+		if (levelParent instanceof Book || levelParent instanceof Part) {
 			section = dbfactory.createChapter();
 		}
 
-		if (parent instanceof Chapter || parent instanceof PartIntro) {
+		if (levelParent instanceof Chapter || levelParent instanceof PartIntro) {
 			section = dbfactory.createSection();
 		}
 
-		if (parent instanceof Article) {
+		if (levelParent instanceof Article) {
 			section = dbfactory.createSection();
 		}
 
-		if (parent instanceof Section) {
+		if (levelParent instanceof Section) {
 			section = dbfactory.createSection();
 		}
 
-		if (parent instanceof Sect1) {
+		if (levelParent instanceof Sect1) {
 			section = dbfactory.createSect2();
 		}
 
-		if (parent instanceof Sect2) {
+		if (levelParent instanceof Sect2) {
 			section = dbfactory.createSect3();
 		}
 
-		if (parent instanceof Sect3) {
+		if (levelParent instanceof Sect3) {
 			section = dbfactory.createSect4();
 		}
 
-		if (parent instanceof Sect4) {
+		if (levelParent instanceof Sect4) {
 			section = dbfactory.createSect5();
 		}
 
-		if (parent instanceof Sect5) {
+		if (levelParent instanceof Sect5) {
 			section = dbfactory.createSimpleSect();
 		}
 
-		if (parent instanceof Reference) {
+		if (levelParent instanceof Reference) {
 			section = dbfactory.createRefEntry();
 		}
 
-		if (parent instanceof RefEntry) {
+		if (levelParent instanceof RefEntry) {
 			section = dbfactory.createRefSect1();
 		}
 
-		if (parent instanceof RefSect1) {
+		if (levelParent instanceof RefSect1) {
 			section = dbfactory.createRefSect2();
 		}
 
-		if (parent instanceof RefSect2) {
+		if (levelParent instanceof RefSect2) {
 			section = dbfactory.createRefSect3();
 		}
 
-		if (parent instanceof RefSect3) {
+		if (levelParent instanceof RefSect3) {
 			section = dbfactory.createRefSect4();
 		}
 
-		if (parent instanceof RefSect4) {
+		if (levelParent instanceof RefSect4) {
 			section = dbfactory.createRefSect5();
 		}
 
-		if (parent instanceof RefSect5) {
+		if (levelParent instanceof RefSect5) {
 			section = dbfactory.createSimpleSect();
 		}
 

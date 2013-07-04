@@ -28,7 +28,6 @@ public class ScriptTests extends AbstractTests {
 		Script script = new Script();
 		script.selectSection(TrafoConstants.SECTION_DOCBOOK);
 		script.addBoolParam(TrafoConstants.PARAM_ADD_INDEX, true);
-		transformer.setScript(script);
 		
 		transformer.setInputStream(new ByteArrayInputStream(htmlCode.getBytes()));
 		

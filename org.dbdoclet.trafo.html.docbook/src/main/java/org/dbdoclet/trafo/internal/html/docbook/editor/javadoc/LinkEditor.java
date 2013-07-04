@@ -10,12 +10,12 @@ package org.dbdoclet.trafo.internal.html.docbook.editor.javadoc;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.tag.docbook.Literal;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.editor.DocBookEditor;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 /**
  * The class <code>LinkEditor</code> is reponsible for transforming @link tags
@@ -33,7 +33,7 @@ public class LinkEditor extends DocBookEditor {
 
 		setValues(values);
 		DocBookTagFactory dbfactory = getTagFactory();
-		DocBookElement parent = getParent();
+		NodeImpl parent = getParent();
 
 		org.dbdoclet.tag.javadoc.Link link = (org.dbdoclet.tag.javadoc.Link) getHtmlElement();
 

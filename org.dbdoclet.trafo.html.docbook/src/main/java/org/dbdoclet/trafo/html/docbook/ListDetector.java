@@ -17,6 +17,7 @@ import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XmlServices;
 import org.dbdoclet.xiphias.dom.ElementImpl;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -36,7 +37,7 @@ public class ListDetector {
 		String cssClass = child.getCssClass();
 		logger.trace(String.format("Closing list %s, %s.", cssClass, child));
 
-		ElementImpl parent = values.getParent();
+		NodeImpl parent = values.getParent();
 		Script script = values.getScript();
 
 		if (isItemizedListElement(child, script)
@@ -90,7 +91,7 @@ public class ListDetector {
 				&& currentCssClass.equals(cssClass) == false) {
 
 			cssClassStack.pop();
-			ElementImpl parent = values.getParent();
+			NodeImpl parent = values.getParent();
 
 			// Eingebettete Liste finden
 			while (parent != null && parent instanceof ItemizedList == false
@@ -192,7 +193,7 @@ public class ListDetector {
 		logger.trace(String.format("Editing list element %s, %s.", cssClass,
 				htmlElement));
 
-		ElementImpl parent = values.getParent();
+		NodeImpl parent = values.getParent();
 
 		if (isNestedList(cssClass) == false && parent instanceof ListItem) {
 			parent = (ElementImpl) parent.getParentNode();
@@ -211,8 +212,8 @@ public class ListDetector {
 		values.setCurrent(listItem);
 	}
 
-	private ElementImpl createListElement(ListType type, String cssClass,
-			DocBookTagFactory dbfactory, ElementImpl parent) {
+	private NodeImpl createListElement(ListType type, String cssClass,
+			DocBookTagFactory dbfactory, NodeImpl parent) {
 
 		if (type == ListType.ITEMIZED
 				&& parent instanceof ItemizedList == false) {

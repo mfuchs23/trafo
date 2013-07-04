@@ -12,11 +12,12 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class EditorInstruction {
 
-	private ElementImpl current;
-	private ElementImpl parent;
+	private NodeImpl current;
+	private NodeImpl parent;
 	private HtmlElement htmlElement;
 	private Object anything;
 	private CharacterDataImpl characterDataNode;
@@ -52,11 +53,11 @@ public class EditorInstruction {
 		return htmlElement;
 	}
 
-	public ElementImpl getCurrent() {
+	public NodeImpl getCurrent() {
 		return current;
 	}
 
-	public ElementImpl getParent() {
+	public NodeImpl getParent() {
 		return parent;
 	}
 
@@ -74,14 +75,12 @@ public class EditorInstruction {
 		this.htmlElement = htmlElement;
 	}
 
-	public void setCurrent(ElementImpl current) {
-
+	public void setCurrent(NodeImpl current) {
 		this.current = current;
 	}
 
-	public void setParent(ElementImpl parent) {
-
-		this.parent = parent;
+	public void setParent(NodeImpl targetNode) {
+		this.parent = targetNode;
 	}
 
 	public void setCharacterDataNode(CharacterDataImpl characterDataNode) {

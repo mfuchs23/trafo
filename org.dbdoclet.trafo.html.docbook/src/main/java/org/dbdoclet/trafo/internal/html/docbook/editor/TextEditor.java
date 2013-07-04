@@ -28,8 +28,8 @@ public class TextEditor extends DocBookEditor {
 			setValues(super.edit(values));
 			DocBookTagFactory dbfactory = getTagFactory();
 
-			DocBookElement parent = getParent();
-			DocBookElement current = getCurrent();
+			DocBookElement parent = getDocBookElementParent();
+			NodeImpl current = getCurrent();
 
 			if (parent.isContentModel()) {
 

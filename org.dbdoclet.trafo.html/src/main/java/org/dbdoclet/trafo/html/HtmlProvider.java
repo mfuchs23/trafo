@@ -13,8 +13,6 @@ import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.progress.ProgressManager;
 import org.dbdoclet.service.StringServices;
-import org.dbdoclet.tag.docbook.DocBookFragment;
-import org.dbdoclet.tag.docbook.Section;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.HtmlFragment;
@@ -23,6 +21,7 @@ import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XPathServices;
 import org.dbdoclet.xiphias.dom.CommentImpl;
+import org.dbdoclet.xiphias.dom.DocumentFragmentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.NodeListImpl;
@@ -40,8 +39,6 @@ public class HtmlProvider implements IHtmlProvider {
 	private String indent = "";
 	private ProgressManager pm;
 	public ArrayList<ProgressListener> listeners;
-	// private HtmlDocument htmlDocument;
-	// private HtmlFragment htmlFragment;
 	private IEditorFactory editorFactory;
 	private IHtmlVisitor visitor;
 	private Script script;
@@ -59,7 +56,7 @@ public class HtmlProvider implements IHtmlProvider {
 		return visitor.beforeEdit(values);
 	}
 
-	private ElementImpl edit(NodeImpl htmlNode, ElementImpl targetNode) {
+	private NodeImpl edit(NodeImpl htmlNode, NodeImpl targetNode) {
 
 		logger.debug("-> edit " + htmlNode);
 
@@ -82,9 +79,9 @@ public class HtmlProvider implements IHtmlProvider {
 		NodeImpl child = null;
 		HtmlElement htmlElement;
 
-		ElementImpl element;
-		ElementImpl oldParent = targetNode;
-		ElementImpl childParent = null;
+		NodeImpl element;
+		NodeImpl oldParent = targetNode;
+		NodeImpl childParent = null;
 
 		Object anything = null;
 		IEditor editor;
@@ -241,7 +238,7 @@ public class HtmlProvider implements IHtmlProvider {
 						TransformInstruction transformInstruction = child
 								.getTransformInstruction();
 
-						ElementImpl parent = values.getParent();
+						NodeImpl parent = values.getParent();
 						parent.appendChild(transformInstruction
 								.getReplacement());
 
@@ -329,7 +326,7 @@ public class HtmlProvider implements IHtmlProvider {
 				logger.debug(indent + "Parent changed. Old parent was "
 						+ oldParent + ". New parent is " + targetNode + ".");
 
-				ElementImpl dbelem = oldParent;
+				NodeImpl dbelem = oldParent;
 				logger.debug(indent + "Closing old parent " + dbelem
 						+ ". HTML Element is " + child + ".");
 
@@ -462,10 +459,8 @@ public class HtmlProvider implements IHtmlProvider {
 		}
 
 		editorFactory = visitor.getEditorFactory();
-		DocBookFragment fragment = new DocBookFragment();
-		Section section = fragment.addSection();
-		
-		edit((ElementImpl) htmlFragment, (ElementImpl) section);
+		DocumentFragmentImpl fragment = visitor.createDocumentFragment(htmlFragment);
+		edit((ElementImpl) htmlFragment, fragment);
 		
 		return fragment;
 	}

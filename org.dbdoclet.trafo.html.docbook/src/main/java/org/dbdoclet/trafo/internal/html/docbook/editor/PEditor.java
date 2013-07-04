@@ -10,7 +10,6 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.Book;
 import org.dbdoclet.tag.docbook.Chapter;
-import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Entry;
 import org.dbdoclet.tag.docbook.Para;
@@ -24,6 +23,7 @@ import org.dbdoclet.tag.html.P;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 
 public class PEditor extends DocBookEditor {
@@ -37,7 +37,7 @@ public class PEditor extends DocBookEditor {
 
 		P p = (P) getHtmlElement();
 
-		DocBookElement parent = getParent();
+		NodeImpl parent = getParent();
 		Para candidate = dbfactory.createPara();
 		copyCommonAttributes(p, candidate);
 		candidate.setParentNode(parent);
@@ -55,13 +55,12 @@ public class PEditor extends DocBookEditor {
 
 			setCurrent(parent);
 
-			if (parent instanceof Para && (parent.getParentNode() != null)) {
-
+			if (parent instanceof Para &&  parent.getParentNode() != null) {
 				parent.appendChild(new TextImpl(" "));
-				setParent((DocBookElement) parent.getParentNode());
+				setParent((NodeImpl) parent.getParentNode());
 			}
 
-			if (parent.isSection()) {
+			if (isSection(parent)) {
 
 				if (parent instanceof Book || parent instanceof Part) {
 
@@ -88,6 +87,7 @@ public class PEditor extends DocBookEditor {
 					refEntry.appendChild(refSection);
 
 					refSection.appendChild(getCurrent());
+					// TODO Auto-generated method stub
 
 				} else {
 

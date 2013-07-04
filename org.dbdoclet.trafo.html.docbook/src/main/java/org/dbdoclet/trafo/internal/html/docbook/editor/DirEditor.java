@@ -11,36 +11,39 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.NodeListImpl;
 
 public class DirEditor extends DocBookEditor {
 
-    @Override
-    public EditorInstruction edit(EditorInstruction values) throws EditorException {
+	@Override
+	public EditorInstruction edit(EditorInstruction values)
+			throws EditorException {
 
-	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = getTagFactory();
+		setValues(super.edit(values));
+		DocBookTagFactory dbfactory = getTagFactory();
 
-	NodeListImpl children = getHtmlElement().getTrafoChildNodes();
+		NodeListImpl children = getHtmlElement().getTrafoChildNodes();
 
-	if (children.size() == 0) {
+		if (children.size() == 0) {
 
-	    return finalizeValues();
+			return finalizeValues();
+		}
+
+		NodeImpl parentNode = getParent();
+		if (isList(parentNode)) {
+
+			setCurrent(dbfactory.createListItem());
+			getCurrent().setParentNode(getParent());
+			parentNode.appendChild(getCurrent());
+			setParent(getCurrent());
+		}
+
+		setCurrent(dbfactory.createItemizedList());
+		getCurrent().setParentNode(getParent());
+		getParent().appendChild(getCurrent());
+		traverse(true);
+
+		return finalizeValues();
 	}
-
-	if (getParent().isList()) {
-
-	    setCurrent(dbfactory.createListItem());
-	    getCurrent().setParentNode(getParent());
-	    getParent().appendChild(getCurrent());
-	    setParent(getCurrent());
-	}
-
-	setCurrent(dbfactory.createItemizedList());
-	getCurrent().setParentNode(getParent());
-	getParent().appendChild(getCurrent());
-	traverse(true);
-
-	return finalizeValues();
-    }
 }

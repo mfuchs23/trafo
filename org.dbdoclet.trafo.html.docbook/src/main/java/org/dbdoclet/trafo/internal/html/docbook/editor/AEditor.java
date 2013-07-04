@@ -21,7 +21,6 @@ import org.dbdoclet.tag.html.A;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.script.Script;
 
 public class AEditor extends DocBookEditor {
 
@@ -33,7 +32,7 @@ public class AEditor extends DocBookEditor {
 		DocBookTagFactory dbfactory = getTagFactory();
 
 		DocBookElement ancestor;
-		DocBookElement parent = getParent();
+		DocBookElement parent = getDocBookElementParent();
 
 		traverse(true);
 

@@ -21,8 +21,6 @@ import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.tag.docbook.Entry;
-import org.dbdoclet.tag.docbook.ImageData;
-import org.dbdoclet.tag.docbook.ImageObject;
 import org.dbdoclet.tag.docbook.Link;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Screen;
@@ -33,8 +31,7 @@ import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.param.Param;
-import org.dbdoclet.trafo.script.Script;
-import org.dbdoclet.xiphias.ImageServices;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class ImgEditor extends DocBookEditor {
 
@@ -76,35 +73,6 @@ public class ImgEditor extends DocBookEditor {
 		validFormatMap.put("WPG", "WPG");
 	}
 
-	private ArrayList<String> createImageDataFormatList(
-			ArrayList<String> paramList, String src) {
-
-		ArrayList<String> formatList = new ArrayList<String>();
-
-		for (String param : paramList) {
-
-			if (param == null) {
-				continue;
-			}
-
-			if (formatList.contains(param.toUpperCase()) == false) {
-				formatList.add(param.toUpperCase());
-			}
-		}
-
-		if (src != null) {
-
-			String value = FileServices.getExtension(src);
-
-			if (value != null && value.trim().length() > 0
-					&& formatList.contains(value.toUpperCase()) == false) {
-				formatList.add(0, value.toUpperCase());
-			}
-		}
-
-		return formatList;
-	}
-
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
@@ -122,7 +90,7 @@ public class ImgEditor extends DocBookEditor {
 		logger.debug("Parameter use-absolute-image-path is set to "
 				+ useAbsoluteImagePath);
 
-		ArrayList<String> imageDataFormats = createImageDataFormatList(
+		List<String> imageDataFormats = dbfactory.createImageDataFormatList(
 				script.getTextParameterList(TrafoConstants.SECTION_DOCBOOK,
 						TrafoConstants.PARAM_IMAGEDATA_FORMATS,
 						new ArrayList<String>()), img.getSrc());
@@ -156,7 +124,7 @@ public class ImgEditor extends DocBookEditor {
 		validateSrc(src);
 
 		DocBookElement media;
-		DocBookElement parent = getParent();
+		NodeImpl parent = getParent();
 
 		if (parent instanceof Emphasis || parent instanceof Entry
 				|| parent instanceof Para || parent instanceof Screen

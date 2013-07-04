@@ -22,7 +22,7 @@ public class VarEditor extends DocBookEditor {
 	setValues(super.edit(values));
 	DocBookTagFactory dbfactory = getTagFactory();
 
-	DocBookElement parent = getParent();
+	DocBookElement parent = getDocBookElementParent();
 
 	if (parent instanceof BlockQuote) {
 

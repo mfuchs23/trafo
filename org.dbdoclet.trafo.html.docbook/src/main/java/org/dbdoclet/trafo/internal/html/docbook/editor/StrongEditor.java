@@ -14,6 +14,7 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class StrongEditor extends DocBookEditor {
 
@@ -25,7 +26,7 @@ public class StrongEditor extends DocBookEditor {
 		DocBookTagFactory dbfactory = getTagFactory();
 
 		HtmlElement child = getHtmlElement();
-		DocBookElement parent = getParent();
+		NodeImpl parent = getParent();
 
 		DocBookElement candidate;
 

@@ -24,13 +24,17 @@ public class AbstractTests {
 	protected ArrayList<String> getValues(String xmlCode, String query) {
 
 		try {
+
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
 					.newDocumentBuilder();
 			ByteArrayInputStream stream = new ByteArrayInputStream(
 					xmlCode.getBytes());
 			Document doc = builder.parse(stream);
 			return XPathServices.getValues(doc, query);
+		
 		} catch (Exception oops) {
+			
+			System.err.println(xmlCode);
 			oops.printStackTrace();
 			fail();
 		}

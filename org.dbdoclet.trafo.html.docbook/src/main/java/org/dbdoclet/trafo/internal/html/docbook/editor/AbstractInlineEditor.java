@@ -33,7 +33,7 @@ public abstract class AbstractInlineEditor extends DocBookEditor {
 		DocBookTagFactory dbfactory = getTagFactory();
 		traverse(true);
 
-		DocBookElement parent = getParent();
+		DocBookElement parent = getDocBookElementParent();
 
 		if (parent.isContentModel()) {
 

@@ -66,7 +66,6 @@ import org.dbdoclet.xiphias.NodeSerializer;
 import org.dbdoclet.xiphias.XPathServices;
 import org.dbdoclet.xiphias.XmlServices;
 import org.dbdoclet.xiphias.dom.CommentImpl;
-import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeCountVisitor;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.NodeListImpl;
@@ -766,13 +765,13 @@ public abstract class DocBookTransformer {
 	 * 
 	 * @param htmlNode
 	 *            a <code>Node</code> value
-	 * @param dbParent
+	 * @param dbNode
 	 *            a <code>DocBookElement</code> value
 	 * 
 	 * @return a <code>Element</code>. The root node of the created DocBook
 	 *         document tree.
 	 */
-	private ElementImpl edit(NodeImpl htmlNode, ElementImpl dbParent) {
+	private NodeImpl edit(NodeImpl htmlNode, NodeImpl dbNode) {
 
 		logger.debug("-> edit " + htmlNode);
 
@@ -781,7 +780,7 @@ public abstract class DocBookTransformer {
 			return null;
 		}
 
-		if (dbParent == null) {
+		if (dbNode == null) {
 			logger.error("[DocBookDoclet.edit] - Parameter dbParent is null!");
 			return null;
 		}
@@ -796,21 +795,21 @@ public abstract class DocBookTransformer {
 		NodeImpl child = null;
 		HtmlElement htmlElement;
 
-		ElementImpl dbElement;
-		ElementImpl dbOldParent = dbParent;
-		ElementImpl dbChildParent = null;
+		NodeImpl dbElement;
+		NodeImpl dbOldParent = dbNode;
+		NodeImpl dbChildParent = null;
 
 		Object anything = null;
 		IEditor editor;
 
-		ElementImpl dbelem; // for temporay use only!
+		NodeImpl dbelem; // for temporay use only!
 
 		int index = 0;
 
 		logger.debug(indent
 				+ "\n>>>==================================================");
 		logger.debug(indent + " HTML Vaterelement " + htmlNode + ".");
-		logger.debug(indent + " DocBook Vaterelement " + dbParent + ".");
+		logger.debug(indent + " DocBook Vaterelement " + dbNode + ".");
 
 		indent += ".";
 
@@ -825,7 +824,7 @@ public abstract class DocBookTransformer {
 
 			logger.debug(indent + " HTML element is " + child + ".");
 
-			dbElement = dbParent;
+			dbElement = dbNode;
 			doTraverse = true;
 
 			if (child instanceof CommentImpl) {
@@ -838,8 +837,8 @@ public abstract class DocBookTransformer {
 						EditorInstruction values = new EditorInstruction(script);
 						values.setAnything(null);
 						values.setHtmlElement(null);
-						values.setCurrent(dbParent);
-						values.setParent(dbParent);
+						values.setCurrent(dbNode);
+						values.setParent(dbNode);
 						values.setCharacterDataNode((CommentImpl) child);
 
 						editor = editorFactory.getCommentEditor();
@@ -852,9 +851,9 @@ public abstract class DocBookTransformer {
 						logger.debug(indent
 								+ " Nach der Kommentarbearbeitung: " + child
 								+ ".\n");
-						dbParent = values.getParent();
+						dbNode = values.getParent();
 
-						if (dbParent == null) {
+						if (dbNode == null) {
 							throw new NullPointerException("[Node #" + index
 									+ "]"
 									+ "DocBook parent element for element '"
@@ -867,7 +866,7 @@ public abstract class DocBookTransformer {
 					} else {
 
 						pm.fireProgressEvent(new ProgressEvent("Comment"));
-						dbParent.appendChild(child);
+						dbNode.appendChild(child);
 						continue;
 					}
 
@@ -887,8 +886,8 @@ public abstract class DocBookTransformer {
 
 					values.setAnything(null);
 					values.setHtmlElement(null);
-					values.setCurrent(dbParent);
-					values.setParent(dbParent);
+					values.setCurrent(dbNode);
+					values.setParent(dbNode);
 					values.setCharacterDataNode((TextImpl) child);
 
 					editor = editorFactory.getTextEditor();
@@ -899,9 +898,9 @@ public abstract class DocBookTransformer {
 					logger.debug(indent + " Nach der Textbearbeitung: " + child
 							+ ".\n");
 
-					dbParent = values.getParent();
+					dbNode = values.getParent();
 
-					if (dbParent == null) {
+					if (dbNode == null) {
 
 						throw new NullPointerException("[Node #" + index + "]"
 								+ "DocBook parent element for element '"
@@ -941,8 +940,8 @@ public abstract class DocBookTransformer {
 
 					values.setAnything(anything);
 					values.setHtmlElement((HtmlElement) child);
-					values.setCurrent(dbParent);
-					values.setParent(dbParent);
+					values.setCurrent(dbNode);
+					values.setParent(dbNode);
 					values.setCharacterDataNode(null);
 
 					logger.debug(indent + " Vor der Transformation: " + child
@@ -953,7 +952,7 @@ public abstract class DocBookTransformer {
 						TransformInstruction transformInstruction = child
 								.getTransformInstruction();
 
-						ElementImpl parent = values.getParent();
+						NodeImpl parent = values.getParent();
 						parent.appendChild(transformInstruction
 								.getReplacement());
 
@@ -989,9 +988,9 @@ public abstract class DocBookTransformer {
 					doTraverse = values.doTraverse();
 					doIgnore = values.doIgnore();
 
-					dbParent = values.getParent();
+					dbNode = values.getParent();
 
-					if (dbParent == null) {
+					if (dbNode == null) {
 
 						throw new NullPointerException("[Node #" + index + "]"
 								+ "DocBook parent element for element " + child
@@ -1018,7 +1017,7 @@ public abstract class DocBookTransformer {
 						+ "\n<<<==================================================");
 
 				if (doIgnore == true) {
-					dbParent = dbChildParent;
+					dbNode = dbChildParent;
 				}
 
 			} else {
@@ -1034,21 +1033,21 @@ public abstract class DocBookTransformer {
 			}
 
 			logger.debug(indent + "[Teilbaum bearbeitet] HTML: " + child
-					+ ", DocBook: " + dbElement + ", Vater: " + dbParent);
-			dbElement.closed();
+					+ ", DocBook: " + dbElement + ", Vater: " + dbNode);
+			// dbElement.closed();
 
-			if (dbParent != dbOldParent) {
+			if (dbNode != dbOldParent) {
 
 				logger.debug(indent + "Parent changed. Old parent was "
-						+ dbOldParent + ". New parent is " + dbParent + ".");
+						+ dbOldParent + ". New parent is " + dbNode + ".");
 
 				dbelem = dbOldParent;
 				logger.debug(indent + "Closing old parent " + dbelem
 						+ ". HTML Element is " + child + ".");
-				dbelem.closed();
+				// dbelem.closed();
 				// dbelem.isNew(false);
 
-				dbOldParent = dbParent;
+				dbOldParent = dbNode;
 			}
 
 		}
@@ -1059,10 +1058,10 @@ public abstract class DocBookTransformer {
 		}
 
 		logger.debug(indent + "[Vaterknoten bearbeitet] HTML: " + child
-				+ ", Vaterknoten: " + dbParent);
+				+ ", Vaterknoten: " + dbNode);
 
 		logger.debug("<- edit ");
-		return dbParent;
+		return dbNode;
 	}
 
 	private void generateTitle(HtmlDocument htmlDoc, DocBookTagFactory dbf,

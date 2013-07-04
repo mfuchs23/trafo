@@ -28,7 +28,7 @@ public class StrikeEditor extends DocBookEditor {
 
 	setCurrent(emphasis);
 
-	if (emphasis.isValidParent(getParent()) == false) {
+	if (emphasis.isValidParent(getDocBookElementParent()) == false) {
 
 	    SimPara candidate = dbfactory.createSimPara();
 	    candidate.setParentNode(getParent());

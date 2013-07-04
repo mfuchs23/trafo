@@ -28,7 +28,7 @@ public class UlEditor extends DocBookEditor {
 	    return finalizeValues();
 	}
 
-	if (getParent().isList()) {
+	if (isList(getParent())) {
 
 	    setCurrent(dbfactory.createListItem());
 	    getCurrent().setParentNode(getParent());

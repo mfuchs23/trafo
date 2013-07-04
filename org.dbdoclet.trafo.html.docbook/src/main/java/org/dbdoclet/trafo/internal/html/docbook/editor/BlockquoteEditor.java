@@ -26,7 +26,7 @@ public class BlockquoteEditor extends DocBookEditor {
 
 		BlockQuote blockquote = dbfactory.createBlockQuote();
 
-		DocBookElement parent = getParent();
+		DocBookElement parent = getDocBookElementParent();
 
 		parent.appendChild(blockquote);
 		blockquote.setParentNode(parent);

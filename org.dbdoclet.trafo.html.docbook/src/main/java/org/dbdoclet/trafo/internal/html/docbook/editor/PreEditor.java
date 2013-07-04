@@ -29,7 +29,7 @@ public class PreEditor extends DocBookEditor {
 		HtmlElement pre = values.getHtmlElement();
 
 		DocBookElement candidate;
-		DocBookElement parent = getParent();
+		DocBookElement parent = getDocBookElementParent();
 
 		if (getParent() instanceof Entry) {
 

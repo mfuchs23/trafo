@@ -39,7 +39,7 @@ public class MetaEditor extends DocBookEditor {
 		DocBookTagFactory dbfactory = getTagFactory();
 		traverse(false);
 
-		DocBookElement current = getCurrent();
+		NodeImpl current = getCurrent();
 		NodeImpl root = current.getRoot();
 		ElementImpl info = (ElementImpl) root.getFirstElement();
 

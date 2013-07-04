@@ -1,19 +1,16 @@
 package org.dbdoclet.trafo.html.docbook;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dbdoclet.Sfv;
 import org.dbdoclet.jive.PanelProvider;
 import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
@@ -56,6 +53,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 	private InputStream in;
 	private OutputStream out;
 	private ArrayList<ProgressListener> listeners = new ArrayList<ProgressListener>();
+
 	protected void activate(ComponentContext context) {
 		logger.info("Activierung des Bundles " + getId());
 	}
@@ -98,10 +96,6 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		this.out = out;
 	}
 
-	public void setScript(Script script) {
-		this.script = script;
-	}
-
 	public void setTagFactory(DocBookTagFactory dbfactory) {
 
 		if (dbfactory != null) {
@@ -109,23 +103,13 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		}
 	}
 
-	// public NodeImpl transform(Script script, String buffer, NodeImpl parent)
-	// throws Exception {
-	//
-	//
-	// DocBookTransformer trafo = new DocBookTransformer();
-	// trafo.setTagFactory(dbfactory);
-	// trafo.setScript(script);
-	//
-	// return trafo.transform(buffer, parent, null);
-	// }
-
 	@Override
 	public TrafoResult transform(Script script) {
 
 		TrafoResult result = new TrafoResult();
 
 		try {
+
 			String encoding = script.getTextParameter(
 					TrafoConstants.SECTION_HTML, TrafoConstants.PARAM_ENCODING,
 					"UTF-8");
@@ -163,18 +147,18 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 			visitor.setScript(script);
 
 			HtmlProvider htmlProvider = new HtmlProvider(script);
-			
+
 			NodeImpl htmlDoc = null;
 			ElementImpl documentElement = null;
-			
+
 			String htmlCode = retrieveHtmlCode(in, encoding);
 			boolean isFragment = htmlProvider.isFragment(htmlCode);
 			if (isFragment) {
 				htmlDoc = htmlProvider.parseFragment(htmlCode);
 			} else {
-				htmlDoc = htmlProvider.parseDocument(htmlCode);				
+				htmlDoc = htmlProvider.parseDocument(htmlCode);
 			}
-			
+
 			ProgressManager pm = new ProgressManager(listeners);
 			pm.nextStage();
 			NodeCountVisitor nodeCounter = new NodeCountVisitor(listeners);
@@ -189,22 +173,24 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 			pm.nextStage();
 			pm.fireProgressEvent(new ProgressEvent("Transformation...", false));
 			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
-			
+
 			if (isFragment) {
-				DocumentFragment fragment = htmlProvider.traverse((HtmlFragment) htmlDoc, visitor);
+				DocumentFragment fragment = htmlProvider.traverse(
+						(HtmlFragment) htmlDoc, visitor);
 				documentElement = (ElementImpl) fragment;
 			} else {
-				Document document = htmlProvider.traverse((HtmlDocument) htmlDoc, visitor);
+				Document document = htmlProvider.traverse(
+						(HtmlDocument) htmlDoc, visitor);
 				documentElement = (ElementImpl) document.getDocumentElement();
 			}
-			
+
 			pm.nextStage();
 			nodeCounter = new NodeCountVisitor(listeners);
 			pm.fireProgressEvent(new ProgressEvent("Postprocess stage 1...",
 					false));
 			documentElement.traverse(nodeCounter);
 			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
-			
+
 			PostprocessStage1 postprocessStage1 = new PostprocessStage1(
 					dbfactory, script, listeners);
 			documentElement.traverse(postprocessStage1);
@@ -215,7 +201,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 					false));
 			documentElement.traverse(nodeCounter.reset());
 			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
-			
+
 			PostprocessStage2 postprocessStage2 = new PostprocessStage2(
 					dbfactory, script, listeners);
 			documentElement.traverse(postprocessStage2);
@@ -235,19 +221,31 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 			encoding = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
 					TrafoConstants.PARAM_ENCODING, "UTF-8");
 
-			NodeSerializer serializer = new NodeSerializer();
-			serializer.addProgressListeners(listeners);
-			OutputStreamWriter writer = new OutputStreamWriter(out, encoding);
-
 			if (isFragment) {
-				serializer.write(documentElement, writer);
+				result.setRootNode(documentElement);
 			} else {
 				DocumentImpl document = documentElement.getDocument();
 				document.setXmlEncoding(encoding);
-				serializer.write(document, writer);
+				result.setRootNode(document);
 			}
-			
-			writer.close();
+
+			if (out != null) {
+
+				NodeSerializer serializer = new NodeSerializer();
+				serializer.addProgressListeners(listeners);
+				OutputStreamWriter writer = new OutputStreamWriter(out,
+						encoding);
+
+				if (isFragment) {
+					serializer.write(documentElement, writer);
+				} else {
+					DocumentImpl document = documentElement.getDocument();
+					document.setXmlEncoding(encoding);
+					serializer.write(document, writer);
+				}
+
+				writer.close();
+			}
 
 		} catch (Throwable oops) {
 			result.setThrowable(oops);
@@ -260,21 +258,20 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 	private String retrieveHtmlCode(InputStream in, String encoding)
 			throws IOException {
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in,
-				encoding));
+		ByteArrayOutputStream out = new ByteArrayOutputStream(); 
 
-		StringWriter buffer = new StringWriter();
-		String line = reader.readLine();
-
-		while (line != null) {
-			buffer.append(line);
-			buffer.append(Sfv.LSEP);
-			line = reader.readLine();
+		byte[] buffer = new byte[4096];
+		
+		int n = in.read(buffer);
+		while ( n != -1) {
+			out.write(buffer, 0, n);
+			n = in.read(buffer);
 		}
 
-		reader.close();
-
-		return buffer.toString();
+		in.close();
+		out.close();
+		
+		return new String(out.toByteArray(), encoding);
 	}
 
 	@Override

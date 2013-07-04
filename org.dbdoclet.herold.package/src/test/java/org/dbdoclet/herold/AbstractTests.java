@@ -2,17 +2,23 @@ package org.dbdoclet.herold;
 
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.dbdoclet.trafo.AbstractTrafoService;
+import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
+import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XmlServices;
 import org.dbdoclet.xiphias.XmlValidationResult;
@@ -111,6 +117,34 @@ public class AbstractTests {
 				String.format("src/test/resources/%s.html", id));
 		File xmlFile = new File(String.format("build/test/%s.xml", id));
 		return herold(htmlFile, xmlFile);
+	}
+
+	protected String transform(String htmlCode) {
+
+		if (htmlCode == null) {
+			throw new IllegalArgumentException("Der Parameter htmlCode darf nicht null sein!");
+		}
+		
+		try {
+			
+			AbstractTrafoService trafo = new HtmlDocBookTrafo();
+			Script script = new Script();
+			trafo.setInputStream(new ByteArrayInputStream(htmlCode.getBytes()));
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+			trafo.setOutputStream(buffer);
+			TrafoResult result = trafo.transform(script);
+			
+			if (result.isFailed()) {
+				fail(result.toString());
+			}
+			
+			return buffer.toString("UTF-8");
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			fail();
+			return null;
+		}
 	}
 
 }

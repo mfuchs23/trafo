@@ -25,7 +25,7 @@ public class CommentEditor extends DocBookEditor {
 
 			setValues(super.edit(values));
 
-			DocBookElement parent = getParent();
+			DocBookElement parent = getDocBookElementParent();
 			getCurrent();
 
 			CharacterDataImpl node = getCharacterDataNode();

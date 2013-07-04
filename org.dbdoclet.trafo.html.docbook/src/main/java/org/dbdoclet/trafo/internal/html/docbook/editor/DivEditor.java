@@ -24,6 +24,7 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.docbook.SectionDetector;
 import org.dbdoclet.trafo.script.Script;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class DivEditor extends DocBookEditor {
 
@@ -37,7 +38,7 @@ public class DivEditor extends DocBookEditor {
 			String title) {
 
 		DocBookElement admon;
-		DocBookElement parent = getParent();
+		NodeImpl parent = getParent();
 
 		switch (type) {
 		case CAUTION:
@@ -103,7 +104,7 @@ public class DivEditor extends DocBookEditor {
 		String clazz = div.getCssClass();
 		String title = div.getTitle();
 
-		DocBookElement parent = getParent();
+		NodeImpl parent = getParent();
 
 		traverse(true);
 		ignore(false);
