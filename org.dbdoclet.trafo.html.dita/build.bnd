@@ -1,0 +1,11 @@
+version=7.0.0
+Bundle-Name=org.dbdoclet.trafo.html.dita
+Bundle-SymbolicName=org.dbdoclet.trafo.html.dita
+Bundle-Version=${version}
+Service-Component: OSGI-INF/component-description.xml
+Export-Package: \
+  org.dbdoclet.trafo.html.* ;version=${version}
+Private-Package: \
+  org.dbdoclet.trafo.internal.* ;version=${version}
+Include-Resource: \
+  OSGI-INF/component-description.xml=OSGI-INF/component-description.xml

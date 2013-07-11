@@ -6,7 +6,7 @@
  * E-Mail: michael.fuchs@dbdoclet.org
  * URL:    http://www.michael-a-fuchs.de
  */
-package org.dbdoclet.trafo.internal.html.docbook.editor;
+package org.dbdoclet.trafo.internal.html.dita.editor;
 
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;

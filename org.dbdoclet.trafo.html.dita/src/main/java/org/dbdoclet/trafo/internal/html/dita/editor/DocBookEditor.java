@@ -6,7 +6,7 @@
  * E-Mail: michael.fuchs@dbdoclet.org
  * URL:    http://www.michael-a-fuchs.de
  */
-package org.dbdoclet.trafo.internal.html.docbook.editor;
+package org.dbdoclet.trafo.internal.html.dita.editor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,8 +24,8 @@ import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.IEditor;
-import org.dbdoclet.trafo.html.docbook.DocumentElementType;
-import org.dbdoclet.trafo.internal.html.docbook.LinkManager;
+import org.dbdoclet.trafo.html.dita.DocumentElementType;
+import org.dbdoclet.trafo.internal.html.dita.LinkManager;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;

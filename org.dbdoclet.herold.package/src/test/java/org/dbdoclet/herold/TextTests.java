@@ -1,26 +1,26 @@
 package org.dbdoclet.herold;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.dbdoclet.xiphias.XPathServices;
-import org.dbdoclet.xiphias.XmlServices;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 public class TextTests extends AbstractTests {
 
 	@Test
 	public void pureTextFragment() {
-		transform("String");
+		String xmlCode = transform("String");
+		assertEquals("String", xmlCode);
+	}
+
+	@Test
+	public void multipleTextFragments() {
+		String xmlCode = transform("Lorem ipsum\n\n dolor sit amet.");
+		assertEquals("Lorem ipsum dolor sit amet.", xmlCode);
+	}
+
+	@Test
+	public void multipleParagraphs() {
+		String xmlCode = transform("<p>Lorem ipsum<p>dolor sit amet.");
+		assertEquals("<para>Lorem ipsum</para>\n<para>dolor sit amet.</para>\n", xmlCode);
 	}
 }

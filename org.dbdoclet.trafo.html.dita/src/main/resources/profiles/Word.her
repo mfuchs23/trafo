@@ -1,0 +1,21 @@
+transformation html2docbook;
+
+/**
+ * Transformation of HTML exported from Winword 2003 as filtered HTML.
+ */
+
+section section-detection  {
+	attribute-class = ["^MsoHeading(\d+)$"];
+	section-numbering-pattern = "((\d\.)+)?\d?\.?\p{Z}*";
+}
+
+section HTML {
+	encoding = "windows-1252";
+	exclude = [ "//p[starts-with(@class, 'MsoToc')]" ];
+}
+
+section DocBook {
+	encoding = "UTF-8";
+	title-normalize-space = true;
+	collapse-protected-space = true;
+}

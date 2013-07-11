@@ -1,0 +1,22 @@
+transformation html2docbook;
+
+/**
+ * Transformation of HTML exported from Winword 2003 as filtered HTML.
+ */
+input {
+}
+
+output {
+}
+
+section HTML {
+	encoding = "UTF-8";
+	exclude = [ "//DIV[starts-with(@ID, 'Inhaltsverzeichnis')]" ];
+	section-numbering-pattern = "((\d+\.)+)?\d+?\.?\p{Z}*";
+}
+
+section DocBook {
+	encoding = "UTF-8";
+	title-normalize-space = true;
+	collapse-protected-space = true;
+}

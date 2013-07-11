@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="htmlDocBookTrafo">
+	<implementation class="org.dbdoclet.trafo.html.dita.HtmlDocBookTrafo" />
+	<property name="from" type="String" value="html"/>
+	<property name="to" type="String" value="docbook"/>
+	<service>
+		<provide interface="org.dbdoclet.trafo.TrafoService" />
+	</service>
+</scr:component>

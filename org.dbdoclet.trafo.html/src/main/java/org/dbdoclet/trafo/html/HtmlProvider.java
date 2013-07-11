@@ -197,8 +197,7 @@ public class HtmlProvider implements IHtmlProvider {
 
 				} catch (EditorException oops) {
 
-					logger.debug(indent + "EditorException "
-							+ oops.getMessage());
+					logger.fatal("EditorException", oops);
 				}
 			}
 
@@ -287,11 +286,11 @@ public class HtmlProvider implements IHtmlProvider {
 
 				} catch (EditorFactoryException oops) {
 
-					logger.debug("EditorFactoryException " + oops.getMessage());
+					logger.fatal("EditorFactoryException", oops);
 
 				} catch (EditorException oops) {
 
-					logger.debug("EditorException " + oops.getMessage());
+					logger.fatal("EditorException", oops);
 				}
 			}
 
