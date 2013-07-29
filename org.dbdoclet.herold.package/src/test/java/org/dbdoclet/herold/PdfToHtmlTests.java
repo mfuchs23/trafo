@@ -30,7 +30,7 @@ public class PdfToHtmlTests extends AbstractTests {
 
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
 
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:author");

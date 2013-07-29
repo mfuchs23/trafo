@@ -11,7 +11,7 @@ package org.dbdoclet.trafo.internal.html.dita.editor;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class BigEditor extends DocBookEditor {
+public class BigEditor extends DitaEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)

@@ -31,15 +31,15 @@ package org.dbdoclet.trafo.internal.html.dita.editor.javadoc;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.tag.docbook.Link;
 import org.dbdoclet.tag.docbook.XRef;
 import org.dbdoclet.tag.javadoc.Linkplain;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.dita.editor.DocBookEditor;
+import org.dbdoclet.trafo.internal.html.dita.editor.DitaEditor;
 
-public class LinkplainEditor extends DocBookEditor {
+public class LinkplainEditor extends DitaEditor {
 
 	private static Log logger = LogFactory.getLog(LinkplainEditor.class);
 
@@ -47,38 +47,7 @@ public class LinkplainEditor extends DocBookEditor {
 	public EditorInstruction edit(EditorInstruction values) {
 
 		setValues(values);
-		DocBookTagFactory dbfactory = getTagFactory();
-
-		Linkplain linkplain = (Linkplain) getHtmlElement();
-
-		String ref = linkplain.getRef();
-		logger.debug("ref=" + ref);
-
-		if ((ref != null) && (ref.length() > 0)) {
-
-			String label = linkplain.getTextContent();
-
-			if ((label != null) && (label.length() > 0)) {
-
-				Link elem = dbfactory.createLink(label, ref);
-				setCurrent(elem);
-
-			} else {
-
-				XRef elem = dbfactory.createXRef(ref);
-				setCurrent(elem);
-			}
-
-		} else {
-
-			Emphasis elem = dbfactory.createEmphasis(linkplain.getName());
-			setCurrent(elem);
-		}
-
-		getParent().appendChild(getCurrent());
-
-		traverse(false);
-
+		DitaTagFactory tagFactory = getTagFactory();
 		return finalizeValues();
 	}
 }

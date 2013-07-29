@@ -12,7 +12,7 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
 
-public class ScriptEditor extends DocBookEditor {
+public class ScriptEditor extends DitaEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {

@@ -22,7 +22,7 @@ public class SectionTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "book" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		assertEquals("book", doc.getDocumentElement().getTagName());
 	}
 
@@ -35,7 +35,7 @@ public class SectionTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "part" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		assertEquals("part", doc.getDocumentElement().getTagName());
 	}
 
@@ -48,7 +48,7 @@ public class SectionTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "paragraph" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		assertEquals("para", doc.getDocumentElement().getTagName());
 	}
 
@@ -61,7 +61,7 @@ public class SectionTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "article" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		assertEquals("article", doc.getDocumentElement().getTagName());
 	}
 
@@ -74,7 +74,7 @@ public class SectionTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "reference" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		assertEquals("reference", doc.getDocumentElement().getTagName());
 	}
 
@@ -87,7 +87,7 @@ public class SectionTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "chapter" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		assertEquals("chapter", doc.getDocumentElement().getTagName());
 	}
 
@@ -100,7 +100,7 @@ public class SectionTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "section" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		assertEquals("section", doc.getDocumentElement().getTagName());
 	}
 

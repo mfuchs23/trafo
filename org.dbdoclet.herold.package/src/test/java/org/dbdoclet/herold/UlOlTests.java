@@ -27,8 +27,8 @@ public class UlOlTests extends AbstractTests {
 		String xmlFileName = "build/test/Aufzhlung_1.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "listDetection");
-		Document doc = validateAndParse(xmlFile);
+		html2docbook(htmlFile, xmlFile, "listDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:listitem");
 		assertNotNull(nodeList);
@@ -49,8 +49,8 @@ public class UlOlTests extends AbstractTests {
 		String xmlFileName = "build/test/MsoListBullet_1.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "listDetection");
-		Document doc = validateAndParse(xmlFile);
+		html2docbook(htmlFile, xmlFile, "listDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:listitem");
 		assertNotNull(nodeList);
@@ -67,8 +67,8 @@ public class UlOlTests extends AbstractTests {
 		String xmlFileName = "build/test/MsoListBullet_2.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "listDetection");
-		Document doc = validateAndParse(xmlFile);
+		html2docbook(htmlFile, xmlFile, "listDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:listitem");
 		assertNotNull(nodeList);
@@ -85,8 +85,8 @@ public class UlOlTests extends AbstractTests {
 		String xmlFileName = "build/test/MsoListBullet_3.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "listDetection");
-		Document doc = validateAndParse(xmlFile);
+		html2docbook(htmlFile, xmlFile, "listDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:listitem");
 		assertNotNull(nodeList);
@@ -103,8 +103,8 @@ public class UlOlTests extends AbstractTests {
 		String xmlFileName = "build/test/MsoListNumberedTest.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "listDetection");
-		Document doc = validateAndParse(xmlFile);
+		html2docbook(htmlFile, xmlFile, "listDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:listitem");
 		assertNotNull(nodeList);
@@ -125,8 +125,8 @@ public class UlOlTests extends AbstractTests {
 		String xmlFileName = "build/test/MsoNestedList_1.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "listDetection");
-		Document doc = validateAndParse(xmlFile);
+		html2docbook(htmlFile, xmlFile, "listDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:itemizedlist");
 		assertNotNull(nodeList);
@@ -143,8 +143,8 @@ public class UlOlTests extends AbstractTests {
 		String xmlFileName = "build/test/MsoNestedList_2.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "listDetection");
-		Document doc = validateAndParse(xmlFile);
+		html2docbook(htmlFile, xmlFile, "listDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:itemizedlist");
 		assertNotNull(nodeList);
@@ -164,8 +164,8 @@ public class UlOlTests extends AbstractTests {
 		String xmlFileName = "build/test/MsoNestedList_3.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "listDetection");
-		Document doc = validateAndParse(xmlFile);
+		html2docbook(htmlFile, xmlFile, "listDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:itemizedlist");
 		assertNotNull(nodeList);

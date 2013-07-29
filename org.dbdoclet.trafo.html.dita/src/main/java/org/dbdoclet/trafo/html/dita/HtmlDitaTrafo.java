@@ -16,6 +16,7 @@ import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.progress.ProgressManager;
 import org.dbdoclet.service.ResourceServices;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlFragment;
@@ -24,8 +25,8 @@ import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
 import org.dbdoclet.trafo.html.HtmlProvider;
-import org.dbdoclet.trafo.internal.html.dita.DocBookVisitor;
-import org.dbdoclet.trafo.internal.html.dita.HtmlDocBookPanel;
+import org.dbdoclet.trafo.internal.html.dita.DitaVisitor;
+import org.dbdoclet.trafo.internal.html.dita.HtmlDitaPanel;
 import org.dbdoclet.trafo.internal.html.dita.PostprocessStage1;
 import org.dbdoclet.trafo.internal.html.dita.PostprocessStage2;
 import org.dbdoclet.trafo.internal.html.dita.PostprocessStage3;
@@ -43,12 +44,12 @@ import org.osgi.service.component.ComponentContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 
-public class HtmlDocBookTrafo extends AbstractTrafoService implements
+public class HtmlDitaTrafo extends AbstractTrafoService implements
 		PanelProvider, ScriptListener {
 
-	private final Log logger = LogFactory.getLog(HtmlDocBookTrafo.class);
-	private HtmlDocBookPanel htmlDocBookPanel;
-	private DocBookTagFactory dbfactory = new DocBookTagFactory();
+	private final Log logger = LogFactory.getLog(HtmlDitaTrafo.class);
+	private HtmlDitaPanel htmlDitaPanel;
+	private DitaTagFactory tagFactory = new DitaTagFactory();
 	private Script script;
 	private InputStream in;
 	private OutputStream out;
@@ -60,22 +61,22 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 
 	@Override
 	public String getId() {
-		return "html2docbook";
+		return "html2dita";
 	}
 
 	@Override
 	public JPanel getPanel() {
 
-		htmlDocBookPanel = new HtmlDocBookPanel();
-		return htmlDocBookPanel;
+		htmlDitaPanel = new HtmlDitaPanel();
+		return htmlDitaPanel;
 	}
 
 	public Script getScript() {
 		return script;
 	}
 
-	public DocBookTagFactory getTagFactory() {
-		return dbfactory;
+	public	DitaTagFactory getTagFactory() {
+		return tagFactory;
 	}
 
 	@Override
@@ -96,10 +97,10 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		this.out = out;
 	}
 
-	public void setTagFactory(DocBookTagFactory dbfactory) {
+	public void setTagFactory(DitaTagFactory tagFactory) {
 
-		if (dbfactory != null) {
-			this.dbfactory = dbfactory;
+		if (tagFactory != null) {
+			this.tagFactory = tagFactory;
 		}
 	}
 
@@ -114,15 +115,15 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 					TrafoConstants.SECTION_HTML, TrafoConstants.PARAM_ENCODING,
 					"UTF-8");
 
-			if (htmlDocBookPanel != null) {
+			if (htmlDitaPanel != null) {
 
-				String profileName = htmlDocBookPanel.getProfile();
+				String profileName = htmlDitaPanel.getProfile();
 
 				if (profileName != null && profileName.trim().length() > 0) {
 
 					String profileText = ResourceServices.getResourceAsString(
 							"profiles/" + profileName + ".her",
-							HtmlDocBookTrafo.class.getClassLoader());
+							HtmlDitaTrafo.class.getClassLoader());
 
 					if (profileText != null) {
 						TrafoScriptManager mgr = new TrafoScriptManager();
@@ -132,18 +133,18 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 
 				script.selectSection(TrafoConstants.SECTION_HTML);
 				script.setTextParameter(TrafoConstants.PARAM_ENCODING,
-						htmlDocBookPanel.getSourceEncoding());
+						htmlDitaPanel.getSourceEncoding());
 
 				script.selectSection(TrafoConstants.SECTION_DOCBOOK);
 				script.setTextParameter(TrafoConstants.PARAM_LANGUAGE,
-						htmlDocBookPanel.getLanguage());
+						htmlDitaPanel.getLanguage());
 				script.setTextParameter(TrafoConstants.PARAM_DOCUMENT_ELEMENT,
-						htmlDocBookPanel.getDocumentType());
+						htmlDitaPanel.getDocumentType());
 			}
 
-			DocBookVisitor visitor = new DocBookVisitor();
+			DitaVisitor visitor = new DitaVisitor();
 			visitor.addProgressListeners(listeners);
-			visitor.setTagFactory(dbfactory);
+			visitor.setTagFactory(tagFactory);
 			visitor.setScript(script);
 
 			HtmlProvider htmlProvider = new HtmlProvider(script);
@@ -192,7 +193,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
 
 			PostprocessStage1 postprocessStage1 = new PostprocessStage1(
-					dbfactory, script, listeners);
+					tagFactory, script, listeners);
 			documentElement.traverse(postprocessStage1);
 			postprocessStage1.finish();
 
@@ -203,20 +204,12 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 			pm.setProgressMaximum(nodeCounter.getNumberOfNodes());
 
 			PostprocessStage2 postprocessStage2 = new PostprocessStage2(
-					dbfactory, script, listeners);
+					tagFactory, script, listeners);
 			documentElement.traverse(postprocessStage2);
 			postprocessStage2.finish();
 
-			new PostprocessStage3(dbfactory, postprocessStage1.getSubtables())
+			new PostprocessStage3(tagFactory, postprocessStage1.getSubtables())
 					.process();
-
-			boolean addIndex = script.isParameterOn(
-					TrafoConstants.SECTION_DOCBOOK,
-					TrafoConstants.PARAM_ADD_INDEX, false);
-
-			if (addIndex == true) {
-				documentElement.appendChild(dbfactory.createIndex());
-			}
 
 			encoding = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
 					TrafoConstants.PARAM_ENCODING, "UTF-8");

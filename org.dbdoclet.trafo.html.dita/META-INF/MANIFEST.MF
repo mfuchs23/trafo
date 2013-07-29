@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Service-Component: OSGI-INF/component-description.xml
 Bundle-ManifestVersion: 2
-Bundle-Name: org.dbdoclet.trafo.html.docbook
-Bundle-SymbolicName: org.dbdoclet.trafo.html.docbook
+Bundle-Name: org.dbdoclet.trafo.html.dita
+Bundle-SymbolicName: org.dbdoclet.trafo.html.dita
 Bundle-Version: 7.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.antlr.runtime;version="3.4.0",
@@ -22,7 +22,7 @@ Import-Package: org.antlr.runtime;version="3.4.0",
  org.dbdoclet.progress,
  org.dbdoclet.service,
  org.dbdoclet.tag,
- org.dbdoclet.tag.docbook,
+ org.dbdoclet.tag.dita,
  org.dbdoclet.tag.html,
  org.dbdoclet.tag.javadoc,
  org.dbdoclet.trafo,

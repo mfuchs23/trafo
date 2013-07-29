@@ -12,7 +12,7 @@ import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
 
-public class MapEditor extends DocBookEditor {
+public class MapEditor extends DitaEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {

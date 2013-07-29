@@ -9,7 +9,7 @@
 package org.dbdoclet.trafo.internal.html.dita.editor.javadoc;
 
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.dita.editor.DocBookEditor;
+import org.dbdoclet.trafo.internal.html.dita.editor.DitaEditor;
 
 /**
  * The class <code>ValueEditor</code> is reponsible for transforming @value tags
@@ -18,7 +18,7 @@ import org.dbdoclet.trafo.internal.html.dita.editor.DocBookEditor;
  * @author <a href="mailto:michael.fuchs@unico-group.com">Michael Fuchs</a>
  * @version $Revision$
  */
-public class ValueEditor extends DocBookEditor {
+public class ValueEditor extends DitaEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) {

@@ -8,37 +8,21 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
+import org.dbdoclet.tag.dita.DitaElement;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.BlockQuote;
-import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class BlockquoteEditor extends DocBookEditor {
+public class BlockquoteEditor extends DitaEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
-
-		BlockQuote blockquote = dbfactory.createBlockQuote();
-
-		DocBookElement parent = getDocBookElementParent();
-
-		parent.appendChild(blockquote);
-		blockquote.setParentNode(parent);
-
-		Para para = dbfactory.createPara();
-
-		blockquote.appendChild(para);
-		para.setParentNode(blockquote);
-
-		setCurrent(para);
-		traverse(true);
-
+		DitaTagFactory tagFactory = getTagFactory();
 		return finalizeValues();
 	}
 }

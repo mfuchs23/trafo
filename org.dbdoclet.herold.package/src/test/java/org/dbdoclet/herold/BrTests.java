@@ -27,7 +27,7 @@ public class BrTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/pdftohtml.her" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:para");
 		assertNotNull(nodeList);
@@ -41,7 +41,7 @@ public class BrTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/article.her" };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:para");
 		assertNotNull(nodeList);

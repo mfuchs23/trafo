@@ -9,14 +9,14 @@
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
 import org.dbdoclet.service.StringServices;
-import org.dbdoclet.tag.docbook.DocBookElement;
+import org.dbdoclet.tag.dita.DitaElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.XmlServices;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.CommentImpl;
 
-public class CommentEditor extends DocBookEditor {
+public class CommentEditor extends DitaEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
@@ -25,9 +25,7 @@ public class CommentEditor extends DocBookEditor {
 
 			setValues(super.edit(values));
 
-			DocBookElement parent = getDocBookElementParent();
-			getCurrent();
-
+			DitaElement parent = getDitaElementParent();
 			CharacterDataImpl node = getCharacterDataNode();
 
 			if (node instanceof CommentImpl == false) {

@@ -8,25 +8,5 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.docbook.Emphasis;
-import org.dbdoclet.trafo.TrafoConstants;
-import org.dbdoclet.trafo.html.EditorException;
-import org.dbdoclet.trafo.html.EditorInstruction;
-
 public class BEditor extends EmEditor {
-
-	@Override
-	public EditorInstruction edit(EditorInstruction values)
-			throws EditorException {
-
-		EditorInstruction evo = super.edit(values);
-
-		Emphasis emphasis = getEmphasis();
-
-		if (emphasis != null) {
-			emphasis.setRole(TrafoConstants.DEFAULT_EMPHASIS_ROLE_BOLD);
-		}
-
-		return evo;
-	}
 }

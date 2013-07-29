@@ -10,10 +10,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.progress.ProgressListener;
-import org.dbdoclet.tag.docbook.Abstract;
-import org.dbdoclet.tag.docbook.DocBookElement;
+import org.dbdoclet.tag.dita.Abstract;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.Info;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.HtmlFragment;
@@ -21,10 +20,9 @@ import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.IEditorFactory;
 import org.dbdoclet.trafo.html.IHtmlVisitor;
-import org.dbdoclet.trafo.html.dita.DocumentElementType;
 import org.dbdoclet.trafo.html.dita.ListDetector;
 import org.dbdoclet.trafo.html.dita.SectionDetector;
-import org.dbdoclet.trafo.internal.html.dita.editor.DocBookEditorFactory;
+import org.dbdoclet.trafo.internal.html.dita.editor.DitaEditorFactory;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XPathServices;
 import org.dbdoclet.xiphias.dom.DocumentFragmentImpl;
@@ -37,24 +35,25 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
-public class DocBookVisitor implements IHtmlVisitor {
+public class DitaVisitor implements IHtmlVisitor {
 
-	private static Log logger = LogFactory.getLog(DocBookVisitor.class);
+	private static Log logger = LogFactory.getLog(DitaVisitor.class);
 
 	private ArrayList<ProgressListener> listeners;
 	private LinkManager linkManager;
-	private DocBookTagFactory dbfactory;
+	private DocBookTagFactory dbfactory = new DocBookTagFactory();
+	private DitaTagFactory tagFactory;
 	private Script script;
 	private ListDetector listDetector;
-	private DocBookEditorFactory docBookEditorFactory;
+	private DitaEditorFactory editorFactory;
 
-	public DocBookVisitor() {
+	public DitaVisitor() {
 		listDetector = new ListDetector();
 		linkManager = new LinkManager();
 	}
 
 	public void addProgressListener(ProgressListener listener) {
-	
+ 
 		if (listener == null) {
 			return;
 		}
@@ -73,12 +72,12 @@ public class DocBookVisitor implements IHtmlVisitor {
 
 		SectionDetector sectionDetector = new SectionDetector();
 		sectionDetector.setScript(script);
-		sectionDetector.setTagFactory(dbfactory);
+		sectionDetector.setTagFactory(tagFactory);
 		sectionDetector.setLinkManager(linkManager);
 
 		HtmlElement htmlElement = values.getHtmlElement();
 		if (sectionDetector.isSection(htmlElement)) {
-			sectionDetector.edit(values, dbfactory);
+			sectionDetector.edit(values);
 			return false;
 		}
 
@@ -98,19 +97,16 @@ public class DocBookVisitor implements IHtmlVisitor {
 	public DocumentImpl createDocument(HtmlDocument htmlDoc) {
 
 
-		ElementImpl documentElement = createDocumentElement();
+		ElementImpl topic = createDocumentElement();
 		DocumentImpl document = new DocumentImpl();
 
-		Info info = dbfactory.createInfo();
-		documentElement.appendChild(info);
-
-		String title = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+		String title = script.getTextParameter(TrafoConstants.SECTION_DITA,
 				TrafoConstants.PARAM_TITLE, null);
 
 		if (title != null && title.trim().length() > 0) {
-			info.appendChild(dbfactory.createTitle(title));
+			topic.appendChild(tagFactory.createTitle(title));
 		} else {
-			generateTitle(htmlDoc, dbfactory, info);
+			generateTitle(htmlDoc, tagFactory, topic);
 		}
 
 		String abstractText = script
@@ -118,68 +114,23 @@ public class DocBookVisitor implements IHtmlVisitor {
 						TrafoConstants.PARAM_ABSTRACT, null);
 
 		if (abstractText != null) {
-			Abstract abstractElement = dbfactory.createAbstract();
-			info.appendChild(abstractElement);
+			Abstract abstractElement = tagFactory.createAbstract();
+			topic.appendChild(abstractElement);
 			createAbstract(document, abstractElement, abstractText);
 		}
 
-		document.setDocumentElement(documentElement);
-		documentElement.setDocument(document);
+		document.setDocumentElement(topic);
+		topic.setDocument(document);
 		
 		return document;
 	}
 
 	private ElementImpl createDocumentElement() {
 		
-		ElementImpl documentElement = dbfactory.createSection();
-		
-		DocumentElementType documentType = DocumentElementType.valueOf("ARTICLE");
+		ElementImpl documentElement = tagFactory.createTopic();
+		documentElement.setId("topic");
 
-		if (script != null) {
-
-			String value = script.getTextParameter(
-					TrafoConstants.SECTION_DOCBOOK,
-					TrafoConstants.PARAM_DOCUMENT_ELEMENT, "article");
-
-			documentType = DocumentElementType.valueOf(value.toUpperCase());
-		}
-
-		switch (documentType) {
-		case ARTICLE:
-			documentElement = dbfactory.createArticle();
-			break;
-		case BOOK:
-			documentElement = dbfactory.createBook();
-			break;
-		case CHAPTER:
-			documentElement = dbfactory.createChapter();
-			break;
-		case REFERENCE:
-			documentElement = dbfactory.createReference();
-			break;
-		case OVERVIEW:
-			documentElement = dbfactory.createSection();
-			break;
-		case PARAGRAPH:
-			documentElement = dbfactory.createPara();
-			break;
-		case PART:
-			documentElement = dbfactory.createPart();
-			break;
-		case SECTION:
-			documentElement = dbfactory.createSection();
-			break;
-		default:
-			documentElement = dbfactory.createBook();
-
-		}
-
-		documentElement.setNamespaceURI(DocBookElement.DOCBOOK_NAMESPACE);
-		documentElement.setAttribute("xmlns", DocBookElement.DOCBOOK_NAMESPACE);
-		documentElement
-				.setAttribute("xmlns:xl", DocBookElement.XLINK_NAMESPACE);
-
-		String language = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+		String language = script.getTextParameter(TrafoConstants.SECTION_DITA,
 				TrafoConstants.PARAM_LANGUAGE, null);
 
 		logger.debug("Profile: Parameter language = " + language);
@@ -208,14 +159,14 @@ public class DocBookVisitor implements IHtmlVisitor {
 	@Override
 	public IEditorFactory getEditorFactory() {
 
-		if (docBookEditorFactory == null) {
-			docBookEditorFactory = new DocBookEditorFactory();
-			docBookEditorFactory.setLinkManager(linkManager);
-			docBookEditorFactory.setScript(script);
-			docBookEditorFactory.setTagFactory(dbfactory);
+		if (editorFactory == null) {
+			editorFactory = new DitaEditorFactory();
+			editorFactory.setLinkManager(linkManager);
+			editorFactory.setScript(script);
+			editorFactory.setTagFactory(tagFactory);
 		}
 
-		return docBookEditorFactory;
+		return editorFactory;
 	}
 
 	@Override
@@ -227,8 +178,8 @@ public class DocBookVisitor implements IHtmlVisitor {
 		this.script = script;
 	}
 
-	public void setTagFactory(DocBookTagFactory dbfactory) {
-		this.dbfactory = dbfactory;
+	public void setTagFactory(DitaTagFactory tagFactory) {
+		this.tagFactory = tagFactory;
 	}
 
 	private void createAbstract(Document doc, Abstract abstractElement,
@@ -270,8 +221,8 @@ public class DocBookVisitor implements IHtmlVisitor {
 		}
 	}
 
-	private void generateTitle(HtmlDocument htmlDoc, DocBookTagFactory dbf,
-			Info info) {
+	private void generateTitle(HtmlDocument htmlDoc, DitaTagFactory dbf,
+			ElementImpl parent) {
 
 		HtmlElement elem = (HtmlElement) XPathServices.getNode(htmlDoc,
 				"/html/head/title");
@@ -289,16 +240,16 @@ public class DocBookVisitor implements IHtmlVisitor {
 
 		if (elem != null) {
 
-			info.appendChild(dbf.createTitle(elem.getTextContent()));
+			parent.appendChild(dbf.createTitle(elem.getTextContent()));
 
 		} else {
 
 			Text text = (Text) XPathServices.getNode(htmlDoc, "//text()[1]");
 
 			if (text != null) {
-				info.appendChild(dbf.createTitle(text.getData()));
+				parent.appendChild(dbf.createTitle(text.getData()));
 			} else {
-				info.appendChild(dbf.createTitle("Herold"));
+				parent.appendChild(dbf.createTitle("Herold"));
 			}
 		}
 	}

@@ -44,7 +44,7 @@ public class CommentTests extends AbstractTests {
 			File xmlFile = new File(xmlFileName);
 			herold.convert(htmlFile, xmlFile);
 
-			validateAndParse(xmlFile);
+			validateAndParseDocBook(xmlFile);
 			Document doc = XmlServices.parse(xmlFile);
 			return doc;
 

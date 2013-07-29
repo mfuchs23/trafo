@@ -21,6 +21,6 @@ public class MiscTests extends AbstractTests {
 				"-o", xmlFile.getPath() };
 
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		validateAndParse(xmlFile);
+		validateAndParseDocBook(xmlFile);
 	}
 }

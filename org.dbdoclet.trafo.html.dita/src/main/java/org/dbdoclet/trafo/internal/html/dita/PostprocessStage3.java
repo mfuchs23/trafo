@@ -2,6 +2,7 @@ package org.dbdoclet.trafo.internal.html.dita;
 
 import java.util.HashMap;
 
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.EntryTbl;
@@ -11,18 +12,20 @@ import org.dbdoclet.tag.docbook.XRef;
 
 public class PostprocessStage3 {
 
-	private final DocBookTagFactory dbfactory;
+	private final DitaTagFactory tagFactory;
 	private final HashMap<EntryTbl, DocBookElement> subtables;
 
-	public PostprocessStage3(DocBookTagFactory dbfactory,
+	public PostprocessStage3(DitaTagFactory tagFactory,
 			HashMap<EntryTbl, DocBookElement> subtables) {
 
-		this.dbfactory = dbfactory;
+		this.tagFactory = tagFactory;
 		this.subtables = subtables;
 	}
 
 	public void process() {
 
+		DocBookTagFactory dbfactory = new DocBookTagFactory();
+		
 		if ((subtables != null) && (subtables.size() > 0)) {
 
 			int index = 1;

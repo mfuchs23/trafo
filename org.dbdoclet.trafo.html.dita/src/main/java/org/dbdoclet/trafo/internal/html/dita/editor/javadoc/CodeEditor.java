@@ -8,23 +8,17 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor.javadoc;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.dita.editor.DocBookEditor;
+import org.dbdoclet.trafo.internal.html.dita.editor.DitaEditor;
 
-public class CodeEditor extends DocBookEditor {
+public class CodeEditor extends DitaEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) {
 
 	setValues(values);
-	DocBookTagFactory dbfactory = getTagFactory();
-
-	org.dbdoclet.tag.javadoc.Code code = (org.dbdoclet.tag.javadoc.Code) getHtmlElement();
-	getCurrent().appendChild(dbfactory.createComputerOutput(code.getTextContent()));
-
-	traverse(false);
-
+	DitaTagFactory tagFactory = getTagFactory();
 	return finalizeValues();
     }
 }

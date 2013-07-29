@@ -9,28 +9,27 @@
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
 import org.dbdoclet.service.StringServices;
-import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.Para;
+import org.dbdoclet.tag.dita.DitaElement;
+import org.dbdoclet.tag.dita.DitaTagFactory;
+import org.dbdoclet.tag.dita.P;
 import org.dbdoclet.tag.html.Br;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.script.Script;
-import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-public class BrEditor extends DocBookEditor {
+public class BrEditor extends DitaEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		DitaTagFactory tagFactory = getTagFactory();
 		traverse(false);
 
 		Br brElement = (Br) values.getHtmlElement();
@@ -44,14 +43,14 @@ public class BrEditor extends DocBookEditor {
 			return finalizeValues();
 		}
 
-		if (getCurrent() instanceof Para) {
+		if (getCurrent() instanceof P) {
 
-			DocBookElement parent = (DocBookElement) getCurrent()
+			DitaElement parent = (DitaElement) getCurrent()
 					.getParentNode();
 
 			if (parent != null) {
 
-				Para para = dbfactory.createPara();
+				P para = tagFactory.createP();
 				parent.appendChild(para);
 
 				setParent(para);

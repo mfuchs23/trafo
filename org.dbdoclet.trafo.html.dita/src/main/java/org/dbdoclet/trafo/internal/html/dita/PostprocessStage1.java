@@ -6,8 +6,8 @@ import java.util.HashMap;
 import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.service.StringServices;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.EntryTbl;
 import org.dbdoclet.tag.docbook.InformalTable;
 import org.dbdoclet.tag.docbook.ItemizedList;
@@ -30,7 +30,7 @@ public class PostprocessStage1 extends AbstractNodeVisitor {
 	private final HashMap<EntryTbl, DocBookElement> subtables;
 	private final Script script;
 
-	public PostprocessStage1(DocBookTagFactory dbfactory, Script script,
+	public PostprocessStage1(DitaTagFactory tagFactory, Script script,
 			ArrayList<ProgressListener> listeners) {
 
 		super(listeners);

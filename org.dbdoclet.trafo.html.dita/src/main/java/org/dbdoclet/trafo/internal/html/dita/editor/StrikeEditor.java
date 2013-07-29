@@ -8,43 +8,19 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.Emphasis;
+import org.dbdoclet.tag.dita.B;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.SimPara;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class StrikeEditor extends DocBookEditor {
+public class StrikeEditor extends DitaEditor {
 
     @Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = getTagFactory();
-
-	traverse(true);
-	Emphasis emphasis = dbfactory.createEmphasis();
-	emphasis.setRole("strikethrough");
-
-	setCurrent(emphasis);
-
-	if (emphasis.isValidParent(getDocBookElementParent()) == false) {
-
-	    SimPara candidate = dbfactory.createSimPara();
-	    candidate.setParentNode(getParent());
-
-	    if (candidate.validate()) {
-
-		getParent().appendChild(candidate);
-		candidate.appendChild(getCurrent());
-	    }
-
-	} else {
-
-	    getCurrent().setParentNode(getParent());
-	    getParent().appendChild(getCurrent());
-	}
-
+	DitaTagFactory tagFactory = getTagFactory();
 	return finalizeValues();
     }
 }

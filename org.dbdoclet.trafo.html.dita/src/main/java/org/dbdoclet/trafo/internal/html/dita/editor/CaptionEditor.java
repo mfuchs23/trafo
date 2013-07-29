@@ -8,20 +8,20 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.Title;
+import org.dbdoclet.tag.dita.DitaTagFactory;
+import org.dbdoclet.tag.dita.Title;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class CaptionEditor extends DocBookEditor {
+public class CaptionEditor extends DitaEditor {
 
     @Override
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = getTagFactory();
+	DitaTagFactory tagFactory = getTagFactory();
 
-	Title title = dbfactory.createTitle();
+	Title title = tagFactory.createTitle();
 
 	getParent().getTrafoParentNode().insertChild(0, title);
 	setCurrent(title);

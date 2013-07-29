@@ -41,7 +41,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"--docbook-add-index=false" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:index");
 		assertNull("//d:index", node);
@@ -54,7 +54,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"--docbook-add-index" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:index");
 		assertNotNull("//d:index", node);
@@ -67,7 +67,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/addIndexOn.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:index");
 		assertNotNull("//d:index", node);
@@ -80,7 +80,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/createRemapAttributeOn.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//@remap");
 		assertNotNull("//@remap", node);
@@ -93,7 +93,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/createRemapAttributeOff.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//@remap");
 		assertNull("//@remap", node);
@@ -106,7 +106,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/addIndexOff.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:index");
 		assertNotNull("//d:index", node);
@@ -119,7 +119,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/createXrefLabelOn.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:anchor/@xreflabel");
 		assertNotNull("//d:anchor/@xreflabel", node);
@@ -132,7 +132,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/createXrefLabelOff.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:anchor/@xreflabel");
 		assertNull("//d:anchor", node);
@@ -145,7 +145,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"--docbook-decompose-tables=false" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:informaltable");
 		assertNotNull("//d:informaltable", node);
@@ -158,7 +158,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-T" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:informaltable");
 		assertNull("//d:informaltable", node);
@@ -171,7 +171,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/decomposeTablesOff.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:informaltable");
 		assertNotNull("//d:informaltable", node);
@@ -184,7 +184,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/decomposeTablesOn.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:informaltable");
 		assertNull("//d:informaltable", node);
@@ -264,7 +264,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "./src/test/resources/profile/imageDataFormats.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:imageobject[3]/d:imagedata/@format");
 		assertNotNull("//d:imagedata/@format", node.getNodeValue());
@@ -280,7 +280,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "./src/test/resources/profile/imagePath.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:imagedata/@fileref");
 		assertEquals("//d:imagedata/@fileref",
@@ -306,7 +306,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-t", "Dies ist ein Titel" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:title");
 		assertEquals("//d:title", "Dies ist ein Titel", node.getTextContent());
@@ -319,7 +319,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "./src/test/resources/profile/title.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:title");
 		assertEquals("//d:title", "Dies ist ein Titel", node.getTextContent());
@@ -332,7 +332,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "./src/test/resources/profile/useAbsoluteImagePath.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:imagedata/@fileref");
 		assertTrue("//d:imagedata/@fileref",
@@ -346,7 +346,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "./src/test/resources/profile/exclude.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:imagedata");
 		assertNull("//img", node);
@@ -363,7 +363,7 @@ public class ParameterTests extends AbstractTests {
 				"-p",
 				"./src/test/resources/profile/sectionNumberingPattern.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:section/d:title");
 		assertEquals("Einführung", node.getTextContent());
@@ -376,7 +376,7 @@ public class ParameterTests extends AbstractTests {
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "./src/test/resources/profile/sourceEncoding.her" };
 		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
 				Sfv.NS_DOCBOOK, "//d:section/d:title");
 		assertEquals("1. EinfÃ¼hrung", node.getTextContent());

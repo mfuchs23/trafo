@@ -15,6 +15,7 @@ public class TrafoConstants {
 	// public static final String DEFAULT_SECTION_NUMBERING_PATTERN =
 	// "(((\\d\\.)+)?\\d*\\.?\\p{Z}*).*";
 
+	public static final String SECTION_DITA = "DITA";
 	public static final String SECTION_DOCBOOK = "DocBook";
 	public static final String SECTION_HTML = "HTML";
 	public static final String SECTION_SECTION_DETECTION = "section-detection";

@@ -1,24 +1,22 @@
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.dita.DitaElement;
+import org.dbdoclet.tag.dita.DitaTagFactory;
+import org.dbdoclet.tag.dita.P;
 import org.dbdoclet.tag.docbook.Para;
-import org.dbdoclet.tag.docbook.Subscript;
-import org.dbdoclet.tag.docbook.Superscript;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
-import org.dbdoclet.xiphias.dom.NodeImpl;
 
-public abstract class AbstractInlineEditor extends DocBookEditor {
+public abstract class AbstractInlineEditor extends DitaEditor {
 
-	private DocBookElement inlineElement;
+	private DitaElement inlineElement;
 
-	public DocBookElement getInlineElement() {
+	public DitaElement getInlineElement() {
 		return inlineElement;
 	}
 
-	public void setInlineElement(DocBookElement inlineElement) {
+	public void setInlineElement(DitaElement inlineElement) {
 		this.inlineElement = inlineElement;
 	}
 
@@ -30,47 +28,21 @@ public abstract class AbstractInlineEditor extends DocBookEditor {
 		setCurrent(inlineElement);
 		copyCommonAttributes(getHtmlElement(), inlineElement);
 
-		DocBookTagFactory dbfactory = getTagFactory();
+		DitaTagFactory tagFactory = getTagFactory();
 		traverse(true);
 
-		DocBookElement parent = getDocBookElementParent();
+		DitaElement parent = getDitaElementParent();
 
-		if (parent.isContentModel()) {
+		if (parent != null && parent.isContentModel()) {
 
-			Para para = dbfactory.createPara();
+			P para = tagFactory.createP();
 			para.setFormatType(ElementImpl.FORMAT_INLINE);
 			parent.appendChild(para);
 			setParent(para);
 			parent = para;
 		}
 
-		if (parent instanceof Subscript || parent instanceof Superscript) {
-
-			NodeImpl ancestor = parent.getTrafoParentNode();
-
-			if (ancestor != null) {
-
-				ancestor.replaceChild(inlineElement, parent);
-				inlineElement.appendChild(parent);
-				setCurrent(parent);
-				return finalizeValues();
-			}
-		}
-
-		if (inlineElement.isValidParent(parent) == false) {
-
-			Para candidate = dbfactory.createPara();
-			candidate.setParentNode(parent);
-
-			if (candidate.validate()) {
-
-				setParent(candidate);
-				parent.appendChild(candidate);
-				candidate.appendChild(getCurrent());
-			}
-
-		} else {
-
+		if (getCurrent() != null && parent != null) {
 			getCurrent().setParentNode(parent);
 			parent.appendChild(getCurrent());
 		}

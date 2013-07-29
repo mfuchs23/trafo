@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -16,7 +15,6 @@ import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.script.Script;
-import org.dbdoclet.xiphias.XmlServices;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -26,6 +24,7 @@ public class HeroldFileTests extends AbstractTests {
 	@Override
 	@Before
 	public void startUp() {
+		super.startUp();
 		new File("bin/DocBook").mkdirs();
 	}
 
@@ -42,17 +41,27 @@ public class HeroldFileTests extends AbstractTests {
 	}
 
 	@Test
-	public void testPoe_1() {
-		herold("Edgar Allan Poe - Die Maske des roten Todes");
+	public void testPoe2DocBook() {
+		html2docbook("Edgar Allan Poe - Die Maske des roten Todes");
 	}
 
 	@Test
-	public void testJohannSebastianBach_1() {
-		herold("JSB");
+	public void testPoe2Dita() {
+		html2dita("Edgar Allan Poe - Die Maske des roten Todes");
 	}
 
 	@Test
-	public void testJohannSebastianBach_2() {
+	public void testJSB2DocBook() {
+		html2docbook("JSB");
+	}
+
+	@Test
+	public void testJSB2Dita() {
+		html2dita("JSB");
+	}
+
+	@Test
+	public void testJSB() {
 		herold("JSB.html", DocumentElementType.BOOK);
 	}
 
@@ -63,13 +72,9 @@ public class HeroldFileTests extends AbstractTests {
 			File htmlFile = new File("src/test/resources/JSB.html");
 			File xmlFile = new File("build/test/JSB.xml");
 
-			Herold herold = new Herold();
-			herold.convert(htmlFile, xmlFile);
-			String buffer = FileServices.readToString(xmlFile, "UTF-8");
-
-			URL schemaUrl = ResourceServices.getResourceAsUrl("docbook5.xsd");
-			XmlServices.validate(buffer, "UTF-8", schemaUrl);
-
+			html2docbook(htmlFile, xmlFile);
+			html2dita(htmlFile, xmlFile);
+			
 		} catch (Exception oops) {
 			oops.printStackTrace();
 			fail();

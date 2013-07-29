@@ -13,8 +13,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
+import org.dbdoclet.herold.Herold.OutputFormat;
 import org.dbdoclet.trafo.AbstractTrafoService;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
@@ -26,10 +32,14 @@ import org.junit.Before;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.sun.org.apache.xerces.internal.util.XMLCatalogResolver;
+
 public class AbstractTests {
 
 	protected static String NS_DOCBOOK = "http://docbook.org/ns/docbook";
 	protected URL docbookSchemaUrl;
+	protected URL ditaTopicSchemaUrl;
+	private String  ditaCatalog;
 
 	public AbstractTests() {
 		super();
@@ -38,14 +48,22 @@ public class AbstractTests {
 	@Before
 	public void startUp() {
 		try {
+			
 			docbookSchemaUrl = new File(
 					"/usr/share/dbdoclet/docbook/xsd/5.0/docbook.xsd").toURI()
 					.toURL();
+			
+			ditaTopicSchemaUrl = new File(
+					"/usr/share/dita-ot/schema/base/xsd/basetopic.xsd").toURI()
+					.toURL();
+			
+			ditaCatalog = "/usr/share/dita-ot/schema/catalog.xml";
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/** Ausführen einer Transformation via Kommandozeile */
 	protected int executeHeroldCommandLine(String[] cmd) throws IOException,
 			SAXException, ParserConfigurationException {
@@ -56,16 +74,30 @@ public class AbstractTests {
 		}
 
 		System.setProperty("herold.home", "./root");
-		Herold.setSystemExitEnabled(false);
-		Herold.main(cmd);
-		return Herold.getExitCode();
+		
+		Herold herold = new Herold();
+		herold.setSystemExitEnabled(false);
+		herold.execute(cmd);
+		return herold.getExitCode();
 	}
 
-	protected Document herold(File htmlFile, File xmlFile) {
-		return herold(htmlFile, xmlFile, "default");
+	protected Document html2docbook(File htmlFile, File xmlFile) {
+		return herold(htmlFile, xmlFile, OutputFormat.DocBook, "default");
 	}
 
-	protected Document herold(File htmlFile, File xmlFile, String profile) {
+	protected Document html2docbook(File htmlFile, File xmlFile, String profile) {
+		return herold(htmlFile, xmlFile, OutputFormat.DocBook, profile);
+	}
+
+	protected Document html2dita(File htmlFile, File xmlFile) {
+		return herold(htmlFile, xmlFile, OutputFormat.DITA, "default");
+	}
+
+	protected Document html2dita(File htmlFile, File xmlFile, String profile) {
+		return herold(htmlFile, xmlFile, OutputFormat.DITA, profile);
+	}
+
+	protected Document herold(File htmlFile, File xmlFile, OutputFormat outputFormat, String profile) {
 		try {
 
 			TrafoScriptManager mgr = new TrafoScriptManager();
@@ -78,7 +110,7 @@ public class AbstractTests {
 
 			Herold herold = new Herold();
 			herold.setVerbose(false);
-
+			herold.setOutputFormat(outputFormat);
 			File outDir = xmlFile.getParentFile();
 
 			if (outDir.exists() == false) {
@@ -88,7 +120,11 @@ public class AbstractTests {
 			herold.convert(new FileInputStream(htmlFile), new FileOutputStream(
 					xmlFile), script);
 
-			return validateAndParse(xmlFile);
+			if (outputFormat == OutputFormat.DITA) {
+				return validateAndParseDita(xmlFile);
+			}
+			
+			return validateAndParseDocBook(xmlFile);
 
 		} catch (Exception oops) {
 
@@ -99,7 +135,7 @@ public class AbstractTests {
 		return null;
 	}
 
-	protected Document validateAndParse(File xmlFile)
+	protected Document validateAndParseDocBook(File xmlFile)
 			throws ParserConfigurationException, SAXException, IOException {
 
 		XmlValidationResult result = XmlServices.validate(xmlFile,
@@ -112,11 +148,33 @@ public class AbstractTests {
 		return XmlServices.parse(xmlFile);
 	}
 
-	protected Document herold(String id) {
+
+	protected Document validateAndParseDita(File xmlFile)
+			throws ParserConfigurationException, SAXException, IOException {
+
+		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		XMLCatalogResolver resolver = new XMLCatalogResolver();
+		resolver.setCatalogList(new String[] { ditaCatalog } );
+		factory.setResourceResolver(resolver);
+		Schema schema = factory.newSchema(ditaTopicSchemaUrl);
+		Validator validator = schema.newValidator();
+		validator.validate(new StreamSource(xmlFile));
+
+		return XmlServices.parse(xmlFile);
+	}
+
+	protected Document html2docbook(String id) {
 		File htmlFile = new File(
 				String.format("src/test/resources/%s.html", id));
 		File xmlFile = new File(String.format("build/test/%s.xml", id));
-		return herold(htmlFile, xmlFile);
+		return html2docbook(htmlFile, xmlFile);
+	}
+
+	protected Document html2dita(String id) {
+		File htmlFile = new File(
+				String.format("src/test/resources/%s.html", id));
+		File xmlFile = new File(String.format("build/test/%s.dita", id));
+		return html2dita(htmlFile, xmlFile);
 	}
 
 	protected String transform(String htmlCode) {

@@ -16,5 +16,6 @@
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo" rev="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html" rev="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html.docbook" rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html.dita" rev="latest.integration" />
   </dependencies>
 </ivy-module>

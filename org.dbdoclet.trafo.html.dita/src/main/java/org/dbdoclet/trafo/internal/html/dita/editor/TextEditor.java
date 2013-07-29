@@ -8,14 +8,14 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.Para;
+import org.dbdoclet.tag.dita.DitaTagFactory;
+import org.dbdoclet.tag.dita.P;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 
-public class TextEditor extends DocBookEditor {
+public class TextEditor extends DitaEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
@@ -24,7 +24,7 @@ public class TextEditor extends DocBookEditor {
 		try {
 
 			setValues(super.edit(values));
-			DocBookTagFactory dbfactory = getTagFactory();
+			DitaTagFactory tagFactory = getTagFactory();
 
 			NodeImpl parent = getParent();
 			NodeImpl current = getCurrent();
@@ -33,7 +33,7 @@ public class TextEditor extends DocBookEditor {
 
 				if (getCharacterDataNode().getNodeType() == NodeImpl.TEXT_NODE) {
 
-					Para para = dbfactory.createPara();
+					P para = tagFactory.createP();
 					parent.appendChild(para);
 
 					setParent(para);

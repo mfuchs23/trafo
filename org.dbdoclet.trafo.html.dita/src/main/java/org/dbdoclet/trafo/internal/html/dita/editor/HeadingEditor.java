@@ -11,14 +11,14 @@ package org.dbdoclet.trafo.internal.html.dita.editor;
 import java.util.HashMap;
 
 import org.dbdoclet.option.OptionException;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.dita.SectionDetector;
 
-public class HeadingEditor extends DocBookEditor {
+public class HeadingEditor extends DitaEditor {
 
 	public static HashMap<String, HashMap<String, String>> validHtmlParentPathMap;
 
@@ -39,19 +39,17 @@ public class HeadingEditor extends DocBookEditor {
 				HtmlElement.getAttributeMap());
 	}
 
-	// private HeaderElement header;
-
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		try {
 
-			DocBookTagFactory dbfactory = getTagFactory();
+			DitaTagFactory tagFactory = getTagFactory();
 			SectionDetector sectionDetector = new SectionDetector();
 			sectionDetector.setScript(script);
-			sectionDetector.setTagFactory(dbfactory);
-			sectionDetector.edit(values, dbfactory);
+			sectionDetector.setTagFactory(tagFactory);
+			sectionDetector.edit(values);
 
 			setValues(super.edit(values));
 			return finalizeValues();
@@ -59,7 +57,7 @@ public class HeadingEditor extends DocBookEditor {
 		} catch (OptionException oops) {
 
 			throw new EditorException(oops);
-		} // end of try-catch
+		}
 	}
 
 }

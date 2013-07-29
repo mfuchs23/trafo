@@ -8,24 +8,19 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.docbook.Emphasis;
-import org.dbdoclet.trafo.TrafoConstants;
+import org.dbdoclet.tag.dita.DitaTagFactory;
+import org.dbdoclet.tag.dita.U;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class UEditor extends EmEditor {
+public class UEditor extends AbstractInlineEditor {
     
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
-        EditorInstruction evo = super.edit(values);
-        
-        Emphasis emphasis = getEmphasis();
-        
-		if (emphasis != null) {
-            emphasis.setRole(TrafoConstants.DEFAULT_EMPHASIS_ROLE_UNDERLINE);
-        }
-        
-        return evo;
+        DitaTagFactory tagFactory = getTagFactory();
+        U underline = tagFactory.createU();
+        setInlineElement(underline);
+        return super.edit(values);
     }
 }

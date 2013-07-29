@@ -10,9 +10,10 @@ package org.dbdoclet.trafo.internal.html.dita.editor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dbdoclet.service.StringServices;
+import org.dbdoclet.tag.dita.DitaElement;
+import org.dbdoclet.tag.dita.DitaTagFactory;
+import org.dbdoclet.tag.dita.P;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.DocBookVersion;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Row;
@@ -31,10 +32,10 @@ import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 
-public abstract class DocBookEditor implements IEditor {
+public abstract class DitaEditor implements IEditor {
 
 	protected static final String FSEP = System.getProperty("file.separator");
-	protected static final Log logger = LogFactory.getLog(DocBookEditor.class);
+	protected static final Log logger = LogFactory.getLog(DitaEditor.class);
 
 	protected static final String AUTOMATICALLY_INSERTED = "Automatically inserted";
 	private NodeImpl current;
@@ -46,14 +47,16 @@ public abstract class DocBookEditor implements IEditor {
 	private boolean doTraverse;
 	private LinkManager linkManager;
 	private DocumentElementType documentElementType;
-	private DocBookTagFactory tagFactory;
+	private DitaTagFactory tagFactory;
+	
+	// protected DocBookTagFactory dbfactory = new DocBookTagFactory();
 	protected Script script;
 	
-	public void copyCommonAttributes(HtmlElement html, DocBookElement dbk) {
+	public void copyCommonAttributes(HtmlElement html, DitaElement ditaElement) {
 
-		logger.debug("Copy common attributes from " + html + " to " + dbk);
+		logger.debug("Copy common attributes from " + html + " to " + ditaElement);
 
-		if (html == null || dbk == null) {
+		if (html == null || ditaElement == null) {
 			return;
 		}
 
@@ -61,51 +64,29 @@ public abstract class DocBookEditor implements IEditor {
 
 		if (htmlId != null) {
 			if (linkManager != null) {
-				dbk.setId(linkManager.createUniqueId(htmlId));
+				ditaElement.setId(linkManager.createUniqueId(htmlId));
 			} else {
 				logger.warn("Attribute linkManager must not be null! " + html + ", " + toString());
 			}
 		}
 
 		if (script.isParameterOn(TrafoConstants.SECTION_DOCBOOK,
-				TrafoConstants.PARAM_CREATE_CONDITION_ATTRIBUTE, false)) {
-
-			StringBuilder buffer = new StringBuilder();
-
-			String htmlClass = html.getCssClass();
-
-			if (htmlClass != null) {
-				buffer.append(htmlClass);
-				buffer.append(",");
-			}
-
-			String htmlTitle = html.getTitle();
-
-			if (htmlTitle != null) {
-				buffer.append(htmlTitle);
-				buffer.append(",");
-			}
-
-			String condition = buffer.toString();
-
-			if (condition.trim().length() > 0) {
-				condition = StringServices.cutSuffix(condition, ",");
-				dbk.setCondition(condition);
-			}
-		}
-
-		if (script.isParameterOn(TrafoConstants.SECTION_DOCBOOK,
 				TrafoConstants.PARAM_CREATE_REMAP_ATTRIBUTE, false)) {
 
-			createRemapAttribute(html, dbk);
-			dbk.setLine(html.getLine());
-			dbk.setColumn(html.getColumn());
+			createRemapAttribute(html, ditaElement);
+			ditaElement.setLine(html.getLine());
+			ditaElement.setColumn(html.getColumn());
 		}
 
-		dbk.setUserData("html", html, null);
+		ditaElement.setUserData("html", html, null);
 	}
 	
-	private void createRemapAttribute(HtmlElement html, DocBookElement dbk) {
+	protected void copyCommonAttributes(HtmlElement htmlElement, DocBookElement anchor) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void createRemapAttribute(HtmlElement html, DitaElement dbk) {
 		String remap = String.format("%s:%d:%d", html.getTagName(),
 				html.getLine(), html.getColumn());
 		dbk.setRemap(remap);
@@ -118,15 +99,15 @@ public abstract class DocBookEditor implements IEditor {
 		}
 
 		setValues(vo);
-		DocBookTagFactory dbfactory = getTagFactory();
+		DitaTagFactory tagFactory = getTagFactory();
 
 		if (parent instanceof Row) {
 
 			if ((child != null) && !(child instanceof Td)
 					&& !(child instanceof Th) && !(child instanceof Table)) {
 
-				Para para = dbfactory.createPara();
-				parent.appendChild(dbfactory.createEntry().appendChild(para));
+				P para = tagFactory.createP();
+				// parent.appendChild(dbfactory.createEntry().appendChild(para));
 				parent = para;
 				current = parent;
 			}
@@ -134,8 +115,8 @@ public abstract class DocBookEditor implements IEditor {
 			if (characterDataNode != null
 					&& characterDataNode instanceof TextImpl) {
 			
-				Para para = dbfactory.createPara();
-				parent.appendChild(dbfactory.createEntry().appendChild(para));
+				P para = tagFactory.createP();
+				// parent.appendChild(dbfactory.createEntry().appendChild(para));
 				parent = para;
 				current = parent;
 			}
@@ -172,25 +153,6 @@ public abstract class DocBookEditor implements IEditor {
 		return current;
 	}
 
-	private DocBookVersion getDocBookVersion() {
-
-		DocBookTagFactory dbfactory = getTagFactory();
-
-		if (dbfactory == null) {
-			throw new IllegalStateException(
-					"The field dbfactory must not be null!");
-		}
-
-		DocBookVersion docBookVersion = dbfactory.getDocBookVersion();
-
-		if (docBookVersion == null) {
-			throw new IllegalStateException(
-					"The field docBookVersion must not be null!");
-		}
-
-		return docBookVersion;
-	}
-
 	public DocumentElementType getDocumentElementType() {
 		return documentElementType;
 	}
@@ -208,10 +170,10 @@ public abstract class DocBookEditor implements IEditor {
 		return parent;
 	}
 
-	public DocBookTagFactory getTagFactory() {
+	public DitaTagFactory getTagFactory() {
 
 		if (tagFactory == null) {
-			tagFactory = new DocBookTagFactory();
+			tagFactory = new DitaTagFactory();
 		}
 		
 		return tagFactory;
@@ -224,33 +186,6 @@ public abstract class DocBookEditor implements IEditor {
 	public void ignore(boolean newDoIgnore) {
 
 		this.doIgnore = newDoIgnore;
-	}
-
-	public boolean isDocBook5() {
-
-		DocBookVersion docBookVersion = getDocBookVersion();
-
-		if (docBookVersion == DocBookVersion.V5_0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isDocBookVersion(DocBookVersion version) {
-
-		if (version == null) {
-			throw new IllegalArgumentException(
-					"The argument version must not be null!");
-		}
-
-		DocBookVersion docBookVersion = getDocBookVersion();
-
-		if (docBookVersion.equals(version)) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	public void setAnything(Object newAnything) {
@@ -275,7 +210,7 @@ public abstract class DocBookEditor implements IEditor {
 		this.parent = newParent;
 	}
 
-	public void setTagFactory(DocBookTagFactory tagFactory) {
+	public void setTagFactory(DitaTagFactory tagFactory) {
 		this.tagFactory = tagFactory;
 	}
 
@@ -341,7 +276,8 @@ public abstract class DocBookEditor implements IEditor {
 	}
 
 	protected String validateAlign(String align) {
-		return tagFactory.validateAlign(align);
+		//return dbfactory.validateAlign(align);
+		return "left";
 	}
 
 	protected String validateSrc(String src) {
@@ -371,12 +307,12 @@ public abstract class DocBookEditor implements IEditor {
 		return false;
 	}
 
-	protected DocBookElement getDocBookElementParent() {
+	protected DitaElement getDitaElementParent() {
 
 		NodeImpl parent = getParent();
 		
-		if (parent instanceof DocBookElement) {
-			return (DocBookElement) parent;
+		if (parent instanceof DitaElement) {
+			return (DitaElement) parent;
 		}
 		
 		return null;
@@ -398,9 +334,9 @@ public abstract class DocBookEditor implements IEditor {
 
 	protected boolean isContentModel(NodeImpl parentNode) {
 
-		if (parentNode instanceof DocBookElement) {
+		if (parentNode instanceof DitaElement) {
 	
-			DocBookElement parent = (DocBookElement) parentNode;
+			DitaElement parent = (DitaElement) parentNode;
 	
 			if (parent.isContentModel()) {
 				return true;

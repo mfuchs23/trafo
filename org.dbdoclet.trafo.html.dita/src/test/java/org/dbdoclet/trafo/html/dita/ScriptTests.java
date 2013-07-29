@@ -12,7 +12,7 @@ import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.html.AbstractTests;
-import org.dbdoclet.trafo.html.dita.HtmlDocBookTrafo;
+import org.dbdoclet.trafo.html.dita.HtmlDitaTrafo;
 import org.dbdoclet.trafo.script.Script;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class ScriptTests extends AbstractTests {
 		String htmlCode = ResourceServices
 				.getResourceAsString("html/lorem.html");
 
-		HtmlDocBookTrafo transformer = new HtmlDocBookTrafo();
+		HtmlDitaTrafo transformer = new HtmlDitaTrafo();
 
 		Script script = new Script();
 		script.selectSection(TrafoConstants.SECTION_DOCBOOK);

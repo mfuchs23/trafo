@@ -8,31 +8,19 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.Acronym;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
-public class AcronymEditor extends DocBookEditor {
+public class AcronymEditor extends DitaEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
-
-		Acronym candidate = dbfactory.createAcronym();
-		candidate.setParentNode(getParent());
-
-		if (candidate.validate()) {
-
-			setCurrent(candidate);
-			getParent().appendChild(getCurrent());
-		} // end of if ()
-
-		traverse(true);
-
+		DitaTagFactory tagFactory = getTagFactory();
 		return finalizeValues();
 	}
 }

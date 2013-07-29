@@ -13,7 +13,7 @@ public class PreTests extends AbstractTests {
 	@Test
 	public void keepFormatting() {
 
-		Document doc = herold("html/pre/PreKeepFormatting");
+		Document doc = html2docbook("html/pre/PreKeepFormatting");
 		String text = (String) XPathServices.getValue(doc, "d", NS_DOCBOOK,
 				"//d:screen/text()");
 		assertNotNull(text);
@@ -23,7 +23,7 @@ public class PreTests extends AbstractTests {
 	@Test
 	public void keepAttributeLanguage() {
 
-		Document doc = herold("html/pre/PreKeepFormatting");
+		Document doc = html2docbook("html/pre/PreKeepFormatting");
 		String text = (String) XPathServices.getValue(doc, "d", NS_DOCBOOK,
 				"//d:screen/@language");
 		assertNotNull(text);

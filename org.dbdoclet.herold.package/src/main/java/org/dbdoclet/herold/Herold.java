@@ -40,6 +40,7 @@ import org.dbdoclet.trafo.TrafoException;
 import org.dbdoclet.trafo.TrafoExceptionHandler;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
+import org.dbdoclet.trafo.html.dita.HtmlDitaTrafo;
 import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
 import org.dbdoclet.trafo.script.Script;
 
@@ -52,232 +53,101 @@ import org.dbdoclet.trafo.script.Script;
  */
 public class Herold {
 
-	private static Log logger = LogFactory.getLog(Herold.class);
+	public enum OutputFormat {
+		DITA, DocBook
+	}
 
-	private static FileOption optIn;
-	private static FileOption optOut;
-	private static ResourceBundle res = ResourceBundle
+	private static Log logger = LogFactory.getLog(Herold.class);;
+
+	private int exitCode;
+	private FileOption optIn;
+	private FileOption optOut;
+	private OutputFormat outputFormat;
+	private ResourceBundle res = ResourceBundle
 			.getBundle("org/dbdoclet/herold/Resources");
+	private boolean systemExitEnabled = true;
 	private boolean verbose = false;
-	private static boolean systemExitEnabled = true;
 
-	private static int exitCode;
+	private static String getVersion() {
+
+		Package p = Herold.class.getPackage();
+		return p.getImplementationVersion();
+	}
 
 	public static void main(String[] args) {
 
-		OptionList options = null;
-		exitCode = 0;
-
-		try {
-
-			Option<?> option;
-			options = new OptionList(args);
-
-			// help
-			option = new BooleanOption("help", "h");
-			option.setMediumName("?");
-			options.add(option);
-
-			// license
-			option = new BooleanOption("license", "L");
-			options.add(option);
-
-			// version
-			option = new BooleanOption("version", "V");
-			options.add(option);
-
-			options.validate(true);
-
-			if (options.getFlag("help", false)) {
-				printUsage();
-				return;
-			}
-
-			if (options.getFlag("version", false)) {
-				printVersion();
-				return;
-			}
-
-			if (options.getFlag("license", false)) {
-				printLicense();
-				exit(0);
-			}
-
-			options = createOptionList(args);
-
-			if (options.validate() == false) {
-				throw new OptionException(options.getError());
-			}
-
-			Herold converter = new Herold();
-
-			StringOption optProfile = (StringOption) options
-					.getOption("profile");
-			File profileFile = findProfile(optProfile);
-			Script script;
-
-			TrafoScriptManager mgr = new TrafoScriptManager();
-			script = mgr.parseScript(profileFile);
-			logger.info(String.format("Using profile file %s.",
-					profileFile.getAbsolutePath()));
-
-			if (logger.isTraceEnabled()) {
-				StringWriter buffer = new StringWriter();
-				mgr.writeScript(script, buffer);
-				logger.trace("Script: " + buffer.toString());
-			}
-
-			File outFile = converter.processCommandLineOptions(options, script);
-
-			if (outFile != null) {
-				logger.info(String.format("Output file is %s.",
-						outFile.getPath()));
-			}
-
-			InputStream in = null;
-			OutputStream out = null;
-
-			if (optIn.isUnset()) {
-				in = System.in;
-			} else {
-				in = new FileInputStream(optIn.getValue());
-			}
-
-			out = createOutputStream();
-
-			converter.convert(in, out, script);
-
-		} catch (OptionException oops) {
-
-			if ((options != null) && (options.getFlag("help", false) == false)) {
-
-				printUsage();
-
-				String msg = oops.getMessage();
-
-				if (msg != null) {
-					System.err.println(msg);
-				}
-
-			} else {
-				oops.printStackTrace();
-				printUsage();
-			}
-
-			exitCode = 1;
-
-		} catch (TrafoException oops) {
-
-			logger.fatal("TrafoException", TrafoExceptionHandler.getCause(oops));
-			exitCode = 2;
-
-		} catch (FileNotFoundException oops) {
-
-			logger.fatal(oops.getMessage());
-			exitCode = 3;
-
-		} catch (IOException oops) {
-
-			oops.printStackTrace();
-			exitCode = 4;
-
-		} catch (Exception oops) {
-
-			oops.printStackTrace();
-			exitCode = 5;
-		}
-
-		exit(exitCode);
+		Herold herold = new Herold();
+		herold.execute(args);
 	}
 
-	private static OutputStream createOutputStream()
-			throws FileNotFoundException {
+	private static void printLicense() throws IOException {
 
-		OutputStream out;
+		URL url = ResourceServices
+				.getResourceAsUrl("/org/dbdoclet/herold/COPYING");
 
-		if (optOut.isUnset()) {
+		if (url != null) {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					url.openStream()));
+			String line = reader.readLine();
 
-			out = System.out;
+			while (line != null) {
+				println(line);
+				line = reader.readLine();
+			}
 
+			reader.close();
 		} else {
-
-			File outDir = optOut.getValue().getParentFile();
-
-			if (outDir != null && outDir.exists() == false) {
-				outDir.mkdir();
-			}
-
-			out = new FileOutputStream(optOut.getValue());
-		}
-
-		return out;
-	}
-
-	private static File findProfile(StringOption optProfile)
-			throws FileNotFoundException {
-
-		String profileName = "default.her";
-
-		if (optProfile.isUnset() == false) {
-			profileName = optProfile.getValue();
-		}
-
-		if (profileName == null || profileName.trim().length() == 0) {
-			profileName = "default.her";
-		}
-
-		File profile = new File(profileName);
-
-		if (profile.exists() == true) {
-			return profile;
-		}
-
-		String homePath = System.getProperty("herold.home");
-
-		if (homePath != null) {
-
-			File homeDir = new File(homePath);
-
-			if (homeDir.exists() == false) {
-				throw new FileNotFoundException(String.format(
-						"Home directory %s does not exist!", homePath));
-			}
-
-			File profilesDir = new File(homeDir, "profiles");
-
-			if (profilesDir.exists() == false) {
-				throw new FileNotFoundException(String.format(
-						"Profiles directory %s does not exist!",
-						profilesDir.getAbsolutePath()));
-			}
-
-			File file = new File(profilesDir, profileName);
-
-			if (file.exists() == true) {
-				return file;
-			}
-
-			file = new File(profilesDir, profileName + ".her");
-
-			if (file.exists() == true) {
-				return file;
-			}
-		}
-
-		throw new FileNotFoundException(String.format(
-				"Profile %s does not exist!", profileName));
-	}
-
-	private static void exit(int exitCode) {
-
-		Herold.exitCode = exitCode;
-
-		if (systemExitEnabled == true) {
-			System.exit(exitCode);
+			logger.fatal("Can't find resource for license!");
 		}
 	}
 
-	private static OptionList createOptionList(String[] args) {
+	private static void println(String str) {
+		System.out.println(str);
+	}
+
+	private static void printVersion() {
+
+		println("herold version \"" + getVersion() + "\"");
+	}
+
+	public void convert(File htmlFile, File xmlFile) throws TrafoException,
+			FileNotFoundException {
+
+		Script script = new Script();
+		convert(new FileInputStream(htmlFile), new FileOutputStream(xmlFile),
+				script);
+	}
+
+	public void convert(InputStream in, OutputStream out, Script script)
+			throws TrafoException {
+
+		AbstractTrafoService trafo = new HtmlDocBookTrafo();
+
+		if (outputFormat == OutputFormat.DITA) {
+			trafo = new HtmlDitaTrafo();
+		}
+
+		trafo.setInputStream(in);
+		trafo.setOutputStream(out);
+
+		TrafoResult result = null;
+		if (verbose == true) {
+			trafo.addProgressListener(new ConsoleProgressListener(false));
+			result = trafo.transform(script);
+		} else {
+			result = trafo.transform(script);
+		}
+
+		if (result.isFailed()) {
+			System.err.print(result.toString());
+		}
+
+		if (verbose == true) {
+			System.out.println();
+		}
+	}
+
+	private OptionList createOptionList(String[] args) {
 
 		Option<?> option;
 		SelectOption selopt;
@@ -352,38 +222,234 @@ public class Herold {
 		return options;
 	}
 
-	private static String getVersion() {
-
-		Package p = Herold.class.getPackage();
-		return p.getImplementationVersion();
+	public OutputFormat getOutputFormat() {
+		return outputFormat;
 	}
 
-	private static void printLicense() throws IOException {
+	public void setOutputFormat(OutputFormat outputFormat) {
+		this.outputFormat = outputFormat;
+	}
 
-		URL url = ResourceServices
-				.getResourceAsUrl("/org/dbdoclet/herold/COPYING");
+	private OutputStream createOutputStream() throws FileNotFoundException {
 
-		if (url != null) {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					url.openStream()));
-			String line = reader.readLine();
+		OutputStream out;
 
-			while (line != null) {
-				println(line);
-				line = reader.readLine();
+		if (optOut.isUnset()) {
+
+			out = System.out;
+
+		} else {
+
+			File outDir = optOut.getValue().getParentFile();
+
+			if (outDir != null && outDir.exists() == false) {
+				outDir.mkdir();
 			}
 
-			reader.close();
-		} else {
-			logger.fatal("Can't find resource for license!");
+			out = new FileOutputStream(optOut.getValue());
+		}
+
+		return out;
+	}
+
+	public void execute(String[] args) {
+
+		OptionList options = null;
+		exitCode = 0;
+
+		try {
+
+			Option<?> option;
+			options = new OptionList(args);
+
+			// help
+			option = new BooleanOption("help", "h");
+			option.setMediumName("?");
+			options.add(option);
+
+			// license
+			option = new BooleanOption("license", "L");
+			options.add(option);
+
+			// version
+			option = new BooleanOption("version", "V");
+			options.add(option);
+
+			options.validate(true);
+
+			if (options.getFlag("help", false)) {
+				printUsage();
+				return;
+			}
+
+			if (options.getFlag("version", false)) {
+				printVersion();
+				return;
+			}
+
+			if (options.getFlag("license", false)) {
+				printLicense();
+				exit(0);
+			}
+
+			options = createOptionList(args);
+
+			if (options.validate() == false) {
+				throw new OptionException(options.getError());
+			}
+
+			StringOption optProfile = (StringOption) options
+					.getOption("profile");
+			File profileFile = findProfile(optProfile);
+			Script script;
+
+			TrafoScriptManager mgr = new TrafoScriptManager();
+			script = mgr.parseScript(profileFile);
+			logger.info(String.format("Using profile file %s.",
+					profileFile.getAbsolutePath()));
+
+			if (logger.isTraceEnabled()) {
+				StringWriter buffer = new StringWriter();
+				mgr.writeScript(script, buffer);
+				logger.trace("Script: " + buffer.toString());
+			}
+
+			File outFile = processCommandLineOptions(options, script);
+
+			if (outFile != null) {
+				logger.info(String.format("Output file is %s.",
+						outFile.getPath()));
+			}
+
+			InputStream in = null;
+			OutputStream out = null;
+
+			if (optIn.isUnset()) {
+				in = System.in;
+			} else {
+				in = new FileInputStream(optIn.getValue());
+			}
+
+			out = createOutputStream();
+
+			convert(in, out, script);
+
+		} catch (OptionException oops) {
+
+			if ((options != null) && (options.getFlag("help", false) == false)) {
+
+				printUsage();
+
+				String msg = oops.getMessage();
+
+				if (msg != null) {
+					System.err.println(msg);
+				}
+
+			} else {
+				oops.printStackTrace();
+				printUsage();
+			}
+
+			exitCode = 1;
+
+		} catch (TrafoException oops) {
+
+			logger.fatal("TrafoException", TrafoExceptionHandler.getCause(oops));
+			exitCode = 2;
+
+		} catch (FileNotFoundException oops) {
+
+			logger.fatal(oops.getMessage());
+			exitCode = 3;
+
+		} catch (IOException oops) {
+
+			oops.printStackTrace();
+			exitCode = 4;
+
+		} catch (Exception oops) {
+
+			oops.printStackTrace();
+			exitCode = 5;
+		}
+
+		exit(exitCode);
+	}
+
+	private void exit(int exitCode) {
+
+		this.exitCode = exitCode;
+
+		if (systemExitEnabled == true) {
+			System.exit(exitCode);
 		}
 	}
 
-	private static void println(String str) {
-		System.out.println(str);
+	private File findProfile(StringOption optProfile)
+			throws FileNotFoundException {
+
+		String profileName = "default.her";
+
+		if (optProfile.isUnset() == false) {
+			profileName = optProfile.getValue();
+		}
+
+		if (profileName == null || profileName.trim().length() == 0) {
+			profileName = "default.her";
+		}
+
+		File profile = new File(profileName);
+
+		if (profile.exists() == true) {
+			return profile;
+		}
+
+		String homePath = System.getProperty("herold.home");
+
+		if (homePath != null) {
+
+			File homeDir = new File(homePath);
+
+			if (homeDir.exists() == false) {
+				throw new FileNotFoundException(String.format(
+						"Home directory %s does not exist!", homePath));
+			}
+
+			File profilesDir = new File(homeDir, "profiles");
+
+			if (profilesDir.exists() == false) {
+				throw new FileNotFoundException(String.format(
+						"Profiles directory %s does not exist!",
+						profilesDir.getAbsolutePath()));
+			}
+
+			File file = new File(profilesDir, profileName);
+
+			if (file.exists() == true) {
+				return file;
+			}
+
+			file = new File(profilesDir, profileName + ".her");
+
+			if (file.exists() == true) {
+				return file;
+			}
+		}
+
+		throw new FileNotFoundException(String.format(
+				"Profile %s does not exist!", profileName));
 	}
 
-	private static void printUsage() {
+	public int getExitCode() {
+		return exitCode;
+	}
+
+	public boolean isCanceled() {
+		return false;
+	}
+
+	private void printUsage() {
 
 		try {
 
@@ -398,39 +464,6 @@ public class Herold {
 		}
 	}
 
-	private static void printVersion() {
-
-		println("herold version \"" + getVersion() + "\"");
-	}
-
-	public void convert(InputStream in, OutputStream out, Script script)
-			throws TrafoException {
-
-		AbstractTrafoService trafo = new HtmlDocBookTrafo();
-		trafo.setInputStream(in);
-		trafo.setOutputStream(out);
-		
-		TrafoResult result = null;
-		if (verbose == true) {
-			trafo.addProgressListener(new ConsoleProgressListener(false));
-			result = trafo.transform(script);
-		} else {
-			result = trafo.transform(script);
-		}
-
-		if (result.isFailed()) {
-			System.err.print(result.toString());
-		}
-		
-		if (verbose == true) {
-			System.out.println();
-		}
-	}
-
-	public boolean isCanceled() {
-		return false;
-	}
-
 	public File processCommandLineOptions(OptionList options, Script script) {
 
 		for (Option<?> option : options) {
@@ -442,7 +475,8 @@ public class Herold {
 				name = StringServices.cutPrefix(name,
 						TrafoConstants.SECTION_DOCBOOK.toLowerCase());
 
-			} else if (name.startsWith(TrafoConstants.SECTION_HTML.toLowerCase())) {
+			} else if (name.startsWith(TrafoConstants.SECTION_HTML
+					.toLowerCase())) {
 				script.selectSection(TrafoConstants.SECTION_HTML);
 				name = StringServices.cutPrefix(name,
 						TrafoConstants.SECTION_HTML.toLowerCase());
@@ -468,6 +502,16 @@ public class Herold {
 
 		File outFile;
 
+		if (optOut == null) {
+			throw new IllegalStateException(
+					"The field optOut must not be null!");
+		}
+
+		if (optIn == null) {
+			throw new IllegalStateException(
+					"The field optIn must not be null!");
+		}
+
 		if (optOut.isUnset() && optIn.isUnset() == false) {
 
 			String outFileName = FileServices.getFileBase(optIn.getValue())
@@ -482,23 +526,11 @@ public class Herold {
 		return outFile;
 	}
 
+	public void setSystemExitEnabled(boolean systemExitEnabled) {
+		this.systemExitEnabled = systemExitEnabled;
+	}
+
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
-	}
-
-	public void convert(File htmlFile, File xmlFile) throws TrafoException,
-			FileNotFoundException {
-
-		Script script = new Script();
-		convert(new FileInputStream(htmlFile), new FileOutputStream(xmlFile),
-				script);
-	}
-
-	public static void setSystemExitEnabled(boolean systemExitEnabled) {
-		Herold.systemExitEnabled = systemExitEnabled;
-	}
-
-	public static int getExitCode() {
-		return exitCode;
 	}
 }

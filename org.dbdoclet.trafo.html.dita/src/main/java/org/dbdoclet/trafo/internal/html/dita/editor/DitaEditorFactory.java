@@ -8,7 +8,7 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.javadoc.JavaDocElement;
 import org.dbdoclet.trafo.html.EditorFactoryException;
@@ -17,11 +17,10 @@ import org.dbdoclet.trafo.html.IEditorFactory;
 import org.dbdoclet.trafo.internal.html.dita.LinkManager;
 import org.dbdoclet.trafo.script.Script;
 
-public class DocBookEditorFactory implements IEditorFactory {
+public class DitaEditorFactory implements IEditorFactory {
 
 	private LinkManager linkManager;
-	private Script script;
-	private DocBookTagFactory tagFactory;
+	private DitaTagFactory tagFactory;
 
 	/*
 	 * (non-Javadoc)
@@ -43,13 +42,13 @@ public class DocBookEditorFactory implements IEditorFactory {
 
 		if (child instanceof JavaDocElement) {
 
-			str = "org.dbdoclet.trafo.internal.html.docbook.editor.javadoc"
+			str = "org.dbdoclet.trafo.internal.html.dita.editor.javadoc"
 					+ str.substring(str.lastIndexOf('.'), str.length())
 					+ "Editor";
 
 		} else {
 
-			str = "org.dbdoclet.trafo.internal.html.docbook.editor"
+			str = "org.dbdoclet.trafo.internal.html.dita.editor"
 					+ str.substring(str.lastIndexOf('.'), str.length())
 					+ "Editor";
 		}
@@ -62,7 +61,7 @@ public class DocBookEditorFactory implements IEditorFactory {
 			c = Class.forName(str);
 			o = c.newInstance();
 
-			DocBookEditor editor = (DocBookEditor) o;
+			DitaEditor editor = (DitaEditor) o;
 			editor.setLinkManager(linkManager);
 			editor.setTagFactory(tagFactory);
 
@@ -124,10 +123,9 @@ public class DocBookEditorFactory implements IEditorFactory {
 	}
 
 	public void setScript(Script script) {
-		this.script = script;
 	}
 
-	public void setTagFactory(DocBookTagFactory tagFactory) {
+	public void setTagFactory(DitaTagFactory tagFactory) {
 		this.tagFactory = tagFactory;
 	}
 }

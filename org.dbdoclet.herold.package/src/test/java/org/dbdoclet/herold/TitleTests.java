@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.dbdoclet.herold.Herold.OutputFormat;
 import org.dbdoclet.xiphias.XPathServices;
 import org.dbdoclet.xiphias.XmlServices;
 import org.junit.Test;
@@ -78,8 +79,8 @@ public class TitleTests extends AbstractTests {
 		String xmlFileName = "build/test/TitleMsoHeading7.xml";
 		File xmlFile = new File(xmlFileName);
 
-		herold(htmlFile, xmlFile, "sectionDetection");
-		Document doc = validateAndParse(xmlFile);
+		herold(htmlFile, xmlFile, OutputFormat.DocBook, "sectionDetection");
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:para");
 		assertNotNull(nodeList);

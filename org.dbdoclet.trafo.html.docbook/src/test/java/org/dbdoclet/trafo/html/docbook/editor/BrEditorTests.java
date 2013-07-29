@@ -25,7 +25,7 @@ import org.w3c.dom.Node;
 public class BrEditorTests extends AbstractTests {
 
 	@Test
-	public void trappedBr() {
+	public void trappedBr_1() {
 
 		HtmlFragment fragment = parse("<p>Erste Zeile<br>\nZweite Zeile</p>");
 		P p = (P) fragment.getChildElementList().get(0);
@@ -51,6 +51,35 @@ public class BrEditorTests extends AbstractTests {
 
 		ArrayList<Para> list = section.findChildren(Para.class);
 		assertEquals(2, list.size());
+	}
+
+	@Test
+	public void trappedBr_2() {
+
+		HtmlFragment fragment = parse("<p>Erste Zeile<br/>Zweite Zeile</p>");
+		P p = (P) fragment.getChildElementList().get(0);
+		Br br = (Br) p.findChildElement("br");
+
+		DocBookTagFactory tf = new DocBookTagFactory();
+		Section section = tf.createSection();
+		Para para = tf.createPara();
+		section.appendChild(para);
+		para.setTextContent("Erste Zeile");
+		BrEditor editor = new BrEditor();
+
+		EditorInstruction ei = createEditorInstruction(br, para);
+
+		try {
+			ei = editor.edit(ei);
+		} catch (EditorException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		dumpNode(section);
+
+		ArrayList<Para> list = section.findChildren(Para.class);
+		assertEquals(1, list.size());
 	}
 
 	private void dumpNode(Node node) {

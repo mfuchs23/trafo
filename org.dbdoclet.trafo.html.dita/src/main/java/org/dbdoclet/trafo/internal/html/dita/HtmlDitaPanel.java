@@ -17,7 +17,7 @@ import org.dbdoclet.jive.widget.GridPanel;
 import org.dbdoclet.jive.widget.LanguageListBox;
 import org.dbdoclet.service.ResourceServices;
 
-public class HtmlDocBookPanel extends GridPanel implements ActionListener {
+public class HtmlDitaPanel extends GridPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class HtmlDocBookPanel extends GridPanel implements ActionListener {
 	private final JiveFactory jf;
 	private final ResourceBundle res;
 
-	public HtmlDocBookPanel() {
+	public HtmlDitaPanel() {
 
 		res = PropertyResourceBundle
 				.getBundle("org/dbdoclet/trafo/html/docbook/Resources");

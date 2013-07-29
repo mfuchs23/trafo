@@ -13,7 +13,7 @@ import org.dbdoclet.trafo.html.EditorInstruction;
 
 
 
-public class HrEditor extends DocBookEditor {
+public class HrEditor extends DitaEditor {
 
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {

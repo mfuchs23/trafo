@@ -27,7 +27,7 @@ public class InfoTests extends AbstractTests {
 		String[] cmd = { "-p", "src/test/resources/profile/abstractSimple.her",
 				"-i", htmlFile.getPath(), "-o", xmlFile.getPath() };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:abstract/d:para");
 		assertNotNull(nodeList);
@@ -45,7 +45,7 @@ public class InfoTests extends AbstractTests {
 				"src/test/resources/profile/abstractWithInlineXml.her", "-i",
 				htmlFile.getPath(), "-o", xmlFile.getPath() };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:abstract/d:para");
 		assertNotNull(nodeList);
@@ -63,7 +63,7 @@ public class InfoTests extends AbstractTests {
 				"src/test/resources/profile/abstractComplex.her", "-i",
 				htmlFile.getPath(), "-o", xmlFile.getPath() };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		Document doc = validateAndParse(xmlFile);
+		Document doc = validateAndParseDocBook(xmlFile);
 		ArrayList<Node> nodeList = XPathServices.getNodes(doc, "d", NS_DOCBOOK,
 				"//d:abstract/d:para");
 		assertNotNull(nodeList);
@@ -82,6 +82,6 @@ public class InfoTests extends AbstractTests {
 		String[] cmd = { "-p", "src/test/resources/profile/book.her", "-i",
 				htmlFile.getPath(), "-o", xmlFile.getPath() };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		validateAndParse(xmlFile);
+		validateAndParseDocBook(xmlFile);
 	}
 }

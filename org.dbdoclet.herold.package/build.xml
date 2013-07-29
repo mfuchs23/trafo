@@ -39,6 +39,7 @@
 				<include name="org.dbdoclet.trafo_*.jar"/>
 				<include name="org.dbdoclet.trafo.html_*.jar"/>
 				<include name="org.dbdoclet.trafo.html.docbook_*.jar"/>
+				<include name="org.dbdoclet.trafo.html.dita_*.jar"/>
 			</zipgroupfileset>
 		</jar>
 	</target>
@@ -130,6 +131,7 @@
 			<fileset dir="../org.dbdoclet.xiphias/src/main/java"/>	
 			<fileset dir="../org.dbdoclet.trafo/src/main/java"/>	
 			<fileset dir="../org.dbdoclet.trafo.html.docbook/src/main/java"/>	
+			<fileset dir="../org.dbdoclet.trafo.html.dita/src/main/java"/>	
 		</srcpacker>
 	</target>
 

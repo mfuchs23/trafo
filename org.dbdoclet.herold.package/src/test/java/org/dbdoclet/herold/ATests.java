@@ -20,7 +20,7 @@ public class ATests extends AbstractTests {
 		File xmlFile = new File("build/test/XrefImgError.xml");
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath() };
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
-		validateAndParse(xmlFile);
+		validateAndParseDocBook(xmlFile);
 	}
 
 }
