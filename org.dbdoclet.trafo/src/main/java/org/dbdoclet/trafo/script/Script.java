@@ -2,6 +2,7 @@ package org.dbdoclet.trafo.script;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.dbdoclet.service.UnicodeServices;
 import org.dbdoclet.trafo.param.BooleanParam;
@@ -288,18 +289,18 @@ public class Script {
 		return param.getValueAsText();
 	}
 
-	public ArrayList<String> getTextParameterList(String section, String name) {
+	public List<String> getTextParameterList(String section, String name) {
 		return getTextParameterList(DEFAULT_NAMESPACE, section, name,
 				new ArrayList<String>());
 	}
 
-	public ArrayList<String> getTextParameterList(String section, String name,
-			ArrayList<String> def) {
+	public List<String> getTextParameterList(String section, String name,
+			List<String> def) {
 		return getTextParameterList(DEFAULT_NAMESPACE, section, name, def);
 	}
 
-	public ArrayList<String> getTextParameterList(String namespace,
-			String section, String name, ArrayList<String> def) {
+	public List<String> getTextParameterList(String namespace,
+			String section, String name, List<String> def) {
 
 		Param<?> param = getParameter(namespace, section, name);
 

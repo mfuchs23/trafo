@@ -377,7 +377,11 @@ public class HtmlProvider implements IHtmlProvider {
 			throws IOException, ParserException, TokenizerException {
 
 		HtmlParser parser = new HtmlParser();
-
+		
+		if (listeners != null && listeners.size() > 0) {
+			parser.addProgressListener(listeners.get(0));
+		}
+		
 		HtmlDocument htmlDocument = parser.parseDocument(htmlCode);
 		ElementImpl documentElement = (ElementImpl) htmlDocument.getDocumentElement();
 		documentElement.removeAttribute("xmlns");
@@ -408,6 +412,10 @@ public class HtmlProvider implements IHtmlProvider {
 			throws IOException, ParserException, TokenizerException {
 
 		HtmlParser parser = new HtmlParser();
+		if (listeners != null && listeners.size() > 0) {
+			parser.addProgressListener(listeners.get(0));
+		}
+		
 		HtmlFragment htmlFragment = parser.parseFragment(htmlCode);
 
 		TextParam excludeParam = (TextParam) script.getParameter(
@@ -468,5 +476,10 @@ public class HtmlProvider implements IHtmlProvider {
 
 		HtmlParser parser = new HtmlParser();
 		return parser.isFragment(htmlCode);
+	}
+
+	@Override
+	public void setProgressListeners(ArrayList<ProgressListener> listeners) {
+		this.listeners = listeners;
 	}
 }

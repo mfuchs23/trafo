@@ -24,4 +24,5 @@ section HTML {
 section DocBook {
 	encoding = "UTF-8";
 	collapse-protected-space = true;
+	chunk-elements = [ "chapter", "appendix" ];
 }

@@ -27,6 +27,7 @@ import org.dbdoclet.trafo.html.docbook.SectionDetector;
 import org.dbdoclet.trafo.internal.html.docbook.editor.DocBookEditorFactory;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XPathServices;
+import org.dbdoclet.xiphias.XmlConstants;
 import org.dbdoclet.xiphias.dom.DocumentFragmentImpl;
 import org.dbdoclet.xiphias.dom.DocumentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
@@ -171,13 +172,13 @@ public class DocBookVisitor implements IHtmlVisitor {
 			break;
 		default:
 			documentElement = dbfactory.createBook();
-
 		}
 
-		documentElement.setNamespaceURI(DocBookElement.DOCBOOK_NAMESPACE);
-		documentElement.setAttribute("xmlns", DocBookElement.DOCBOOK_NAMESPACE);
-		documentElement
-				.setAttribute("xmlns:xl", DocBookElement.XLINK_NAMESPACE);
+		documentElement.setNamespaceURI(XmlConstants.NAMESPACE_DOCBOOK);
+		documentElement.setAttribute("xmlns", XmlConstants.NAMESPACE_DOCBOOK);
+		documentElement.setAttribute("version", "5.0");
+		documentElement.setAttribute("xmlns:xl", XmlConstants.NAMESPACE_XLINK);
+		documentElement.setAttribute("xmlns:xi", XmlConstants.NAMESPACE_XINCLUDE);
 
 		String language = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
 				TrafoConstants.PARAM_LANGUAGE, null);

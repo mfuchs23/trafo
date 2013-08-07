@@ -83,7 +83,7 @@ public class BrEditorTests extends AbstractTests {
 	}
 
 	private void dumpNode(Node node) {
-		String buffer = NodeSerializer.toXML(node);
+		String buffer = new NodeSerializer().toXML(node);
 		System.out.println(buffer);
 	}
 

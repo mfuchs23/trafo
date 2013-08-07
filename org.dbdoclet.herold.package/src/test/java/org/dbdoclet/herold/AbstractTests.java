@@ -21,9 +21,9 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.dbdoclet.herold.Herold.OutputFormat;
-import org.dbdoclet.trafo.AbstractTrafoService;
 import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
+import org.dbdoclet.trafo.TrafoService;
 import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XmlServices;
@@ -118,7 +118,7 @@ public class AbstractTests {
 			}
 
 			herold.convert(new FileInputStream(htmlFile), new FileOutputStream(
-					xmlFile), script);
+					xmlFile), xmlFile, script);
 
 			if (outputFormat == OutputFormat.DITA) {
 				return validateAndParseDita(xmlFile);
@@ -185,7 +185,7 @@ public class AbstractTests {
 		
 		try {
 			
-			AbstractTrafoService trafo = new HtmlDocBookTrafo();
+			TrafoService trafo = new HtmlDocBookTrafo();
 			Script script = new Script();
 			trafo.setInputStream(new ByteArrayInputStream(htmlCode.getBytes()));
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();

@@ -109,7 +109,7 @@ public class HeroldFileTests extends AbstractTests {
 					rootType.toString());
 
 			herold.convert(new FileInputStream(htmlFile), new FileOutputStream(
-					xmlFile), script);
+					xmlFile), xmlFile, script);
 
 		} catch (Exception oops) {
 

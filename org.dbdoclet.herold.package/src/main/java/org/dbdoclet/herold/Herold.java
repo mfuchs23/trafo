@@ -114,11 +114,11 @@ public class Herold {
 			FileNotFoundException {
 
 		Script script = new Script();
-		convert(new FileInputStream(htmlFile), new FileOutputStream(xmlFile),
+		convert(new FileInputStream(htmlFile), new FileOutputStream(xmlFile), xmlFile,
 				script);
 	}
 
-	public void convert(InputStream in, OutputStream out, Script script)
+	public void convert(InputStream in, OutputStream out, File systemId, Script script)
 			throws TrafoException {
 
 		AbstractTrafoService trafo = new HtmlDocBookTrafo();
@@ -127,6 +127,7 @@ public class Herold {
 			trafo = new HtmlDitaTrafo();
 		}
 
+		trafo.setSystemId(systemId);
 		trafo.setInputStream(in);
 		trafo.setOutputStream(out);
 
@@ -332,7 +333,7 @@ public class Herold {
 
 			out = createOutputStream();
 
-			convert(in, out, script);
+			convert(in, out, optOut.getValue(), script);
 
 		} catch (OptionException oops) {
 

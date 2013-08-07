@@ -399,7 +399,7 @@ public abstract class DocBookTransformer {
 
 			DocBookElement elem = (DocBookElement) transform(in, parent);
 
-			xml = NodeSerializer.toXML(elem);
+			xml = new NodeSerializer().toXML(elem);
 			result.append(xml);
 
 			if (xml == null || xml.length() == 0) {

@@ -9,21 +9,26 @@
   <info>
     <author>
       <personname>Michael Fuchs</personname>
+
       <personblurb>
         <para>Software Engineer</para>
       </personblurb>
     </author>
+
     <productname>herold</productname>
   </info>
 
   <refmeta>
     <refentrytitle>herold</refentrytitle>
+
     <manvolnum>1</manvolnum>
+
     <refmiscinfo class="manual">User Commands</refmiscinfo>
   </refmeta>
 
   <refnamediv>
     <refname>herold</refname>
+
     <refpurpose>HTML to DocBook converter</refpurpose>
   </refnamediv>
 
@@ -94,6 +99,7 @@
 
       <varlistentry>
         <term>--docbook-title, -t</term>
+
         <listitem>
           <para>The title for the resulting document.</para>
         </listitem>
@@ -101,6 +107,7 @@
 
       <varlistentry>
         <term>--in, -i</term>
+
         <listitem>
           <para>Specifies the HTML input file.</para>
         </listitem>
@@ -108,6 +115,7 @@
 
       <varlistentry>
         <term>--help, -h</term>
+
         <listitem>
           <para>Prints a help page on the console.</para>
         </listitem>
@@ -115,6 +123,7 @@
 
       <varlistentry>
         <term>--html-encoding, -s</term>
+
         <listitem>
           <para>Specifies the encoding of the HTML source files, such as
           ISO-8859-1.</para>
@@ -123,6 +132,7 @@
 
       <varlistentry>
         <term>--out, -o</term>
+
         <listitem>
           <para>Specifies the DocBook XML destination file.</para>
         </listitem>
@@ -130,6 +140,7 @@
 
       <varlistentry>
         <term>--profile, -p</term>
+
         <listitem>
           <para>A profile file with predefined settings.</para>
         </listitem>
@@ -145,6 +156,7 @@
 
       <varlistentry>
         <term>--version, -V</term>
+
         <listitem>
           <para>Displays the version of herold.</para>
         </listitem>
@@ -193,6 +205,9 @@ amet.&lt;/para&gt;""";
     author-email = "me@somewhere.de";
     author-firstname = "Michael";
     author-surname = "Fuchs";
+    chunk-elements = [ "chapter", "section", "appendix" ];
+// Syntax: chunk-&lt;CHUNK-ELEMENT&gt;-depth = &lt;INT&gt;;
+    chunk-section-depth = 3;  
     collapse-protected-space = "true";
     copyright-holder = "Ingenieurbüro Michael Fuchs";
     copyright-year = "2012";
@@ -216,7 +231,7 @@ amet.&lt;/para&gt;""";
     title-normalize-space = true;
     use-absolute-image-path = false;
 }
-    </programlisting>
+</programlisting>
 
     <refsection>
       <title>Syntax</title>
@@ -244,96 +259,96 @@ amet.&lt;/para&gt;""";
     <refsection>
       <title>Section section-detection</title>
 
-      <para>The section <varname>section-detection</varname> is used
-      to detect section elements in HTML code and to strip off any
-      numbering prefix from the titles.</para>
+      <para>The section <varname>section-detection</varname> is used to detect
+      section elements in HTML code and to strip off any numbering prefix from
+      the titles.</para>
 
-      <para>Many authoring tools allow deeply nested sections. While
-      exporting HTML, it happens, that the nesting becomes deeper than
-      six levels. HTML provides header elements for up to six levels,
-      h1-h6, but no h7 or even more. At this point, the formatting is
-      normally done with the help of CSS and div or p elements. herold
-      is able to detect the header element of HTML, but it can not
-      know about the export format of a specific tool. To solve this
-      problem even for some cases, you can specify the parameter
-      <varname>attribute-class</varname>. It consists of a list of
-      regular expressions, which are matched against the class
-      attribute of each HTML element. If a match is found, the element
-      is considered as a section element. The regular expression can
-      have group, which is interpreted as level indicator. The group
-      must be the first group and it must match against a number,
-      e.g. <literal>^heading(\d+)$</literal>. If the level can not be
-      detected, a level of seven is assumed.</para>
+      <para>Many authoring tools allow deeply nested sections. While exporting
+      HTML, it happens, that the nesting becomes deeper than six levels. HTML
+      provides header elements for up to six levels, h1-h6, but no h7 or even
+      more. At this point, the formatting is normally done with the help of
+      CSS and div or p elements. herold is able to detect the header element
+      of HTML, but it can not know about the export format of a specific tool.
+      To solve this problem even for some cases, you can specify the parameter
+      <varname>attribute-class</varname>. It consists of a list of regular
+      expressions, which are matched against the class attribute of each HTML
+      element. If a match is found, the element is considered as a section
+      element. The regular expression can have group, which is interpreted as
+      level indicator. The group must be the first group and it must match
+      against a number, e.g. <literal>^heading(\d+)$</literal>. If the level
+      can not be detected, a level of seven is assumed.</para>
 
-      <para>Because DocBook XSL stylesheets take care of the section
-      numbering while transforming the DocBook XML to a specific
-      output, it is often necessary to strip the numbering already
-      defined in the HTML page. Otherwise you end up with two
-      numbering texts in front of your titles. To help herold with the
-      detection of numbering patterns, use the parameter
-      <varname>section-numbering-pattern</varname>.</para>
-      <para>
+      <para>Because DocBook XSL stylesheets take care of the section numbering
+      while transforming the DocBook XML to a specific output, it is often
+      necessary to strip the numbering already defined in the HTML page.
+      Otherwise you end up with two numbering texts in front of your titles.
+      To help herold with the detection of numbering patterns, use the
+      parameter <varname>section-numbering-pattern</varname>.</para>
 
-	<variablelist>
+      <para><variablelist>
           <varlistentry>
             <term>attribute-class</term>
+
             <listitem>
-              <para>A regular expression, which is applied to every p
-              and div element. If the expression matches, the current
-              element is handled as a section element. If the regular
-              expression has groups, the first group will be used as
-              nesting level, otherwise level seven is assumed.</para>
+              <para>A regular expression, which is applied to every p and div
+              element. If the expression matches, the current element is
+              handled as a section element. If the regular expression has
+              groups, the first group will be used as nesting level, otherwise
+              level seven is assumed.</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>section-numbering-pattern</term>
+
             <listitem>
-              <para>Normally you want to get rid of the section
-              numbering that comes with the HTML data, because it
-              becomes part of the title text in DocBook. The section
-              numbers will the appear twice in your target media. One
-              from HTML and one from the DocBook XSL processing. The
-              parameter section-numbering-pattern defines a regular
-              expression, which is matched against the beginning of
+              <para>Normally you want to get rid of the section numbering that
+              comes with the HTML data, because it becomes part of the title
+              text in DocBook. The section numbers will the appear twice in
+              your target media. One from HTML and one from the DocBook XSL
+              processing. The parameter section-numbering-pattern defines a
+              regular expression, which is matched against the beginning of
               every section title. If it matches, the matching part is
               removed.</para>
-           </listitem>
+            </listitem>
           </varlistentry>
-	</variablelist>
-      </para>
+        </variablelist></para>
     </refsection>
 
     <refsection>
       <title>Section list-detection</title>
-      <para>Sometimes lists are not represented with ul, ol or dl
-      tags, but they are represented as p tags with additional css
-      formatting. If you use a tool, which creates or exports HTML
-      with such a construct, the conversion will end up with para
-      elements, instead of the corresponding list elements in
-      DocBook. To recreate the lists in some cases, you can use the
-      section <varname>list-detection</varname>. The parameters
+
+      <para>Sometimes lists are not represented with ul, ol or dl tags, but
+      they are represented as p tags with additional css formatting. If you
+      use a tool, which creates or exports HTML with such a construct, the
+      conversion will end up with para elements, instead of the corresponding
+      list elements in DocBook. To recreate the lists in some cases, you can
+      use the section <varname>list-detection</varname>. The parameters
       <varname>itemized-attribute-class</varname> and
-      <varname>ordered-attribute-class</varname> let you define lists
-      of regular expression, which should match against the class
-      attribute of listitem elements in the HTML. herold tries to
-      rebuild the proper list structure from this information, even
-      for nested lists.</para>
+      <varname>ordered-attribute-class</varname> let you define lists of
+      regular expression, which should match against the class attribute of
+      listitem elements in the HTML. herold tries to rebuild the proper list
+      structure from this information, even for nested lists.</para>
     </refsection>
 
     <refsection>
       <title>Section HTML</title>
+
       <para>The section HTML defines parameters, which control the loading and
       parsing of the HTML input data.</para>
-      <para>
-	<variablelist>
+
+      <para><variablelist>
           <varlistentry>
             <term>encoding</term>
+
             <listitem>
               <para>The character set used to read the input stream.</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>exclude</term>
+
             <listitem>
               <para>Defines an array of xpath expressions. All matches are
               removed from the HTML DOM tree before transformation.</para>
@@ -341,11 +356,14 @@ amet.&lt;/para&gt;""";
           </varlistentry>
         </variablelist></para>
     </refsection>
+
     <refsection>
       <title>Section DocBook</title>
+
       <para><variablelist>
           <varlistentry>
             <term>abstract</term>
+
             <listitem>
               <para>The text for the abstract element of the info section. If
               the text is structured with newlines, use three double quotes as
@@ -355,22 +373,56 @@ amet.&lt;/para&gt;""";
               text will parsed and can contain DocBook elements.</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>add-index</term>
+
             <listitem>
               <para>If set to true, an index element is inserted at the end of
               the DocBook XML.</para>
             </listitem>
           </varlistentry>
+
+          <varlistentry>
+            <term>chunk-elements</term>
+
+            <listitem>
+              <para>Defines an array of element names. If an element of this
+              list is detected while writing the output, the element and all
+              child nodes will be written to a separate file. This new file
+              will be included into the parent file with an
+              <markup>xi:include</markup> tag. Recursive structures result in
+              recursive includes. You might want to use this, if you are
+              transforming big HTML files and the resulting DocBook XML file
+              becomes uncomfortable large. </para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>chunk-&lt;CHUNK-ELEMENT&gt;-depth</term>
+
+            <listitem>
+              <para>Defines the depth for a chunk element, until the chunking
+              should be executed, eg <property>chunk-section-depth =
+              3</property>. If an element defined for chunking is nested
+              recursivley, you might want to control the depth to which the
+              chunking should be done. The default depth is 1, which means
+              only the topmost element is separated.</para>
+            </listitem>
+          </varlistentry>
+
           <varlistentry>
             <term>create-xref-label</term>
+
             <listitem>
               <para>if set to false, anchor elements doesn't get a xreflabel
               attribute.</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>decompose-tables</term>
+
             <listitem>
               <para>If set to true, tables structures will be ignored. The
               content of the table cells will be inserted into the DocBook XML
@@ -380,22 +432,28 @@ amet.&lt;/para&gt;""";
               structure.</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>document-element</term>
+
             <listitem>
               <para>The document element you want to use. Must be one of
               article, book, part or reference.</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>encoding</term>
+
             <listitem>
               <para>The character set which will be used for writing the
               output file.</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>image-data-formats</term>
+
             <listitem>
               <para>An array of image formats. These formats will be inserted
               as imageobject elements, additionally to the format found in the
@@ -405,16 +463,20 @@ amet.&lt;/para&gt;""";
               "fo-&lt;FORMAT&gt;".</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>title</term>
+
             <listitem>
               <para>The title of the resulting document. If this parameter is
               undefined, herold tries to dected the title from the head
               section of the HTML data.</para>
             </listitem>
           </varlistentry>
+
           <varlistentry>
             <term>use-absolute-image-path</term>
+
             <listitem>
               <para>If you want absolute image paths in the fileref attribute
               of the imagedata element, set this parameter to true.</para>
@@ -426,6 +488,7 @@ amet.&lt;/para&gt;""";
 
   <refsection>
     <title>Copyright</title>
+
     <para>Copyright 2001-2013 Michael Fuchs. License GPLv3+: GNU GPL version 3
     or later <link
     xlink:href="http://gnu.org/licenses/gpl.html">http://gnu.org/licenses/gpl.html</link>.

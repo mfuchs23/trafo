@@ -2,6 +2,7 @@ package org.dbdoclet.trafo.internal.html.dita;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
@@ -66,7 +67,7 @@ public class PostprocessStage1 extends AbstractNodeVisitor {
 			return;
 		}
 
-		ArrayList<String> stripPrefixesList = new ArrayList<String>();
+		List<String> stripPrefixesList = new ArrayList<String>();
 		String text = elem.getTextContent();
 
 		if (elem instanceof ListItem

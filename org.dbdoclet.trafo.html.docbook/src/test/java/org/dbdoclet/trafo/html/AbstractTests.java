@@ -12,8 +12,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dbdoclet.html.parser.HtmlParser;
 import org.dbdoclet.tag.html.HtmlFragment;
-import org.dbdoclet.trafo.AbstractTrafoService;
 import org.dbdoclet.trafo.TrafoResult;
+import org.dbdoclet.trafo.TrafoService;
 import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XPathServices;
@@ -70,7 +70,7 @@ public class AbstractTests {
 		
 		try {
 			
-			AbstractTrafoService trafo = new HtmlDocBookTrafo();
+			TrafoService trafo = new HtmlDocBookTrafo();
 			Script script = new Script();
 			trafo.setInputStream(new ByteArrayInputStream(htmlCode.getBytes()));
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();

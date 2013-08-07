@@ -1,9 +1,11 @@
 package org.dbdoclet.trafo.html;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.dbdoclet.html.parser.ParserException;
 import org.dbdoclet.html.tokenizer.TokenizerException;
+import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlFragment;
 import org.w3c.dom.Document;
@@ -19,6 +21,5 @@ public interface IHtmlProvider {
 
 	public HtmlFragment parseFragment(String htmlCode) throws IOException,
 			ParserException, TokenizerException;
-
-
+	public void setProgressListeners(ArrayList<ProgressListener> listeners);
 }

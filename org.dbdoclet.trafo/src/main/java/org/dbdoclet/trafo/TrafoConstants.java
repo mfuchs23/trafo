@@ -31,6 +31,7 @@ public class TrafoConstants {
 	public static final String PARAM_AUTHOR_EMAIL = "author-email";
 	public static final String PARAM_AUTHOR_FIRSTNAME = "author-firstname";
 	public static final String PARAM_AUTHOR_SURNAME = "author-surname";
+	public static final String PARAM_CHUNK_ELEMENTS = "chunk-elements";
 	public static final String PARAM_COLLAPSE_PROTECTED_SPACE = "collapse-protected-space";
 	public static final String PARAM_COPYRIGHT_HOLDER = "copyright-holder";
 	public static final String PARAM_COPYRIGHT_YEAR = "copyright-year";

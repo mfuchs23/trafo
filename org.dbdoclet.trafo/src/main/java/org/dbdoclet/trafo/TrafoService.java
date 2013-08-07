@@ -1,5 +1,6 @@
 package org.dbdoclet.trafo;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -23,4 +24,6 @@ public interface TrafoService {
 	public void removeProgressListener(ProgressListener listener);
 	public void setInputStream(InputStream in);
 	public void setOutputStream(OutputStream out);
+
+	public File getSystemId();
 }

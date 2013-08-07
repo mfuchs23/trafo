@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -147,6 +148,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 			visitor.setScript(script);
 
 			HtmlProvider htmlProvider = new HtmlProvider(script);
+			htmlProvider.setProgressListeners(listeners);
 
 			NodeImpl htmlDoc = null;
 			ElementImpl documentElement = null;
@@ -233,6 +235,23 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 
 				NodeSerializer serializer = new NodeSerializer();
 				serializer.addProgressListeners(listeners);
+				serializer.setSystemId(getSystemId());
+				serializer.setEncoding(encoding);
+
+				List<String> chunkElementList = script.getTextParameterList(
+						TrafoConstants.SECTION_DOCBOOK,
+						TrafoConstants.PARAM_CHUNK_ELEMENTS,
+						new ArrayList<String>());
+
+				for (String chunkElement : chunkElementList) {
+					logger.debug(String.format("Adding chunk element %s",
+							chunkElement));
+					int depth = script.getIntParameter(
+							TrafoConstants.SECTION_DOCBOOK,
+							String.format("chunk-%s-depth", chunkElement), 1);
+					serializer.addChunkElement(chunkElement, depth);
+				}
+
 				OutputStreamWriter writer = new OutputStreamWriter(out,
 						encoding);
 
@@ -258,19 +277,19 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 	private String retrieveHtmlCode(InputStream in, String encoding)
 			throws IOException {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream(); 
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		byte[] buffer = new byte[4096];
-		
+
 		int n = in.read(buffer);
-		while ( n != -1) {
+		while (n != -1) {
 			out.write(buffer, 0, n);
 			n = in.read(buffer);
 		}
 
 		in.close();
 		out.close();
-		
+
 		return new String(out.toByteArray(), encoding);
 	}
 
