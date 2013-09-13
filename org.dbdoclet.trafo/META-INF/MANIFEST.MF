@@ -27,5 +27,5 @@ Import-Package: org.antlr.runtime;version="3.2.0",
  org.dbdoclet.xiphias.dom,
  org.osgi.framework;version="1.5.0",
  org.osgi.service.component;version="1.1.0"
-Require-Bundle: org.junit4;resolution:=optional
+Require-Bundle: org.junit;bundle-version="4.11.0"
 Bundle-ClassPath: .

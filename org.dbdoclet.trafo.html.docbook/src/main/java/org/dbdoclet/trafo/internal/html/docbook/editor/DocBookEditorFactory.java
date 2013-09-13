@@ -20,7 +20,6 @@ import org.dbdoclet.trafo.script.Script;
 public class DocBookEditorFactory implements IEditorFactory {
 
 	private LinkManager linkManager;
-	private Script script;
 	private DocBookTagFactory tagFactory;
 
 	/*
@@ -124,7 +123,6 @@ public class DocBookEditorFactory implements IEditorFactory {
 	}
 
 	public void setScript(Script script) {
-		this.script = script;
 	}
 
 	public void setTagFactory(DocBookTagFactory tagFactory) {

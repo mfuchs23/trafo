@@ -17,6 +17,7 @@ import org.dbdoclet.tag.docbook.SectionElement;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class PreEditor extends DocBookEditor {
 
@@ -29,7 +30,7 @@ public class PreEditor extends DocBookEditor {
 		HtmlElement pre = values.getHtmlElement();
 
 		DocBookElement candidate;
-		DocBookElement parent = getDocBookElementParent();
+		NodeImpl parent = getParent();
 
 		if (getParent() instanceof Entry) {
 
@@ -59,7 +60,7 @@ public class PreEditor extends DocBookEditor {
 
 		} else {
 
-			if (parent.isSection()) {
+			if (isSection(parent)) {
 
 				SectionElement sect = (SectionElement) parent;
 				SectionElement firstSectionChild = sect.getFirstSectionChild();

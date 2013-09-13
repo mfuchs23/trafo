@@ -8,12 +8,12 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Literal;
 import org.dbdoclet.tag.html.Code;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class CodeEditor extends DocBookEditor {
 
@@ -24,9 +24,9 @@ public class CodeEditor extends DocBookEditor {
 	DocBookTagFactory dbfactory = getTagFactory();
 
 	Code code = (Code) getHtmlElement();
-	DocBookElement parent = getDocBookElementParent();
+	NodeImpl parent = getParent();
 
-	if (parent.isContentModel() == true) {
+	if (isContentModel(parent) == true) {
 
 	    setCurrent(dbfactory.createProgramListing());
 	    parent.appendChild(getCurrent());
@@ -38,7 +38,7 @@ public class CodeEditor extends DocBookEditor {
 	    candidate.setParentNode(parent);
 
 	    if (candidate.validate()) {
-		parent.appendChild(candidate);
+	    	parent.appendChild(candidate);
 	    }
 
 	    traverse(false);

@@ -7,6 +7,9 @@
       status="integration"
       revision="${module.version}">
   </info>
+  <publications>
+  	<artifact name="herold" />
+  </publications>
   <dependencies>
  	<dependency org="org.antlr" name="org.antlr.runtime" rev="3.2" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.commons" rev="latest.integration" />

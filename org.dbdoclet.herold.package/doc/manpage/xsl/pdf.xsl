@@ -1,13 +1,5 @@
 <xsl:stylesheet exclude-result-prefixes="#default" version="1.0" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/dbdoclet-titlepage.xsl"/>
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/autoidx-kosek.xsl"/>
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/autoidx-kimber.xsl"/>
-  <xsl:include href="http://dbdoclet.org/xsl/functions.xsl"/>
-  <xsl:include href="http://dbdoclet.org/xsl/fo/fop1.xsl"/>
-  <xsl:include href="http://dbdoclet.org/xsl/fo/themes/color.xsl"/>
-  <xsl:include href="http://dbdoclet.org/xsl/fo/synopsis.xsl"/>
-  <!-- SECTION Parameter -->
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/dbdoclet-titlepage.xsl"/>  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/autoidx-kosek.xsl"/>  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/autoidx-kimber.xsl"/>  <xsl:include href="http://dbdoclet.org/xsl/functions.xsl"/>  <xsl:include href="http://dbdoclet.org/xsl/fo/fop1.xsl"/>  <xsl:include href="http://dbdoclet.org/xsl/fo/themes/color.xsl"/>  <xsl:include href="http://dbdoclet.org/xsl/fo/synopsis.xsl"/>  <!-- SECTION Parameter -->
    <xsl:param name="admon.graphics">1</xsl:param>
   <xsl:param name="admon.graphics.extension">.gif</xsl:param>
   <xsl:param name="admon.graphics.path">file:/usr/share/dbdoclet/docbook/xsl/images/</xsl:param>
@@ -32,8 +24,7 @@
   <xsl:param name="callout.icon.size">7.00pt</xsl:param>
   <xsl:param name="callout.unicode">0</xsl:param>
   <xsl:param name="callout.unicode.number.limit">10</xsl:param>
-  <xsl:param name="callout.unicode.start-character"/>
-  <xsl:param name="callouts.extension">1</xsl:param>
+  <xsl:param name="callout.unicode.start-character"/>  <xsl:param name="callouts.extension">1</xsl:param>
   <xsl:param name="chapter.autolabel">1</xsl:param>
   <xsl:param name="collect.xref.targets">no</xsl:param>
   <xsl:param name="column.count.back">1</xsl:param>
@@ -41,15 +32,12 @@
   <xsl:param name="column.count.front">1</xsl:param>
   <xsl:param name="column.count.index">1</xsl:param>
   <xsl:param name="component.label.includes.part.label">0</xsl:param>
-  <xsl:param name="current.docid"/>
-  <xsl:param name="default.table.frame">all</xsl:param>
+  <xsl:param name="current.docid"/>  <xsl:param name="default.table.frame">all</xsl:param>
   <xsl:param name="default.table.rules">none</xsl:param>
   <xsl:param name="double.sided">0</xsl:param>
   <xsl:param name="draft.mode">0</xsl:param>
   <xsl:param name="draft.watermark.image">file:/usr/share/dbdoclet/docbook/xsl/images/draft.png</xsl:param>
-  <xsl:param name="ebnf.assignment"/>
-  <xsl:param name="ebnf.statement.terminator"/>
-  <xsl:param name="footer.column.widths">1 1 1</xsl:param>
+  <xsl:param name="ebnf.assignment"/>  <xsl:param name="ebnf.statement.terminator"/>  <xsl:param name="footer.column.widths">1 1 1</xsl:param>
   <xsl:param name="footer.rule">1</xsl:param>
   <xsl:param name="footer.table.height">14.00pt</xsl:param>
   <xsl:param name="footers.on.blank.pages">1</xsl:param>
@@ -59,28 +47,20 @@
   <xsl:param name="generate.index">1</xsl:param>
   <xsl:param name="generate.section.toc.level">0</xsl:param>
   <xsl:param name="generate.toc"> /appendix toc,title article/appendix nop /article toc,title book toc,title,figure,table,example,equation /chapter toc,title part toc,title /preface toc,title reference toc,title /sect1 toc /sect2 toc /sect3 toc /sect4 toc /sect5 toc /section toc set toc,title </xsl:param>
-  <xsl:param name="glossary.collection"/>
-  <xsl:param name="glossterm.auto.link">0</xsl:param>
-  <xsl:param name="graphic.default.extension"/>
-  <xsl:param name="header.column.widths">1 1 1</xsl:param>
+  <xsl:param name="glossary.collection"/>  <xsl:param name="glossterm.auto.link">0</xsl:param>
+  <xsl:param name="graphic.default.extension"/>  <xsl:param name="header.column.widths">1 1 1</xsl:param>
   <xsl:param name="header.rule">1</xsl:param>
   <xsl:param name="header.table.height">14.00pt</xsl:param>
   <xsl:param name="headers.on.blank.pages">1</xsl:param>
-  <xsl:param name="highlight.default.language"/>
-  <xsl:param name="highlight.source">0</xsl:param>
+  <xsl:param name="highlight.default.language"/>  <xsl:param name="highlight.source">0</xsl:param>
   <xsl:param name="highlight.xslthl.config">file:/usr/share/dbdoclet/docbook/xsl/highlighting/xslthl-config.xml</xsl:param>
   <xsl:param name="hyphenate">true</xsl:param>
   <xsl:param name="hyphenate.verbatim">0</xsl:param>
-  <xsl:param name="hyphenate.verbatim.characters"/>
-  <xsl:param name="ignore.image.scaling">0</xsl:param>
-  <xsl:param name="img.src.path"/>
-  <xsl:param name="index.method">basic</xsl:param>
-  <xsl:param name="index.number.separator"/>
-  <xsl:param name="index.on.role">0</xsl:param>
+  <xsl:param name="hyphenate.verbatim.characters"/>  <xsl:param name="ignore.image.scaling">0</xsl:param>
+  <xsl:param name="img.src.path"/>  <xsl:param name="index.method">basic</xsl:param>
+  <xsl:param name="index.number.separator"/>  <xsl:param name="index.on.role">0</xsl:param>
   <xsl:param name="index.on.type">0</xsl:param>
-  <xsl:param name="index.range.separator"/>
-  <xsl:param name="index.term.separator"/>
-  <xsl:param name="insert.link.page.number">no</xsl:param>
+  <xsl:param name="index.range.separator"/>  <xsl:param name="index.term.separator"/>  <xsl:param name="insert.link.page.number">no</xsl:param>
   <xsl:param name="insert.xref.page.number">no</xsl:param>
   <xsl:param name="keep.relative.image.uris">0</xsl:param>
   <xsl:param name="l10n.gentext.use.xref.language">0</xsl:param>
@@ -94,15 +74,13 @@
   <xsl:param name="make.single.year.ranges">0</xsl:param>
   <xsl:param name="marker.section.level">2</xsl:param>
   <xsl:param name="nominal.table.width">6.00in</xsl:param>
-  <xsl:param name="olink.base.uri"/>
-  <xsl:param name="page.margin.bottom">0.50in</xsl:param>
+  <xsl:param name="olink.base.uri"/>  <xsl:param name="page.margin.bottom">0.50in</xsl:param>
   <xsl:param name="page.margin.top">0.50in</xsl:param>
   <xsl:param name="page.orientation">portrait</xsl:param>
   <xsl:param name="paper.type">A4</xsl:param>
   <xsl:param name="part.autolabel">I</xsl:param>
   <xsl:param name="preface.autolabel">0</xsl:param>
-  <xsl:param name="preferred.mediaobject.role"/>
-  <xsl:param name="process.empty.source.toc">0</xsl:param>
+  <xsl:param name="preferred.mediaobject.role"/>  <xsl:param name="process.empty.source.toc">0</xsl:param>
   <xsl:param name="process.source.toc">0</xsl:param>
   <xsl:param name="qanda.in.toc">0</xsl:param>
   <xsl:param name="quandadiv.autolabel">0</xsl:param>
@@ -129,8 +107,7 @@
   <xsl:param name="toc.max.depth">8</xsl:param>
   <xsl:param name="toc.section.depth">1</xsl:param>
   <xsl:param name="ulink.footnotes">0</xsl:param>
-  <xsl:param name="ulink.hyphenate"/>
-  <xsl:param name="ulink.hyphenate.chars">/</xsl:param>
+  <xsl:param name="ulink.hyphenate"/>  <xsl:param name="ulink.hyphenate.chars">/</xsl:param>
   <xsl:param name="ulink.show">1</xsl:param>
   <xsl:param name="use.extensions">1</xsl:param>
   <xsl:param name="use.role.for.mediaobject">1</xsl:param>
@@ -138,10 +115,8 @@
   <xsl:param name="variablelist.max.termlength">24</xsl:param>
   <xsl:param name="variablelist.term.break.after">0</xsl:param>
   <xsl:param name="variablelist.term.separator">, </xsl:param>
-  <xsl:param name="xref.label-page.separator"/>
-  <xsl:param name="xref.label-title.separator">: </xsl:param>
-  <xsl:param name="xref.title-page.separator"/>
-  <xsl:attribute-set name="admonition.title.properties">
+  <xsl:param name="xref.label-page.separator"/>  <xsl:param name="xref.label-title.separator">: </xsl:param>
+  <xsl:param name="xref.title-page.separator"/>  <xsl:attribute-set name="admonition.title.properties">
     <xsl:attribute name="font-size">12pt</xsl:attribute>
     <xsl:attribute name="font-family">DejaVu Sans</xsl:attribute>
     <xsl:attribute name="font-weight">normal</xsl:attribute>
@@ -154,6 +129,32 @@
     <xsl:attribute name="font-weight">normal</xsl:attribute>
     <xsl:attribute name="font-style">normal</xsl:attribute>
     <xsl:attribute name="font-size">9pt</xsl:attribute>
+    <xsl:attribute name="color">#000000</xsl:attribute>
+    <xsl:attribute name="background-color">#ffffff</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="normal.para.spacing">
+    <xsl:attribute name="space-before.minimum">0.00pt</xsl:attribute>
+    <xsl:attribute name="space-before.optimum">0.00pt</xsl:attribute>
+    <xsl:attribute name="space-before.maximum">0.00pt</xsl:attribute>
+    <xsl:attribute name="space-after.minimum">0.00pt</xsl:attribute>
+    <xsl:attribute name="space-after.optimum">0.00pt</xsl:attribute>
+    <xsl:attribute name="space-after.maximum">0.00pt</xsl:attribute>
+    <xsl:attribute name="text-indent">15.00pt</xsl:attribute>
+    <xsl:attribute name="font-family">DejaVu Sans</xsl:attribute>
+    <xsl:attribute name="font-weight">normal</xsl:attribute>
+    <xsl:attribute name="font-style">normal</xsl:attribute>
+    <xsl:attribute name="font-size">12pt</xsl:attribute>
+    <xsl:attribute name="color">#000000</xsl:attribute>
+    <xsl:attribute name="background-color">#ffffff</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="section.title.properties">
+    <xsl:attribute name="space-after.minimum">10.00pt</xsl:attribute>
+    <xsl:attribute name="space-after.optimum">10.00pt</xsl:attribute>
+    <xsl:attribute name="space-after.maximum">10.00pt</xsl:attribute>
+    <xsl:attribute name="font-family">DejaVu Sans</xsl:attribute>
+    <xsl:attribute name="font-weight">normal</xsl:attribute>
+    <xsl:attribute name="font-style">normal</xsl:attribute>
+    <xsl:attribute name="font-size">12pt</xsl:attribute>
     <xsl:attribute name="color">#000000</xsl:attribute>
     <xsl:attribute name="background-color">#ffffff</xsl:attribute>
   </xsl:attribute-set>

@@ -11,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.tag.docbook.Abstract;
-import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Info;
 import org.dbdoclet.tag.html.HtmlDocument;

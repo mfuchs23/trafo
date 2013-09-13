@@ -21,6 +21,7 @@ import org.dbdoclet.tag.html.A;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class AEditor extends DocBookEditor {
 
@@ -31,8 +32,8 @@ public class AEditor extends DocBookEditor {
 		setValues(super.edit(values));
 		DocBookTagFactory dbfactory = getTagFactory();
 
-		DocBookElement ancestor;
-		DocBookElement parent = getDocBookElementParent();
+		NodeImpl ancestor;
+		NodeImpl parent = getParent();
 
 		traverse(true);
 
@@ -42,7 +43,7 @@ public class AEditor extends DocBookEditor {
 		// different situations.
 		ancestor = parent;
 
-		if (parent.isContentModel()) {
+		if (isContentModel(parent)) {
 
 			Para para = dbfactory.createPara();
 			parent.appendChild(para);

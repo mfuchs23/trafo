@@ -33,9 +33,9 @@ public abstract class AbstractInlineEditor extends DocBookEditor {
 		DocBookTagFactory dbfactory = getTagFactory();
 		traverse(true);
 
-		DocBookElement parent = getDocBookElementParent();
+		NodeImpl parent = getParent();
 
-		if (parent.isContentModel()) {
+		if (isContentModel(parent)) {
 
 			Para para = dbfactory.createPara();
 			para.setFormatType(ElementImpl.FORMAT_INLINE);

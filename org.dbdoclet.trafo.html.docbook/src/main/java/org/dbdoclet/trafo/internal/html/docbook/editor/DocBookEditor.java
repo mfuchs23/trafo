@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.service.StringServices;
 import org.dbdoclet.tag.docbook.DocBookElement;
+import org.dbdoclet.tag.docbook.DocBookFragment;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.DocBookVersion;
 import org.dbdoclet.tag.docbook.Para;
@@ -371,17 +372,6 @@ public abstract class DocBookEditor implements IEditor {
 		return false;
 	}
 
-	protected DocBookElement getDocBookElementParent() {
-
-		NodeImpl parent = getParent();
-		
-		if (parent instanceof DocBookElement) {
-			return (DocBookElement) parent;
-		}
-		
-		return null;
-	}
-
 	protected boolean isSection(NodeImpl parentNode) {
 
 		if (parentNode instanceof DocBookElement) {
@@ -405,6 +395,10 @@ public abstract class DocBookEditor implements IEditor {
 			if (parent.isContentModel()) {
 				return true;
 			}
+		}
+		
+		if (parentNode instanceof DocBookFragment) {
+			return true;
 		}
 		
 		return false;

@@ -9,11 +9,11 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.BlockQuote;
-import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class BlockquoteEditor extends DocBookEditor {
 
@@ -26,7 +26,7 @@ public class BlockquoteEditor extends DocBookEditor {
 
 		BlockQuote blockquote = dbfactory.createBlockQuote();
 
-		DocBookElement parent = getDocBookElementParent();
+		NodeImpl parent = getParent();
 
 		parent.appendChild(blockquote);
 		blockquote.setParentNode(parent);

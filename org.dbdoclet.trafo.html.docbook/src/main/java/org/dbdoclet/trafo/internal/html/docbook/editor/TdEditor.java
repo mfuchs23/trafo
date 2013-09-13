@@ -14,7 +14,6 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.NodeListImpl;

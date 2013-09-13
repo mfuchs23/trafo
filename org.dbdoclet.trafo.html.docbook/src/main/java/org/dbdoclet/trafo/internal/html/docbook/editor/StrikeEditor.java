@@ -16,35 +16,36 @@ import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class StrikeEditor extends DocBookEditor {
 
-    @Override
-	public EditorInstruction edit(EditorInstruction values) throws EditorException {
+	@Override
+	public EditorInstruction edit(EditorInstruction values)
+			throws EditorException {
 
-	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = getTagFactory();
+		setValues(super.edit(values));
+		DocBookTagFactory dbfactory = getTagFactory();
 
-	traverse(true);
-	Emphasis emphasis = dbfactory.createEmphasis();
-	emphasis.setRole("strikethrough");
+		traverse(true);
+		Emphasis emphasis = dbfactory.createEmphasis();
+		emphasis.setRole("strikethrough");
 
-	setCurrent(emphasis);
+		setCurrent(emphasis);
 
-	if (emphasis.isValidParent(getDocBookElementParent()) == false) {
+		if (emphasis.isValidParent(getParent()) == false) {
 
-	    SimPara candidate = dbfactory.createSimPara();
-	    candidate.setParentNode(getParent());
+			SimPara candidate = dbfactory.createSimPara();
+			candidate.setParentNode(getParent());
 
-	    if (candidate.validate()) {
+			if (candidate.validate()) {
 
-		getParent().appendChild(candidate);
-		candidate.appendChild(getCurrent());
-	    }
+				getParent().appendChild(candidate);
+				candidate.appendChild(getCurrent());
+			}
 
-	} else {
+		} else {
 
-	    getCurrent().setParentNode(getParent());
-	    getParent().appendChild(getCurrent());
+			getCurrent().setParentNode(getParent());
+			getParent().appendChild(getCurrent());
+		}
+
+		return finalizeValues();
 	}
-
-	return finalizeValues();
-    }
 }

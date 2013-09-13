@@ -15,9 +15,10 @@
 	<property file="module.properties" />
 
 	<target name="build">
-
+		
 		<antcall target="default.compile" />
-		<jar destfile="distrib/herold_${module.version}.jar">
+		
+		<jar destfile="distrib/herold.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.dbdoclet.herold.Herold" />
 				<attribute name="Class-Path" value="../conf/ 
@@ -42,6 +43,8 @@
 				<include name="org.dbdoclet.trafo.html.dita_*.jar"/>
 			</zipgroupfileset>
 		</jar>
+
+		<antcall target="default.publish" />
 	</target>
 
 	<!-- ========================================== -->
@@ -73,10 +76,14 @@
 				<include name="herold_${module.version}.jar" />
 			</fileset>
 			<fileset dir="lib">
+				<include name="javax.help_*.jar" />
 				<include name="resolver_*.jar" />
 				<include name="org.antlr.runtime_*.jar" />
+				<include name="org.apache.commons.codec_*.jar" />
 				<include name="org.apache.commons.jxpath_*.jar" />
 				<include name="org.apache.commons.logging_*.jar" />
+				<include name="org.apache.felix.scr_*.jar" />
+				<include name="org.apache.xmlgraphics_*.jar" />
 				<include name="org.apache.log4j_*.jar" />
 			<!--
 				<include name="org.apache.commons.codec_*.jar" />
@@ -122,16 +129,20 @@
 		</copy>
 		<srcpacker product="herold"
 			workdir="/usr/share/herold/src"
-			jarfile="distrib/herold_${module.version}.jar" 
+			jarfile="distrib/herold.jar" 
 			zipfile="distrib/herold-src_${module.version}.zip"
 			buildfile="root/src/build.xml">
 			<fileset dir="src/main/java"/>	
-			<fileset dir="../org.dbdoclet.commons/src/main/java"/>	
-			<fileset dir="../org.dbdoclet.getopts/src/main/java"/>	
-			<fileset dir="../org.dbdoclet.xiphias/src/main/java"/>	
+			<fileset dir="../../common/org.dbdoclet.commons/src/main/java"/>	
+			<fileset dir="../../common/org.dbdoclet.getopts/src/main/java"/>	
+			<fileset dir="../../common/org.dbdoclet.jive/src/main/java"/>	
+			<fileset dir="../../markup/org.dbdoclet.xiphias/src/main/java"/>	
+			<fileset dir="../../markup/org.dbdoclet.tag/src/main/java"/>	
+			<fileset dir="../../markup/org.dbdoclet.html.parser/src/main/java"/>	
 			<fileset dir="../org.dbdoclet.trafo/src/main/java"/>	
-			<fileset dir="../org.dbdoclet.trafo.html.docbook/src/main/java"/>	
+			<fileset dir="../org.dbdoclet.trafo.html/src/main/java"/>	
 			<fileset dir="../org.dbdoclet.trafo.html.dita/src/main/java"/>	
+			<fileset dir="../org.dbdoclet.trafo.html.docbook/src/main/java"/>	
 		</srcpacker>
 	</target>
 

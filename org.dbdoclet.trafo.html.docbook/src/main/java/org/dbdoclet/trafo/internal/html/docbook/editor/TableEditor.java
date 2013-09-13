@@ -18,7 +18,6 @@ import org.dbdoclet.tag.html.Td;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.w3c.dom.Element;
 

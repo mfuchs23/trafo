@@ -13,7 +13,6 @@ import java.util.List;
 import org.dbdoclet.tag.docbook.Abstract;
 import org.dbdoclet.tag.docbook.Author;
 import org.dbdoclet.tag.docbook.Date;
-import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Info;
 import org.dbdoclet.tag.docbook.Keyword;

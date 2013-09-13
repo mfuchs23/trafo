@@ -38,7 +38,7 @@ public class FontEditor extends DocBookEditor {
 
 	setCurrent(emphasis);
 
-	if (emphasis.isValidParent(getDocBookElementParent()) == false) {
+	if (emphasis.isValidParent(getParent()) == false) {
 
 	    SimPara candidate = dbfactory.createSimPara();
 	    candidate.setParentNode(getParent());

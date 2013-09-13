@@ -47,9 +47,11 @@
     problem. One possible solution is to convert HTML to DocBook XML, because
     DocBook is a semantic markup language for documentation, which enables its
     users to create document content that captures the logical structure of
-    the content. The command line tool <productname>herold</productname> can
-    be used to convert HTML to DocBook. Because HTML elements are often used
-    not as intended, the possibilities for such a transformation are somewhat
+    the content. </para>
+
+    <para>The command line tool <productname>herold</productname> can be used
+    to convert HTML to DocBook. Because HTML elements are often used not as
+    intended, the possibilities for such a transformation are somewhat
     limited. herold is part of the dbdoclet suite of tools. For more
     information visit <link
     xlink:href="http://www.dbdoclet.org">http://www.dbdoclet.org</link>.</para>
@@ -394,7 +396,7 @@ amet.&lt;/para&gt;""";
               <markup>xi:include</markup> tag. Recursive structures result in
               recursive includes. You might want to use this, if you are
               transforming big HTML files and the resulting DocBook XML file
-              becomes uncomfortable large. </para>
+              becomes uncomfortable large.</para>
             </listitem>
           </varlistentry>
 
