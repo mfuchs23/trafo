@@ -90,11 +90,6 @@ public class ImgEditor extends DocBookEditor {
 		logger.debug("Parameter use-absolute-image-path is set to "
 				+ useAbsoluteImagePath);
 
-		List<String> imageDataFormats = dbfactory.createImageDataFormatList(
-				script.getTextParameterList(TrafoConstants.SECTION_DOCBOOK,
-						TrafoConstants.PARAM_IMAGEDATA_FORMATS,
-						new ArrayList<String>()), img.getSrc());
-
 		String imagePath = "./img";
 
 		Param<?> param = script
@@ -178,8 +173,8 @@ public class ImgEditor extends DocBookEditor {
 
 		try {
 
-			dbfactory.createHtmlImageData(media, dbfactory, imageDataFormats, img, file);
-			dbfactory.createFoImageData(media, dbfactory, imageDataFormats, img, file);
+			dbfactory.createHtmlImageData(media, dbfactory, img, file);
+			dbfactory.createFoImageData(media, dbfactory, img, file);
 
 		} catch (IOException oops) {
 			throw new EditorException(oops);

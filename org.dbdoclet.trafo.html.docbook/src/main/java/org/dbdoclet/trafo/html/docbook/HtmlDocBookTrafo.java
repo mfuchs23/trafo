@@ -18,6 +18,7 @@ import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.progress.ProgressManager;
 import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.Index;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlFragment;
 import org.dbdoclet.trafo.AbstractTrafoService;
@@ -216,8 +217,9 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 					TrafoConstants.SECTION_DOCBOOK,
 					TrafoConstants.PARAM_ADD_INDEX, false);
 
-			if (addIndex == true) {
-				documentElement.appendChild(dbfactory.createIndex());
+			Index index = dbfactory.createIndex();
+			if (addIndex == true && index.isValidParent(documentElement)) {
+				documentElement.appendChild(index);
 			}
 
 			encoding = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,

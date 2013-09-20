@@ -47,7 +47,7 @@
     problem. One possible solution is to convert HTML to DocBook XML, because
     DocBook is a semantic markup language for documentation, which enables its
     users to create document content that captures the logical structure of
-    the content. </para>
+    the content.</para>
 
     <para>The command line tool <productname>herold</productname> can be used
     to convert HTML to DocBook. Because HTML elements are often used not as
@@ -382,6 +382,36 @@ amet.&lt;/para&gt;""";
             <listitem>
               <para>If set to true, an index element is inserted at the end of
               the DocBook XML.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>author-email</term>
+
+            <listitem>
+              <para>The email address of the author. If this parameter is set,
+              it is used to create an info section at the beginning of the
+              document.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>author-firstname</term>
+
+            <listitem>
+              <para>The firstname of the author. If this parameter is set, it
+              is used to create an info section at the beginning of the
+              document.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>author-surname</term>
+
+            <listitem>
+              <para>The surname of the author. If this parameter is set, it is
+              used to create an info section at the beginning of the
+              document.</para>
             </listitem>
           </varlistentry>
 
