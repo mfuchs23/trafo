@@ -171,7 +171,7 @@ public class SectionDetector {
 		DocBookElement sect;
 
 		HtmlElement child = values.getHtmlElement();
-		DocBookElement parent = (DocBookElement) values.getParent();
+		NodeImpl parent = values.getParent();
 
 		if (parent != null) {
 			values.setCurrent(parent);
