@@ -10,9 +10,7 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -90,16 +88,14 @@ public class ImgEditor extends DocBookEditor {
 		logger.debug("Parameter use-absolute-image-path is set to "
 				+ useAbsoluteImagePath);
 
-		String imagePath = "./img";
+		String imagePath = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_IMAGE_PATH, TrafoConstants.DEFAULT_IMAGE_PATH);
 
 		Param<?> param = script
-				.getVariable(TrafoConstants.PARAM_IMAGE_PATH);
+				.getVariable(TrafoConstants.VAR_IMAGE_SUBPATH);
 
 		if (param != null) {
-			imagePath = param.getValueAsText();
-		} else {
-			imagePath = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
-					TrafoConstants.PARAM_IMAGE_PATH, "");
+			imagePath = FileServices.appendPath(imagePath, param.getValueAsText());
 		}
 
 		logger.debug("Configuration property imagePath is set to " + imagePath);

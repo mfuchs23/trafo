@@ -57,14 +57,20 @@ public class LinkplainEditor extends DocBookEditor {
 		if ((ref != null) && (ref.length() > 0)) {
 
 			String label = linkplain.getTextContent();
+			String name = linkplain.getAttribute("name");
 
-			if ((label != null) && (label.length() > 0)) {
+			if (label != null && label.length() > 0) {
 
 				Link elem = dbfactory.createLink(label, ref);
 				setCurrent(elem);
 
-			} else {
+			} else if (name != null && name.length() > 0) {
+				
+				Link elem = dbfactory.createLink(name, ref);
+				setCurrent(elem);
 
+			} else {
+				
 				XRef elem = dbfactory.createXRef(ref);
 				setCurrent(elem);
 			}

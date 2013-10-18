@@ -89,8 +89,8 @@ public class DocBookVisitor implements IHtmlVisitor {
 	public DocumentFragmentImpl createDocumentFragment(HtmlFragment htmlFragment) {
 		
 		DocumentFragmentImpl fragment = new DocumentFragmentImpl();
-		// ElementImpl documentElement = createDocumentElement();
-		// fragment.appendChild(documentElement);
+		ElementImpl documentElement = createDocumentElement();
+		fragment.setUserData("documentElement", documentElement, null);
 		return fragment;
 	}
 	
@@ -129,50 +129,20 @@ public class DocBookVisitor implements IHtmlVisitor {
 		return document;
 	}
 
-	private ElementImpl createDocumentElement() {
+	public ElementImpl createDocumentElement() {
 		
 		ElementImpl documentElement = dbfactory.createSection();
+		String tagName = "article";
 		
-		DocumentElementType documentType = DocumentElementType.valueOf("ARTICLE");
-
 		if (script != null) {
 
-			String value = script.getTextParameter(
+			tagName = script.getTextParameter(
 					TrafoConstants.SECTION_DOCBOOK,
 					TrafoConstants.PARAM_DOCUMENT_ELEMENT, "article");
-
-			documentType = DocumentElementType.valueOf(value.toUpperCase());
+			tagName = tagName.toLowerCase();
 		}
 
-		switch (documentType) {
-		case ARTICLE:
-			documentElement = dbfactory.createArticle();
-			break;
-		case BOOK:
-			documentElement = dbfactory.createBook();
-			break;
-		case CHAPTER:
-			documentElement = dbfactory.createChapter();
-			break;
-		case REFERENCE:
-			documentElement = dbfactory.createReference();
-			break;
-		case OVERVIEW:
-			documentElement = dbfactory.createSection();
-			break;
-		case PARAGRAPH:
-			documentElement = dbfactory.createPara();
-			break;
-		case PART:
-			documentElement = dbfactory.createPart();
-			break;
-		case SECTION:
-			documentElement = dbfactory.createSection();
-			break;
-		default:
-			documentElement = dbfactory.createBook();
-		}
-
+		documentElement = dbfactory.createElementByName(tagName);
 		documentElement.setNamespaceURI(XmlConstants.NAMESPACE_DOCBOOK);
 		documentElement.setAttribute("xmlns", XmlConstants.NAMESPACE_DOCBOOK);
 		documentElement.setAttribute("version", "5.0");

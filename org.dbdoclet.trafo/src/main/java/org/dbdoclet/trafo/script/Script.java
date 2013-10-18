@@ -477,12 +477,15 @@ public class Script {
 					"The field currentParamMap must not be null! Select a scetion first.");
 		}
 
-		TextParam param = (TextParam) currentParamMap.get(name);
-		param = new TextParam(name, new String(text));
+		TextParam param = new TextParam(name, new String(text));
 		currentParamMap.put(name, param);
 	}
 
 	public void setVariable(Param<?> param) {
 		variableMap.put(param.getName(), param);
+	}
+	
+	public void unsetVariable(String varname) {
+		variableMap.remove(varname);
 	}
 }

@@ -43,6 +43,7 @@ import org.dbdoclet.trafo.internal.html.docbook.editor.HeadingEditor;
 import org.dbdoclet.trafo.param.TextParam;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.NodeImpl;
+import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -86,13 +87,8 @@ public class SectionDetector {
 
 	private Class<?>[] map;
 	private EditorInstruction values;
-
 	private Script script;
-
-	private DocumentElementType documentElementType;
-
 	private DocBookTagFactory dbfactory;
-
 	private LinkManager linkManager;
 
 	public boolean isSection(HtmlElement element) {
@@ -190,20 +186,14 @@ public class SectionDetector {
 
 		Element root = initMap();
 		levelParent = findParentForLevel(child, level);
-
-		if ((levelParent == null)
-				&& ((documentElementType == DocumentElementType.OVERVIEW) || (documentElementType == DocumentElementType.BOOK))) {
-
-			sect = dbfactory.createChapter();
-			sect.setRemap(child.getNodeName());
-
-			levelParent = (NodeImpl) root;
-
+		
+		if (levelParent instanceof DocumentFragment) {
+			NodeImpl documentElement = (NodeImpl) levelParent.getUserData("documentElement");
+			sect = createSectionChild(child, documentElement);
 		} else {
-
 			sect = createSectionChild(child, levelParent);
 		}
-
+		
 		if (sect != null) {
 
 			if (sect instanceof Para) {
@@ -256,12 +246,16 @@ public class SectionDetector {
 
 		} else {
 
-			sect = (DocBookElement) values.getCurrent();
+			NodeImpl current = values.getCurrent();
+			
+			if (current instanceof DocBookElement) {
+				sect = (DocBookElement) current;
+			}
 		}
 
 		String id = child.getId();
 
-		if ((id != null) && (id.length() > 0)) {
+		if (sect != null && id != null && id.length() > 0) {
 			sect.setId(linkManager.createUniqueId(id));
 		}
 
@@ -373,12 +367,10 @@ public class SectionDetector {
 		Element root = getDocumentElement();
 
 		if (root instanceof DocBookFragment) {
-			root = ((DocBookFragment) root).getFirstElement();
+			root = (Element) root.getUserData("documentElement");
 		}
 
-		if (root instanceof Book
-				|| (documentElementType == DocumentElementType.BOOK)
-				|| (documentElementType == DocumentElementType.OVERVIEW)) {
+		if (root instanceof Book) {
 			return true;
 		} else {
 			return false;
@@ -585,17 +577,7 @@ public class SectionDetector {
 	}
 
 	public void setScript(Script script) {
-		
 		this.script = script;
-		
-		if (script != null) {
-
-			String value = script.getTextParameter(
-					TrafoConstants.SECTION_DOCBOOK,
-					TrafoConstants.PARAM_DOCUMENT_ELEMENT, "article");
-
-			documentElementType = DocumentElementType.valueOf(value.toUpperCase());
-		}
 	}
 
 	public void setTagFactory(DocBookTagFactory dbfactory) {
