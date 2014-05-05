@@ -24,7 +24,7 @@ public abstract class AbstractPanelProvider extends GridPanel {
 	public Script createScript(JPanel panel, Script script) {
 		this.panel = panel;
 		this.script = script;
-		structureList = new ArrayList<String>();
+		structureList = new ArrayList<>();
 		Component[] jcomponentArray = panel.getComponents();
 		getComponentsList(jcomponentArray);
 		script.selectSection("", "project");
@@ -70,7 +70,7 @@ public abstract class AbstractPanelProvider extends GridPanel {
 				}
 
 				if (comp instanceof JComboBox) {
-					script.setTextParameter(comp.getName(), ((JComboBox) comp)
+					script.setTextParameter(comp.getName(), ((JComboBox<?>) comp)
 							.getSelectedItem().toString());
 					continue;
 				}

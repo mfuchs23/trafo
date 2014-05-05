@@ -25,6 +25,7 @@ import org.dbdoclet.trafo.html.dita.SectionDetector;
 import org.dbdoclet.trafo.internal.html.dita.editor.DitaEditorFactory;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.XPathServices;
+import org.dbdoclet.xiphias.XmlConstants;
 import org.dbdoclet.xiphias.dom.DocumentFragmentImpl;
 import org.dbdoclet.xiphias.dom.DocumentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
@@ -149,7 +150,7 @@ public class DitaVisitor implements IHtmlVisitor {
 
 		if (language != null) {
 			documentElement.setAttributeNS(
-					"http://www.w3.org/XML/1998/namespace", "xml:lang",
+					XmlConstants.NAMESPACE_XML, "xml:lang",
 					language);
 		}
 		
@@ -256,7 +257,7 @@ public class DitaVisitor implements IHtmlVisitor {
 
 	private String detectLanguage(Element documentElement) {
 
-		String lang = documentElement.getAttribute("xml:lang");
+		String lang = documentElement.getAttributeNS(XmlConstants.NAMESPACE_XML, "lang");
 
 		if (lang == null) {
 			lang = documentElement.getAttribute("lang");

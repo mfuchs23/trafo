@@ -9,9 +9,9 @@
 	<target name="build" depends="prepare">
 		<javac includeantruntime="false" srcdir="java" destdir="classes" encoding="utf-8">
 			<include name="org/dbdoclet/herold/Herold.java" />
-			<include name="org/dbdoclet/trafo/tag/docbook/*" />
-			<include name="org/dbdoclet/trafo/tag/html/*" />
-			<include name="org/dbdoclet/trafo/html/docbook/editor/**" />
+			<include name="org/dbdoclet/tag/docbook/*" />
+			<include name="org/dbdoclet/tag/html/*" />
+			<include name="org/dbdoclet/trafo/internal/html/docbook/editor/**" />
 			<classpath>
 				<fileset dir="../jars">
 					<include name="*.jar" />

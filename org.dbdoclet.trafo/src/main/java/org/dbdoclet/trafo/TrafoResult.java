@@ -15,7 +15,6 @@ import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerException;
 
 import org.dbdoclet.service.StringServices;
-import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 
 /**

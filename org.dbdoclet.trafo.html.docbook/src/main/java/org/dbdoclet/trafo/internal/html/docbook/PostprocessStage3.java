@@ -46,7 +46,7 @@ public class PostprocessStage3 {
 
 				Tgroup tgroup = dbfactory.createTgroup();
 				tgroup.setChildNodes(entrytbl.getChildNodes());
-				tgroup.setTrafoAttributes(entrytbl.getTrafoAttributes());
+				tgroup.setTrafoAttributes(entrytbl.getAttributesAsMap());
 				it.appendChild(tgroup);
 
 				DocBookElement tableParent = (DocBookElement) table

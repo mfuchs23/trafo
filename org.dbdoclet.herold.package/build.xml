@@ -18,7 +18,7 @@
 		
 		<antcall target="default.compile" />
 		
-		<jar destfile="distrib/herold.jar">
+		<jar destfile="distrib/herold_${module.version}.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.dbdoclet.herold.Herold" />
 				<attribute name="Class-Path" value="../conf/ 
@@ -43,8 +43,6 @@
 				<include name="org.dbdoclet.trafo.html.dita_*.jar"/>
 			</zipgroupfileset>
 		</jar>
-
-		<antcall target="default.publish" />
 	</target>
 
 	<!-- ========================================== -->
@@ -185,7 +183,7 @@
 		</copy>
 
 		<mkdir dir="${packman.dir}/main"/>
-		<copy todir="${packman.dir}/main" file="build.properties"/>
+		<copy tofile="${packman.dir}/main/build.properties" file="module.properties"/>
 		
 		<echo>Creating Windows Package...</echo>
 		<replaceregexp byline="true" file="spec/herold.nsi" match="org.dbdoclet.tidbit_[0-9\.]+\.jar" replace="org.dbdoclet.tidbit_${project.version}.jar" />

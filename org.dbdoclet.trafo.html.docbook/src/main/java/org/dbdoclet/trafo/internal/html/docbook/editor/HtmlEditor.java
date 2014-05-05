@@ -13,6 +13,7 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
+import org.dbdoclet.xiphias.XmlConstants;
 
 public class HtmlEditor extends DocBookEditor {
 
@@ -30,11 +31,7 @@ public class HtmlEditor extends DocBookEditor {
 		String lang = child.getAttribute("lang");
 
 		if (lang == null) {
-			lang = child.getAttribute("xml:lang");
-		}
-
-		if (lang != null) {
-			article.setAttribute("lang", lang.toLowerCase());
+			lang = child.getAttributeNS(XmlConstants.NAMESPACE_XML, "lang");
 		}
 
 		setCurrent(article);
@@ -44,7 +41,7 @@ public class HtmlEditor extends DocBookEditor {
 		article.setAttribute("version", "5.0");
 
 		if (lang != null) {
-			article.setAttribute("xml:lang", lang.toLowerCase());
+			article.setAttributeNS(XmlConstants.NAMESPACE_XML, "xml:lang", lang.toLowerCase());
 		}
 
 		getParent().appendChild(getCurrent());

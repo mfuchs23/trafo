@@ -50,7 +50,7 @@ public class AbstractTests {
 		try {
 			
 			docbookSchemaUrl = new File(
-					"/usr/share/dbdoclet/docbook/xsd/5.0/docbook.xsd").toURI()
+					"/usr/share/dodo/docbook/xsd/5.0/docbook.xsd").toURI()
 					.toURL();
 			
 			ditaTopicSchemaUrl = new File(

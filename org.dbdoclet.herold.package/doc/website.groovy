@@ -5,8 +5,8 @@ String top = new File("website.header").text;
 def ant = new AntBuilder();
 
 ant.sequential() {
-    delete(dir: "/home/michael/Internetauftritt/projects/herold")
-    copy(todir: "/home/michael/Internetauftritt/projects/herold") {
+    delete(dir: "/home/michael/Webpräsenz/HTML/projects/herold")
+    copy(todir: "/home/michael/Webpräsenz/HTML/projects/herold") {
         fileset(dir: "html")
     }
 }
@@ -22,6 +22,6 @@ def closure = { file ->
     }
 }
 
-File dir = new File("/home/michael/Internetauftritt/projects/herold");
+File dir = new File("/home/michael/Webpräsenz/HTML/projects/herold");
 
 dir.eachFileRecurse closure

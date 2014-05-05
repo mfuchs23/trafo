@@ -22,5 +22,4 @@ public class ATests extends AbstractTests {
 		assertEquals("ExitCode != 0", 0, executeHeroldCommandLine(cmd));
 		validateAndParseDocBook(xmlFile);
 	}
-
 }

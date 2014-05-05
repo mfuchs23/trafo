@@ -98,8 +98,8 @@ public class DocBookVisitor implements IHtmlVisitor {
 	public DocumentImpl createDocument(HtmlDocument htmlDoc) {
 
 
-		ElementImpl documentElement = createDocumentElement();
 		DocumentImpl document = new DocumentImpl();
+		ElementImpl documentElement = createDocumentElement();
 
 		Info info = dbfactory.createInfo();
 		documentElement.appendChild(info);
@@ -168,7 +168,7 @@ public class DocBookVisitor implements IHtmlVisitor {
 
 		if (language != null) {
 			documentElement.setAttributeNS(
-					"http://www.w3.org/XML/1998/namespace", "xml:lang",
+					XmlConstants.NAMESPACE_XML, "xml:lang",
 					language);
 		}
 		
@@ -275,7 +275,7 @@ public class DocBookVisitor implements IHtmlVisitor {
 
 	private String detectLanguage(Element documentElement) {
 
-		String lang = documentElement.getAttribute("xml:lang");
+		String lang = documentElement.getAttributeNS(XmlConstants.NAMESPACE_XML, "lang");
 
 		if (lang == null) {
 			lang = documentElement.getAttribute("lang");
