@@ -10,38 +10,28 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.trafo.TrafoConstants;
+import org.dbdoclet.tag.docbook.Info;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.xiphias.dom.ElementImpl;
-import org.dbdoclet.xiphias.dom.NodeImpl;
 
-public class StrongEditor extends DocBookEditor {
+
+public class HeaderEditor extends DocBookEditor {
 
 	@Override
 	public EditorInstruction edit(EditorInstruction values)
 			throws EditorException {
 
 		setValues(super.edit(values));
+
 		DocBookTagFactory dbfactory = getTagFactory();
-
-		ElementImpl child = getHtmlElement();
-		NodeImpl parent = getParent();
-
-		DocBookElement candidate;
-
-		candidate = dbfactory.createEmphasis(child.getTextContent());
-		candidate.setParentNode(parent);
-
-		candidate.setRole(TrafoConstants.DEFAULT_EMPHASIS_ROLE_BOLD);
-
-		if (candidate.validate()) {
-
-			parent.appendChild(candidate);
-			setCurrent(candidate);
+		DocBookElement parent = (DocBookElement) values.getParent();
+		
+		if (parent.isSection()) {
+			
+			Info info = dbfactory.createInfo();
+			parent.appendChild(info);
+			setCurrent(info);
 		}
-
-		traverse(false);
 
 		return finalizeValues();
 	}

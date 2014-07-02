@@ -45,8 +45,7 @@ public class BrEditor extends DocBookEditor {
 
 		if (getCurrent() instanceof Para) {
 
-			DocBookElement parent = (DocBookElement) getCurrent()
-					.getParentNode();
+			Node parent = getCurrent().getParentNode();
 
 			if (parent != null) {
 

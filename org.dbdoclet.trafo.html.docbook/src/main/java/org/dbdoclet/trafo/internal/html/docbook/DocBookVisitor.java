@@ -243,7 +243,7 @@ public class DocBookVisitor implements IHtmlVisitor {
 	private void generateTitle(HtmlDocument htmlDoc, DocBookTagFactory dbf,
 			Info info) {
 
-		HtmlElement elem = (HtmlElement) XPathServices.getNode(htmlDoc,
+		ElementImpl elem = (ElementImpl) XPathServices.getNode(htmlDoc,
 				"/html/head/title");
 
 		if (elem == null) {
@@ -251,7 +251,7 @@ public class DocBookVisitor implements IHtmlVisitor {
 			for (int i = 1; i <= 6; i++) {
 
 				if (elem == null) {
-					elem = (HtmlElement) XPathServices.getNode(htmlDoc,
+					elem = (ElementImpl) XPathServices.getNode(htmlDoc,
 							"/html/body/h" + i + "[1]");
 				}
 			}

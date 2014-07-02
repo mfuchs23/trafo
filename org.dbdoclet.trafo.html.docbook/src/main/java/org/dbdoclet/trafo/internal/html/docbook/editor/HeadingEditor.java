@@ -12,11 +12,13 @@ import java.util.HashMap;
 
 import org.dbdoclet.option.OptionException;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.Title;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.docbook.SectionDetector;
+import org.dbdoclet.xiphias.dom.ElementImpl;
 
 public class HeadingEditor extends DocBookEditor {
 
@@ -46,14 +48,29 @@ public class HeadingEditor extends DocBookEditor {
 			throws EditorException {
 
 		try {
+			
+			setValues(super.edit(values));
 
 			DocBookTagFactory dbfactory = getTagFactory();
+
+			ElementImpl headElement = values.getHtmlElement();
+			HtmlElement parent = (HtmlElement) headElement.getParentNode();
+			
+			if (parent instanceof org.dbdoclet.tag.html.Section
+					|| parent instanceof org.dbdoclet.tag.html.Article
+					|| parent instanceof org.dbdoclet.tag.html.Header) {	
+			
+				Title title = dbfactory.createTitle();
+				getCurrent().appendChild(title);
+				setCurrent(title);
+				return finalizeValues();
+			}
+			
 			SectionDetector sectionDetector = new SectionDetector();
 			sectionDetector.setScript(script);
 			sectionDetector.setTagFactory(dbfactory);
 			sectionDetector.edit(values, dbfactory);
 
-			setValues(super.edit(values));
 			return finalizeValues();
 
 		} catch (OptionException oops) {

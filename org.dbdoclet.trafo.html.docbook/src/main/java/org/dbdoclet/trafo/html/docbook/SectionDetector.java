@@ -33,7 +33,7 @@ import org.dbdoclet.tag.docbook.Sect4;
 import org.dbdoclet.tag.docbook.Sect5;
 import org.dbdoclet.tag.docbook.Section;
 import org.dbdoclet.tag.docbook.Title;
-import org.dbdoclet.tag.html.HeaderElement;
+import org.dbdoclet.tag.html.HeadingElement;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -92,6 +92,33 @@ public class SectionDetector {
 	private LinkManager linkManager;
 
 	public boolean isSection(HtmlElement element) {
+
+		/*
+		 * H1-6 Elemente, die als erste Kindelemente von Article oder Section
+		 * auftreten, werden als einfache Titelelemente verarbeitet. Der gleiche
+		 * Fall gilt für Kindelemente von Header.
+		 */
+		Node parentNode = element.getParentNode();
+		
+		if (element instanceof HeadingElement && parentNode != null && parentNode instanceof DocumentFragment == false) {
+
+			String tagName = ((Element) parentNode)
+					.getTagName();
+
+			if (tagName != null && tagName.equalsIgnoreCase("header")) {
+				return false;
+			}
+
+			if (tagName != null
+					&& (tagName.equalsIgnoreCase("section") || tagName
+							.equalsIgnoreCase("article"))) {
+
+				if (element.isFirstChildElement()) {
+					return false;
+				}
+			}
+		}
+
 		return getSectionLevel(element) > 0 ? true : false;
 	}
 
@@ -101,8 +128,8 @@ public class SectionDetector {
 			return 0;
 		}
 
-		if (element instanceof HeaderElement) {
-			return ((HeaderElement) element).getLevel();
+		if (element instanceof HeadingElement) {
+			return ((HeadingElement) element).getLevel();
 		}
 
 		String tagName = element.getTagName();
@@ -178,22 +205,23 @@ public class SectionDetector {
 		NodeImpl levelParent = null;
 		int level = 7;
 
-		if (child instanceof HeaderElement) {
-			level = ((HeaderElement) child).getLevel();
+		if (child instanceof HeadingElement) {
+			level = ((HeadingElement) child).getLevel();
 		} else {
 			level = getSectionLevel(child);
 		}
 
 		Element root = initMap();
 		levelParent = findParentForLevel(child, level);
-		
+
 		if (levelParent instanceof DocumentFragment) {
-			NodeImpl documentElement = (NodeImpl) levelParent.getUserData("documentElement");
+			NodeImpl documentElement = (NodeImpl) levelParent
+					.getUserData("documentElement");
 			sect = createSectionChild(child, documentElement);
 		} else {
 			sect = createSectionChild(child, levelParent);
 		}
-		
+
 		if (sect != null) {
 
 			if (sect instanceof Para) {
@@ -247,7 +275,7 @@ public class SectionDetector {
 		} else {
 
 			NodeImpl current = values.getCurrent();
-			
+
 			if (current instanceof DocBookElement) {
 				sect = (DocBookElement) current;
 			}
@@ -329,7 +357,7 @@ public class SectionDetector {
 
 		if (root instanceof DocBookFragment) {
 
-			Node firstChild = ((DocBookFragment) root).getFirstElement();
+			Node firstChild = ((DocBookFragment) root).getFirstChildElement();
 
 			if (firstChild != null) {
 				root = firstChild;
@@ -352,7 +380,7 @@ public class SectionDetector {
 		Node root = getDocumentElement();
 
 		if (root instanceof DocBookFragment) {
-			root = ((DocBookFragment) root).getFirstElement();
+			root = ((DocBookFragment) root).getFirstChildElement();
 		}
 
 		if (root instanceof Article) {
@@ -424,8 +452,8 @@ public class SectionDetector {
 			if (parent != null) {
 
 				int tagLevel = getSectionLevel(header);
-				int parentLevel = getSectionLevel(
-						(HtmlElement) parent.getUserData("html"));
+				int parentLevel = getSectionLevel((HtmlElement) parent
+						.getUserData("html"));
 
 				while (tagLevel != -1 && parentLevel != -1
 						&& parentLevel >= tagLevel) {
@@ -439,8 +467,8 @@ public class SectionDetector {
 
 					parent = ancestor;
 
-					parentLevel = getSectionLevel(
-							(HtmlElement) parent.getUserData("html"));
+					parentLevel = getSectionLevel((HtmlElement) parent
+							.getUserData("html"));
 				}
 
 				break;
@@ -450,8 +478,8 @@ public class SectionDetector {
 		return parent;
 	}
 
-	public DocBookElement createSectionChild(HtmlElement header, NodeImpl levelParent)
-			throws OptionException {
+	public DocBookElement createSectionChild(HtmlElement header,
+			NodeImpl levelParent) throws OptionException {
 
 		DocBookElement section = null;
 
@@ -548,7 +576,8 @@ public class SectionDetector {
 
 			para = dbfactory.createPara();
 
-			if (((Para) para).isValidParent((DocBookElement) values.getParent())) {
+			if (((Para) para)
+					.isValidParent((DocBookElement) values.getParent())) {
 				values.getParent().appendChild(para);
 			} else {
 				para = (DocBookElement) values.getParent();

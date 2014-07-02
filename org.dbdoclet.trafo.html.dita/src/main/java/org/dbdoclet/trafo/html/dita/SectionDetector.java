@@ -9,7 +9,7 @@ import org.dbdoclet.tag.dita.DitaElement;
 import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.dita.P;
 import org.dbdoclet.tag.dita.Title;
-import org.dbdoclet.tag.html.HeaderElement;
+import org.dbdoclet.tag.html.HeadingElement;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -44,8 +44,8 @@ public class SectionDetector {
 			return 0;
 		}
 
-		if (element instanceof HeaderElement) {
-			return ((HeaderElement) element).getLevel();
+		if (element instanceof HeadingElement) {
+			return ((HeadingElement) element).getLevel();
 		}
 
 		String tagName = element.getTagName();
@@ -120,8 +120,8 @@ public class SectionDetector {
 		NodeImpl levelParent = null;
 		int level = 7;
 
-		if (child instanceof HeaderElement) {
-			level = ((HeaderElement) child).getLevel();
+		if (child instanceof HeadingElement) {
+			level = ((HeadingElement) child).getLevel();
 		} else {
 			level = getSectionLevel(child);
 		}
@@ -183,7 +183,7 @@ public class SectionDetector {
 
 		if (root instanceof DocumentFragmentImpl) {
 
-			Node firstChild = ((DocumentFragmentImpl) root).getFirstElement();
+			Node firstChild = ((DocumentFragmentImpl) root).getFirstChildElement();
 
 			if (firstChild != null) {
 				root = firstChild;
@@ -226,7 +226,7 @@ public class SectionDetector {
 		return root;
 	}
 
-	public NodeImpl findParentForLevel(HtmlElement header, int level) {
+	public NodeImpl findParentForLevel(ElementImpl header, int level) {
 
 		NodeImpl parent = null;
 

@@ -126,7 +126,6 @@ public class PostprocessStage1 extends AbstractNodeVisitor {
 
 			String text = elem.getTextContent();
 			text = text.replace((char) 160, ' ');
-			text = text.trim();
 
 			if (text.length() == 0) {
 				removeList.add(elem);

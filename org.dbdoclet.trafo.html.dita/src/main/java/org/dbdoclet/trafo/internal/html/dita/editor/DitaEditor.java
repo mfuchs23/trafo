@@ -14,8 +14,6 @@ import org.dbdoclet.tag.dita.DitaElement;
 import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.dita.P;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookVersion;
-import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Row;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.Table;
@@ -29,6 +27,7 @@ import org.dbdoclet.trafo.html.dita.DocumentElementType;
 import org.dbdoclet.trafo.internal.html.dita.LinkManager;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
+import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
 
@@ -81,7 +80,7 @@ public abstract class DitaEditor implements IEditor {
 		ditaElement.setUserData("html", html, null);
 	}
 	
-	protected void copyCommonAttributes(HtmlElement htmlElement, DocBookElement anchor) {
+	protected void copyCommonAttributes(ElementImpl htmlElement, DocBookElement anchor) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -194,7 +193,6 @@ public abstract class DitaEditor implements IEditor {
 	}
 
 	public void setChild(HtmlElement newChild) {
-
 		this.child = newChild;
 	}
 

@@ -40,7 +40,7 @@ public class MetaEditor extends DocBookEditor {
 
 		NodeImpl current = getCurrent();
 		NodeImpl root = current.getRoot();
-		ElementImpl info = (ElementImpl) root.getFirstElement();
+		ElementImpl info = (ElementImpl) root.getFirstChildElement();
 
 		if (info == null) {
 			info = dbfactory.createInfo();

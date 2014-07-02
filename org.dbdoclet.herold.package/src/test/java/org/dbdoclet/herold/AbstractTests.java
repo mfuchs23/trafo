@@ -178,6 +178,10 @@ public class AbstractTests {
 	}
 
 	protected String transform(String htmlCode) {
+		return transform(htmlCode, new Script());
+	}
+	
+	protected String transform(String htmlCode, Script script) {
 
 		if (htmlCode == null) {
 			throw new IllegalArgumentException("Der Parameter htmlCode darf nicht null sein!");
@@ -186,7 +190,6 @@ public class AbstractTests {
 		try {
 			
 			TrafoService trafo = new HtmlDocBookTrafo();
-			Script script = new Script();
 			trafo.setInputStream(new ByteArrayInputStream(htmlCode.getBytes()));
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			trafo.setOutputStream(buffer);

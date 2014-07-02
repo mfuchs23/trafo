@@ -71,7 +71,6 @@ public class SectionNumberRemover implements INodeVisitor {
 			return title;
 		}
 
-		title = title.trim();
 		regex = "(" + regex + ").*";
 		Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(title);
