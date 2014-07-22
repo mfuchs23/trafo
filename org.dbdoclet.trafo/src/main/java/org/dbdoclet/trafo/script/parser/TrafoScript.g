@@ -37,7 +37,7 @@ parse	: transformation (section)* EOF;
 transformation
 	: TRAN^ ID EOS!;
 	
-section : SECTION! ID^ BO! (param)* BC!;
+section : SECTION! (ID^|REGEXP^) BO! (param)* BC!;
 
 param	: ID^ EQ! expr EOS!;
 
@@ -56,7 +56,8 @@ EOS	:	';';
 NUMBER	:	('0'..'9')+;
 SECTION	:	'section';
 TRAN 	:	'transformation';
-ID	:	('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'0'..'9'|'-'|'_')+;
+ID	:	('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'0'..'9'|'-'|'.'|'_')+;
+REGEXP  :	'/' ~('*') ('\\/'|~('/'))* '/';
 TEXT	:	'"' ~('"'|'\r'|'\n')* '"'{setText(getText().substring(1, getText().length()-1));};
 MULTILINE
 	:	'"""' (options {greedy=false;}:.*) '"""' {setText(getText().substring(3, getText().length()-3));};

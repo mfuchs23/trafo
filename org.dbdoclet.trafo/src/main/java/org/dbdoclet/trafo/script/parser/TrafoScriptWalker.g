@@ -24,7 +24,7 @@ parse[Script script, String namespace]
 : transformation section*;
 
 transformation	:	^(TRAN ID { script.setSystemParameter(namespace, Script.SYSPARAM_TRANSFORMATION_NAME, $ID.text); });
-section	:	^(ID { script.selectSection(namespace, $ID.text); } expr*);
+section	:	^((ID { script.selectSection(namespace, $ID.text); } | REGEXP { script.selectSection(namespace, $REGEXP.text); })  expr*);
 expr	:	^(ID (bparam[$ID.text] | nparam[$ID.text] | tparam[$ID.text] | mtparam[$ID.text])+);
 bparam[String ID]:	BOOL { script.addBoolParam($ID, $BOOL.text); };
 nparam[String ID]:	NUMBER { script.addNumberParam($ID, $NUMBER.text); };
