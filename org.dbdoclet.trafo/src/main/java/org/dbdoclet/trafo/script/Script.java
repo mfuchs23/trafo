@@ -3,7 +3,9 @@ package org.dbdoclet.trafo.script;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.dbdoclet.service.StringServices;
 import org.dbdoclet.service.UnicodeServices;
 import org.dbdoclet.trafo.param.BooleanParam;
 import org.dbdoclet.trafo.param.NumberParam;
@@ -24,10 +26,12 @@ public class Script {
 	private LinkedHashMap<String, Param<?>> currentParamMap;
 	private final LinkedHashMap<String, Param<?>> variableMap;
 	private ArrayList<ScriptListener> listeners;
+	private ArrayList<String> contextList;
 
 	public Script() {
-		namespaceMap = new LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Param<?>>>>();
-		variableMap = new LinkedHashMap<String, Param<?>>();
+		namespaceMap = new LinkedHashMap<>();
+		variableMap = new LinkedHashMap<>();
+		contextList = new ArrayList<>();
 	}
 
 	public void addBoolParam(String name, boolean flag) {
@@ -220,8 +224,38 @@ public class Script {
 			return null;
 		}
 
+		List<String> specificSectionList = sectionMap.keySet().stream()
+				.filter(sectionName -> contextList.contains(sectionName))
+				.collect(Collectors.toList());
+			
+		List<String> regexpSectionList = sectionMap.keySet().stream()
+				.filter(sectionName -> {
+					if (sectionName.startsWith("/") && sectionName.endsWith("/")) {
+						String regexp = StringServices.trim(sectionName, "/");
+						return contextList.stream().filter(contextName -> contextName.matches(regexp)).collect(Collectors.toList()).size() > 0;
+					} else {
+						return false;
+					}
+				})
+				.collect(Collectors.toList());
+
+		
 		LinkedHashMap<String, Param<?>> paramMap = sectionMap.get(section);
 
+		if (specificSectionList != null && specificSectionList.size() > 0) {
+			LinkedHashMap<String, Param<?>> specificParamMap = sectionMap.get(specificSectionList.get(0));
+			if (specificParamMap.get(name) != null) {
+				return specificParamMap.get(name);
+			}
+		}		
+
+		if (regexpSectionList != null && regexpSectionList.size() > 0) {
+			LinkedHashMap<String, Param<?>> regexpParamMap = sectionMap.get(regexpSectionList.get(0));
+			if (regexpParamMap.get(name) != null) {
+				return regexpParamMap.get(name);
+			}
+		}
+		
 		if (paramMap == null) {
 			return null;
 		}
@@ -487,5 +521,13 @@ public class Script {
 	
 	public void unsetVariable(String varname) {
 		variableMap.remove(varname);
+	}
+
+	public void addContext(String context) {
+		contextList.add(0, context);
+	}
+
+	public void removeContext(String context) {
+		contextList.remove(context);
 	}
 }
