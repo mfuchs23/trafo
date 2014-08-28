@@ -1,5 +1,5 @@
 transformation html2docbook;
 
 section DocBook {
-	add-index = true;
+	add-index = false;
 }

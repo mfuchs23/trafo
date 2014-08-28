@@ -23,9 +23,8 @@ public class AbbrEditor extends DocBookEditor {
 		DocBookTagFactory dbfactory = getTagFactory();
 
 		Abbrev candidate = dbfactory.createAbbrev();
-		candidate.setParentNode(getParent());
 
-		if (candidate.validate()) {
+		if (candidate.isValidParent("AbrEditor", getParent())) {
 
 			setCurrent(candidate);
 			getParent().appendChild(getCurrent());

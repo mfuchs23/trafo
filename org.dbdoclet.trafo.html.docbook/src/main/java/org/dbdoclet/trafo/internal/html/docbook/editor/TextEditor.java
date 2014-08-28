@@ -24,12 +24,12 @@ public class TextEditor extends DocBookEditor {
 		try {
 
 			setValues(super.edit(values));
+			
 			DocBookTagFactory dbfactory = getTagFactory();
-
-			NodeImpl parent = getParent();
 			NodeImpl current = getCurrent();
-
-			if (isContentModel(parent)) {
+			NodeImpl parent = getParent();
+			
+			if (isSection(parent)) {
 
 				if (getCharacterDataNode().getNodeType() == NodeImpl.TEXT_NODE) {
 

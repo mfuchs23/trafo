@@ -213,7 +213,6 @@ public class DivEditor extends DocBookEditor {
 		if (id != null) {
 
 			Anchor anchor = dbfactory.createAnchor();
-			anchor.validate();
 			copyCommonAttributes(getHtmlElement(), anchor);
 			parent.appendChild(anchor);
 		}

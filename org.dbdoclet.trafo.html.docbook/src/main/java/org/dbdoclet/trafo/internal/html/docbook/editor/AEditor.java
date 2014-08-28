@@ -37,19 +37,19 @@ public class AEditor extends DocBookEditor {
 
 		traverse(true);
 
-		// The referncen of attribute parent must not be changed. Because of
-		// this we
-		// need a temporary variable to store a new parent for
-		// different situations.
 		ancestor = parent;
 
-		if (isContentModel(parent)) {
-
-			Para para = dbfactory.createPara();
-			parent.appendChild(para);
-			ancestor = para;
+		if (parent instanceof DocBookElement) {
+			
+			DocBookElement dbParent = (DocBookElement) parent;
+			
+			if (dbParent.isSection()) {
+				Para para = dbfactory.createPara();
+				parent.appendChild(para);
+				ancestor = para;
+			}
 		}
-
+		
 		A htmlA = (A) getHtmlElement();
 
 		String name = htmlA.getName();
@@ -87,9 +87,7 @@ public class AEditor extends DocBookEditor {
 			} else {
 
 				XRef xref = dbfactory.createXRef(getLinkManager().getUniqueId(
-						href));//	public Script getScript() {
-//				return script;
-//				}
+						href));
 
 				xref.setParentNode(ancestor);
 				ancestor.appendChild(xref);
@@ -117,14 +115,14 @@ public class AEditor extends DocBookEditor {
 
 				ULink ulink = dbfactory.createULink();
 				ulink.setParentNode(ancestor);
-				ulink.setUrl(href);//	public Script getScript() {
-//				return script;
-//				}
+				ulink.setUrl(href);// public Script getScript() {
+				// return script;
+				// }
 
 				linkElement = ulink;
 			}
 
-			if (linkElement.validate()) {
+			if (linkElement.isValidParent("VarEditor", ancestor)) {
 
 				setCurrent(linkElement);
 				ancestor.appendChild(getCurrent());
@@ -135,7 +133,7 @@ public class AEditor extends DocBookEditor {
 				SimPara candidate = dbfactory.createSimPara();
 				candidate.setParentNode(ancestor);
 
-				if (candidate.validate()) {
+				if (candidate.isValidParent("VarEditor", ancestor)) {
 
 					ancestor.appendChild(candidate);
 					candidate.appendChild(ancestor);

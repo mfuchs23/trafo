@@ -12,6 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.dbdoclet.Sfv;
 import org.dbdoclet.service.FileServices;
+import org.dbdoclet.xiphias.NodeSerializer;
 import org.dbdoclet.xiphias.XPathServices;
 import org.dbdoclet.xiphias.XmlServices;
 import org.junit.Test;
@@ -26,20 +27,51 @@ public class ParameterTests extends AbstractTests {
 	private final File xmlFile = new File("build/test/ParameterTests.xml");
 
 	@Test
-	public void testInvalidProfile() throws IOException, SAXException,
+	public void attributeRemapOff() throws IOException, SAXException,
 			ParserConfigurationException {
 
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p", "src/test/resources/profile/invalid.her" };
-		assertEquals("ExitCode != 2", 2, executeHeroldCommandLine(cmd));
+				"-p", "src/test/resources/profile/createRemapAttributeOff.her" };
+		executeHeroldCommandLine(cmd);
+		Document doc = validateAndParseDocBook(xmlFile);
+		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
+				Sfv.NS_DOCBOOK, "//@remap");
+		assertNull("//@remap", node);
+	}
+
+	@Test
+	public void attributeRemapOn() throws IOException, SAXException,
+			ParserConfigurationException {
+
+		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
+				"-p", "src/test/resources/profile/createRemapAttributeOn.her" };
+		executeHeroldCommandLine(cmd);
+		Document doc = validateAndParseDocBook(xmlFile);
+		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
+				Sfv.NS_DOCBOOK, "//@remap");
+		assertNotNull("//@remap", node);
 	}
 
 	@Test
 	public void testAddIndex_Off_CmdLine() throws IOException, SAXException,
 			ParserConfigurationException {
 
+
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"--docbook-add-index=false" };
+		executeHeroldCommandLine(cmd);
+		Document doc = validateAndParseDocBook(xmlFile);
+		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
+				Sfv.NS_DOCBOOK, "//d:index");
+		assertNull("//d:index", node);
+	}
+
+	@Test
+	public void testAddIndex_Off_Profile() throws IOException, SAXException,
+			ParserConfigurationException {
+
+		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
+				"-p", "src/test/resources/profile/addIndexOff.her" };
 		executeHeroldCommandLine(cmd);
 		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
@@ -74,42 +106,16 @@ public class ParameterTests extends AbstractTests {
 	}
 
 	@Test
-	public void attributeRemapOn() throws IOException, SAXException,
-			ParserConfigurationException {
+	public void testCreateXrefLabel_Off_Profile() throws IOException,
+			SAXException, ParserConfigurationException {
 
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p", "src/test/resources/profile/createRemapAttributeOn.her" };
+				"-p", "src/test/resources/profile/createXrefLabelOff.her" };
 		executeHeroldCommandLine(cmd);
 		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//@remap");
-		assertNotNull("//@remap", node);
-	}
-
-	@Test
-	public void attributeRemapOff() throws IOException, SAXException,
-			ParserConfigurationException {
-
-		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p", "src/test/resources/profile/createRemapAttributeOff.her" };
-		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParseDocBook(xmlFile);
-		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//@remap");
-		assertNull("//@remap", node);
-	}
-
-	@Test
-	public void testAddIndex_Off_Profile() throws IOException, SAXException,
-			ParserConfigurationException {
-
-		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p", "src/test/resources/profile/addIndexOff.her" };
-		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParseDocBook(xmlFile);
-		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//d:index");
-		assertNotNull("//d:index", node);
+				Sfv.NS_DOCBOOK, "//d:anchor/@xreflabel");
+		assertNull("//d:anchor", node);
 	}
 
 	@Test
@@ -126,24 +132,24 @@ public class ParameterTests extends AbstractTests {
 	}
 
 	@Test
-	public void testCreateXrefLabel_Off_Profile() throws IOException,
-			SAXException, ParserConfigurationException {
-
-		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p", "src/test/resources/profile/createXrefLabelOff.her" };
-		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParseDocBook(xmlFile);
-		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//d:anchor/@xreflabel");
-		assertNull("//d:anchor", node);
-	}
-
-	@Test
 	public void testDecomposeTables_Off_CmdLine() throws IOException,
 			SAXException, ParserConfigurationException {
 
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"--docbook-decompose-tables=false" };
+		executeHeroldCommandLine(cmd);
+		Document doc = validateAndParseDocBook(xmlFile);
+		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
+				Sfv.NS_DOCBOOK, "//d:informaltable");
+		assertNotNull("//d:informaltable", node);
+	}
+
+	@Test
+	public void testDecomposeTables_Off_Profile() throws IOException,
+			SAXException, ParserConfigurationException {
+
+		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
+				"-p", "src/test/resources/profile/decomposeTablesOff.her" };
 		executeHeroldCommandLine(cmd);
 		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
@@ -165,21 +171,9 @@ public class ParameterTests extends AbstractTests {
 	}
 
 	@Test
-	public void testDecomposeTables_Off_Profile() throws IOException,
-			SAXException, ParserConfigurationException {
-
-		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p", "src/test/resources/profile/decomposeTablesOff.her" };
-		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParseDocBook(xmlFile);
-		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//d:informaltable");
-		assertNotNull("//d:informaltable", node);
-	}
-
-	@Test
 	public void testDecomposeTables_On_Profile() throws IOException,
 			SAXException, ParserConfigurationException {
+
 
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "src/test/resources/profile/decomposeTablesOn.her" };
@@ -255,22 +249,38 @@ public class ParameterTests extends AbstractTests {
 	}
 
 	@Test
+	public void testExclude_Profile() throws IOException, SAXException,
+			ParserConfigurationException {
+
+		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
+				"-p", "./src/test/resources/profile/exclude.her" };
+		executeHeroldCommandLine(cmd);
+		Document doc = validateAndParseDocBook(xmlFile);
+		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
+				Sfv.NS_DOCBOOK, "//d:imagedata");
+		assertNull("//img", node);
+		node = XPathServices.getNode(doc.getDocumentElement(), "d",
+				Sfv.NS_DOCBOOK, "//d:para[id='exclude']");
+		assertNull("//p", node);
+	}
+
+	@Test
 	public void testImageDataFormats_Profile() throws IOException,
 			SAXException, ParserConfigurationException {
-
-		File base64File = new File("./src/test/resources/images/logo.base64");
-		base64File.delete();
 
 		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
 				"-p", "./src/test/resources/profile/imageDataFormats.her" };
 		executeHeroldCommandLine(cmd);
 		Document doc = validateAndParseDocBook(xmlFile);
 		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//d:imageobject[3]/d:imagedata/@format");
-		assertNotNull("//d:imagedata/@format", node.getNodeValue());
+				Sfv.NS_DOCBOOK, "//d:imageobject[@role='html-base64']/d:imagedata/@format");
+		
+		if (node == null) {
+			System.err.println(new NodeSerializer().toXML(doc));
+		}
+		
+		assertNotNull("//d:imagedata/@format", node);
 		assertEquals("//d:imagedata/@format", "BASE64", node.getNodeValue());
-		assertTrue(base64File.exists());
-		base64File.delete();
 	}
 
 	@Test
@@ -289,6 +299,15 @@ public class ParameterTests extends AbstractTests {
 	}
 
 	@Test
+	public void testInvalidProfile() throws IOException, SAXException,
+			ParserConfigurationException {
+
+		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
+				"-p", "src/test/resources/profile/invalid.her" };
+		assertEquals("ExitCode != 2", 2, executeHeroldCommandLine(cmd));
+	}
+
+	@Test
 	public void testLanguage_Profile() throws IOException, SAXException,
 			ParserConfigurationException {
 
@@ -297,6 +316,33 @@ public class ParameterTests extends AbstractTests {
 		executeHeroldCommandLine(cmd);
 		String buffer = FileServices.readToString(xmlFile);
 		assertTrue("xml:lang", buffer.contains("xml:lang=\"es\""));
+	}
+
+	@Test
+	public void testSectionNumberingPattern_Profile() throws IOException,
+			SAXException, ParserConfigurationException {
+
+		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
+				"-p",
+				"./src/test/resources/profile/sectionNumberingPattern.her" };
+		executeHeroldCommandLine(cmd);
+		Document doc = validateAndParseDocBook(xmlFile);
+		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
+				Sfv.NS_DOCBOOK, "//d:section/d:title");
+		assertEquals("Einführung", node.getTextContent());
+	}
+
+	@Test
+	public void testSourceEncoding_Profile() throws IOException, SAXException,
+			ParserConfigurationException {
+
+		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
+				"-p", "./src/test/resources/profile/sourceEncoding.her" };
+		executeHeroldCommandLine(cmd);
+		Document doc = validateAndParseDocBook(xmlFile);
+		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
+				Sfv.NS_DOCBOOK, "//d:section/d:title");
+		assertEquals("1. EinfÃ¼hrung", node.getTextContent());
 	}
 
 	@Test
@@ -337,49 +383,6 @@ public class ParameterTests extends AbstractTests {
 				Sfv.NS_DOCBOOK, "//d:imagedata/@fileref");
 		assertTrue("//d:imagedata/@fileref",
 				node.getNodeValue().startsWith("file:///"));
-	}
-
-	@Test
-	public void testExclude_Profile() throws IOException, SAXException,
-			ParserConfigurationException {
-
-		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p", "./src/test/resources/profile/exclude.her" };
-		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParseDocBook(xmlFile);
-		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//d:imagedata");
-		assertNull("//img", node);
-		node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//d:para[id='exclude']");
-		assertNull("//p", node);
-	}
-
-	@Test
-	public void testSectionNumberingPattern_Profile() throws IOException,
-			SAXException, ParserConfigurationException {
-
-		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p",
-				"./src/test/resources/profile/sectionNumberingPattern.her" };
-		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParseDocBook(xmlFile);
-		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//d:section/d:title");
-		assertEquals("Einführung", node.getTextContent());
-	}
-
-	@Test
-	public void testSourceEncoding_Profile() throws IOException, SAXException,
-			ParserConfigurationException {
-
-		String[] cmd = { "-i", htmlFile.getPath(), "-o", xmlFile.getPath(),
-				"-p", "./src/test/resources/profile/sourceEncoding.her" };
-		executeHeroldCommandLine(cmd);
-		Document doc = validateAndParseDocBook(xmlFile);
-		Node node = XPathServices.getNode(doc.getDocumentElement(), "d",
-				Sfv.NS_DOCBOOK, "//d:section/d:title");
-		assertEquals("1. EinfÃ¼hrung", node.getTextContent());
 	}
 
 }

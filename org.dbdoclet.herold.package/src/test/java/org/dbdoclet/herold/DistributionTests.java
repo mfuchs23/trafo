@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class DistributionTests extends AbstractTests {
@@ -13,24 +14,28 @@ public class DistributionTests extends AbstractTests {
 	private static final String HTML_FILE = "src/test/resources/JSB.html";
 
 	@Test
+	@Ignore
 	public void testOptionLicense() {
 		execute(new String[] { "herold", "--license" });
 		execute(new String[] { "herold", "-L" });
 	}
 
 	@Test
+	@Ignore
 	public void testOptionHelp() {
 		execute(new String[] { "herold", "--help" });
 		execute(new String[] { "herold", "-h" });
 	}
 
 	@Test
+	@Ignore
 	public void testOptionVersion() {
 		execute(new String[] { "herold", "--version" });
 		execute(new String[] { "herold", "-V" });
 	}
 
 	@Test
+	@Ignore
 	public void testOptionsInOut() {
 
 		execute(new String[] { "herold", "-i", HTML_FILE, "-o",

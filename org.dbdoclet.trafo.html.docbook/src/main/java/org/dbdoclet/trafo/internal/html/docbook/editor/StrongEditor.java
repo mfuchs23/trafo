@@ -35,7 +35,7 @@ public class StrongEditor extends DocBookEditor {
 
 		candidate.setRole(TrafoConstants.DEFAULT_EMPHASIS_ROLE_BOLD);
 
-		if (candidate.validate()) {
+		if (candidate.isValidParent("StringEditor", parent)) {
 
 			parent.appendChild(candidate);
 			setCurrent(candidate);

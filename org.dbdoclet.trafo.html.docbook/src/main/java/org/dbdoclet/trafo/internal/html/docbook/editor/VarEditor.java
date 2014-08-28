@@ -30,19 +30,15 @@ public class VarEditor extends DocBookEditor {
 
 			setCurrent(dbfactory.createProgramListing());
 			traverse(true);
+
 		} else {
 
 			NodeImpl ancestor = parent;
 
-			if (isContentModel(parent)) {
-				ancestor = dbfactory.createPara();
-				parent.appendChild(ancestor);
-			}
-
 			DocBookElement candidate = dbfactory.createLiteral();
 			candidate.setParentNode(ancestor);
 
-			if (candidate.validate()) {
+			if (candidate.isValidParent("VarEditor", ancestor)) {
 
 				setCurrent(candidate);
 				ancestor.appendChild(candidate);

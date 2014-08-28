@@ -8,8 +8,5 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-
-
 public class H3Editor extends HeadingEditor {
-
-    }
+}

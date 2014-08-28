@@ -68,8 +68,6 @@ public class DtEditor extends DocBookEditor {
 		entry.appendChild(getCurrent());
 
 		setParent(entry);
-		setAnything(getCurrent());
-
 		traverse(true);
 
 		return finalizeValues();

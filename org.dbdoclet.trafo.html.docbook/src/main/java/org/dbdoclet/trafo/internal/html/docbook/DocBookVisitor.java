@@ -20,7 +20,6 @@ import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.html.IEditorFactory;
 import org.dbdoclet.trafo.html.IHtmlVisitor;
-import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.html.docbook.ListDetector;
 import org.dbdoclet.trafo.html.docbook.SectionDetector;
 import org.dbdoclet.trafo.internal.html.docbook.editor.DocBookEditorFactory;
@@ -54,15 +53,15 @@ public class DocBookVisitor implements IHtmlVisitor {
 	}
 
 	public void addProgressListener(ProgressListener listener) {
-	
+
 		if (listener == null) {
 			return;
 		}
-		
+
 		if (listeners == null) {
 			listeners = new ArrayList<ProgressListener>();
 		}
-	
+
 		listeners.add(listener);
 	}
 
@@ -87,16 +86,15 @@ public class DocBookVisitor implements IHtmlVisitor {
 
 	@Override
 	public DocumentFragmentImpl createDocumentFragment(HtmlFragment htmlFragment) {
-		
+
 		DocumentFragmentImpl fragment = new DocumentFragmentImpl();
 		ElementImpl documentElement = createDocumentElement();
 		fragment.setUserData("documentElement", documentElement, null);
 		return fragment;
 	}
-	
+
 	@Override
 	public DocumentImpl createDocument(HtmlDocument htmlDoc) {
-
 
 		DocumentImpl document = new DocumentImpl();
 		ElementImpl documentElement = createDocumentElement();
@@ -113,9 +111,9 @@ public class DocBookVisitor implements IHtmlVisitor {
 			generateTitle(htmlDoc, dbfactory, info);
 		}
 
-		String abstractText = script
-				.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
-						TrafoConstants.PARAM_ABSTRACT, null);
+		String abstractText = script.getTextParameter(
+				TrafoConstants.SECTION_DOCBOOK, TrafoConstants.PARAM_ABSTRACT,
+				null);
 
 		if (abstractText != null) {
 			Abstract abstractElement = dbfactory.createAbstract();
@@ -125,32 +123,37 @@ public class DocBookVisitor implements IHtmlVisitor {
 
 		document.setDocumentElement(documentElement);
 		documentElement.setDocument(document);
-		
+
 		return document;
 	}
 
 	public ElementImpl createDocumentElement() {
-		
+
 		ElementImpl documentElement = dbfactory.createSection();
 		String tagName = "article";
-		
+
 		if (script != null) {
 
-			tagName = script.getTextParameter(
-					TrafoConstants.SECTION_DOCBOOK,
+			tagName = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
 					TrafoConstants.PARAM_DOCUMENT_ELEMENT, "article");
 			tagName = tagName.toLowerCase();
 		}
 
 		documentElement = dbfactory.createElementByName(tagName);
+		
+		if (documentElement == null) {
+			throw new IllegalStateException("Can't create document element " + tagName);
+		}
 		documentElement.setNamespaceURI(XmlConstants.NAMESPACE_DOCBOOK);
 		documentElement.setAttribute("xmlns", XmlConstants.NAMESPACE_DOCBOOK);
 		documentElement.setAttribute("version", "5.0");
 		documentElement.setAttribute("xmlns:xl", XmlConstants.NAMESPACE_XLINK);
-		documentElement.setAttribute("xmlns:xi", XmlConstants.NAMESPACE_XINCLUDE);
+		documentElement.setAttribute("xmlns:xi",
+				XmlConstants.NAMESPACE_XINCLUDE);
 
-		String language = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
-				TrafoConstants.PARAM_LANGUAGE, null);
+		String language = script.getTextParameter(
+				TrafoConstants.SECTION_DOCBOOK, TrafoConstants.PARAM_LANGUAGE,
+				null);
 
 		logger.debug("Profile: Parameter language = " + language);
 
@@ -167,11 +170,10 @@ public class DocBookVisitor implements IHtmlVisitor {
 		}
 
 		if (language != null) {
-			documentElement.setAttributeNS(
-					XmlConstants.NAMESPACE_XML, "xml:lang",
-					language);
+			documentElement.setAttributeNS(XmlConstants.NAMESPACE_XML,
+					"xml:lang", language);
 		}
-		
+
 		return documentElement;
 	}
 
@@ -275,7 +277,8 @@ public class DocBookVisitor implements IHtmlVisitor {
 
 	private String detectLanguage(Element documentElement) {
 
-		String lang = documentElement.getAttributeNS(XmlConstants.NAMESPACE_XML, "lang");
+		String lang = documentElement.getAttributeNS(
+				XmlConstants.NAMESPACE_XML, "lang");
 
 		if (lang == null) {
 			lang = documentElement.getAttribute("lang");
@@ -298,11 +301,11 @@ public class DocBookVisitor implements IHtmlVisitor {
 		if (newListeners == null) {
 			return;
 		}
-		
+
 		if (listeners == null) {
 			listeners = new ArrayList<ProgressListener>();
 		}
-	
+
 		listeners.addAll(newListeners);
 	}
 }

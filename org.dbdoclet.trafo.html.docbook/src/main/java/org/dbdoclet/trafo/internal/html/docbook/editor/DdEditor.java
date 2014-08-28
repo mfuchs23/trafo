@@ -10,7 +10,6 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.ListItem;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Term;
 import org.dbdoclet.tag.docbook.VarListEntry;
@@ -32,29 +31,21 @@ public class DdEditor extends DocBookEditor {
 		// Try to detect two sequenced dd tags.
 		if (getParent() instanceof VariableList) {
 
-			if (getAnything() instanceof ListItem) {
+			VarListEntry entry = dbfactory.createVarListEntry();
+			getParent().appendChild(entry);
 
-				list = (ListItem) getAnything();
+			Term term = dbfactory.createTerm();
+			entry.appendChild(term);
 
-			} else {
-
-				VarListEntry entry = dbfactory.createVarListEntry();
-				getParent().appendChild(entry);
-
-				Term term = dbfactory.createTerm();
-				entry.appendChild(term);
-
-				list = dbfactory.createListItem();
-				entry.appendChild(list);
-			}
+			list = dbfactory.createListItem();
+			entry.appendChild(list);
 
 		} else if (getParent() instanceof VarListEntry) {
 
 			list = dbfactory.createListItem();
 			getParent().appendChild(list);
-			setAnything(list);
 			setParent((DocBookElement) getParent().getParentNode());
-		} // end of else
+		}
 
 		if (list == null) {
 

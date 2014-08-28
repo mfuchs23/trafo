@@ -12,7 +12,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.service.StringServices;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookFragment;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.DocBookVersion;
 import org.dbdoclet.tag.docbook.Para;
@@ -41,7 +40,6 @@ public abstract class DocBookEditor implements IEditor {
 	private NodeImpl current;
 	private NodeImpl parent;
 	private HtmlElement child;
-	private Object anything;
 	private CharacterDataImpl characterDataNode;
 	private boolean doIgnore;
 	private boolean doTraverse;
@@ -49,7 +47,7 @@ public abstract class DocBookEditor implements IEditor {
 	private DocumentElementType documentElementType;
 	private DocBookTagFactory tagFactory;
 	protected Script script;
-	
+
 	public void copyCommonAttributes(HtmlElement html, DocBookElement dbk) {
 
 		logger.debug("Copy common attributes from " + html + " to " + dbk);
@@ -64,7 +62,8 @@ public abstract class DocBookEditor implements IEditor {
 			if (linkManager != null) {
 				dbk.setId(linkManager.createUniqueId(htmlId));
 			} else {
-				logger.warn("Attribute linkManager must not be null! " + html + ", " + toString());
+				logger.warn("Attribute linkManager must not be null! " + html
+						+ ", " + toString());
 			}
 		}
 
@@ -105,7 +104,7 @@ public abstract class DocBookEditor implements IEditor {
 
 		dbk.setUserData("html", html, null);
 	}
-	
+
 	private void createRemapAttribute(HtmlElement html, DocBookElement dbk) {
 		String remap = String.format("%s:%d:%d", html.getTagName(),
 				html.getLine(), html.getColumn());
@@ -134,7 +133,7 @@ public abstract class DocBookEditor implements IEditor {
 
 			if (characterDataNode != null
 					&& characterDataNode instanceof TextImpl) {
-			
+
 				Para para = dbfactory.createPara();
 				parent.appendChild(dbfactory.createEntry().appendChild(para));
 				parent = para;
@@ -151,18 +150,12 @@ public abstract class DocBookEditor implements IEditor {
 
 		values.doIgnore(doIgnore);
 		values.doTraverse(doTraverse);
-		values.setAnything(anything);
 		values.setHtmlElement(child);
 		values.setCurrent(current);
 		values.setParent(parent);
 		values.setCharacterDataNode(characterDataNode);
 
 		return values;
-	}
-
-	public Object getAnything() {
-
-		return anything;
 	}
 
 	public CharacterDataImpl getCharacterDataNode() {
@@ -214,7 +207,7 @@ public abstract class DocBookEditor implements IEditor {
 		if (tagFactory == null) {
 			tagFactory = new DocBookTagFactory();
 		}
-		
+
 		return tagFactory;
 	}
 
@@ -254,11 +247,6 @@ public abstract class DocBookEditor implements IEditor {
 		}
 	}
 
-	public void setAnything(Object newAnything) {
-
-		this.anything = newAnything;
-	}
-
 	public void setChild(HtmlElement newChild) {
 
 		this.child = newChild;
@@ -288,12 +276,13 @@ public abstract class DocBookEditor implements IEditor {
 	public void setValues(EditorInstruction values) {
 
 		script = values.getScript();
-		
+
 		if (script == null) {
-			throw new IllegalStateException("Der Parameter Script darf nicht null sein!");
+			throw new IllegalStateException(
+					"Der Parameter Script darf nicht null sein!");
 		}
-		
- 		anything = values.getAnything();
+
+		values.getAnything();
 		child = values.getHtmlElement();
 		current = values.getCurrent();
 		doIgnore = values.doIgnore();
@@ -359,48 +348,30 @@ public abstract class DocBookEditor implements IEditor {
 	}
 
 	protected boolean isList(NodeImpl parentNode) {
-		
+
 		if (parentNode instanceof DocBookElement) {
-	
+
 			DocBookElement parent = (DocBookElement) parentNode;
-	
+
 			if (parent.isList()) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
 	protected boolean isSection(NodeImpl parentNode) {
 
 		if (parentNode instanceof DocBookElement) {
-	
+
 			DocBookElement parent = (DocBookElement) parentNode;
-	
+
 			if (parent.isSection()) {
 				return true;
 			}
 		}
-		
-		return false;
-	}
 
-	protected boolean isContentModel(NodeImpl parentNode) {
-
-		if (parentNode instanceof DocBookElement) {
-	
-			DocBookElement parent = (DocBookElement) parentNode;
-	
-			if (parent.isContentModel()) {
-				return true;
-			}
-		}
-		
-		if (parentNode instanceof DocBookFragment) {
-			return true;
-		}
-		
 		return false;
 	}
 }

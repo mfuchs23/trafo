@@ -7,7 +7,6 @@ import org.dbdoclet.tag.docbook.Subscript;
 import org.dbdoclet.tag.docbook.Superscript;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public abstract class AbstractInlineEditor extends DocBookEditor {
@@ -35,15 +34,6 @@ public abstract class AbstractInlineEditor extends DocBookEditor {
 
 		NodeImpl parent = getParent();
 
-		if (isContentModel(parent)) {
-
-			Para para = dbfactory.createPara();
-			para.setFormatType(ElementImpl.FORMAT_INLINE);
-			parent.appendChild(para);
-			setParent(para);
-			parent = para;
-		}
-
 		if (parent instanceof Subscript || parent instanceof Superscript) {
 
 			NodeImpl ancestor = parent.getTrafoParentNode();
@@ -57,12 +47,11 @@ public abstract class AbstractInlineEditor extends DocBookEditor {
 			}
 		}
 
-		if (inlineElement.isValidParent(parent) == false) {
+		if (inlineElement.isValidParent("AbstractInlineEditor", parent) == false) {
 
 			Para candidate = dbfactory.createPara();
-			candidate.setParentNode(parent);
 
-			if (candidate.validate()) {
+			if (candidate.isValidParent("AbstractInlineEditor", parent)) {
 
 				setParent(candidate);
 				parent.appendChild(candidate);

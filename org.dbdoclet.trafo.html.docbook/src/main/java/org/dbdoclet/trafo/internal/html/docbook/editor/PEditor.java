@@ -46,7 +46,7 @@ public class PEditor extends DocBookEditor {
 			candidate.setFormatType(ElementImpl.FORMAT_INLINE);
 		}
 
-		if (candidate.validate()) {
+		if (parent instanceof Para == false && candidate.isValidParent("PEditor", parent)) {
 
 			setCurrent(candidate);
 			parent.appendChild(getCurrent());

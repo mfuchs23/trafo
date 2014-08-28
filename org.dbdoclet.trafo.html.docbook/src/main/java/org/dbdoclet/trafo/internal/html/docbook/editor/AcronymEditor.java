@@ -23,16 +23,13 @@ public class AcronymEditor extends DocBookEditor {
 		DocBookTagFactory dbfactory = getTagFactory();
 
 		Acronym candidate = dbfactory.createAcronym();
-		candidate.setParentNode(getParent());
 
-		if (candidate.validate()) {
-
+		if (candidate.isValidParent("AcronymEditor", getParent())) {
 			setCurrent(candidate);
 			getParent().appendChild(getCurrent());
-		} // end of if ()
+		}
 
 		traverse(true);
-
 		return finalizeValues();
 	}
 }

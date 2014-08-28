@@ -16,6 +16,7 @@ import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.docbook.DocumentElementType;
 import org.dbdoclet.trafo.script.Script;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -29,6 +30,7 @@ public class HeroldFileTests extends AbstractTests {
 	}
 
 	@Test
+	@Ignore
 	public void testWordProfile() throws IOException, SAXException,
 			ParserConfigurationException {
 
@@ -46,26 +48,31 @@ public class HeroldFileTests extends AbstractTests {
 	}
 
 	@Test
+	@Ignore
 	public void testPoe2Dita() {
 		html2dita("Edgar Allan Poe - Die Maske des roten Todes");
 	}
 
 	@Test
+	@Ignore
 	public void testJSB2DocBook() {
 		html2docbook("JSB");
 	}
 
 	@Test
+	@Ignore
 	public void testJSB2Dita() {
 		html2dita("JSB");
 	}
 
 	@Test
+	@Ignore
 	public void testJSB() {
 		herold("JSB.html", DocumentElementType.BOOK);
 	}
 
 	@Test
+	@Ignore
 	public void testJSB_1() {
 		try {
 
@@ -82,6 +89,7 @@ public class HeroldFileTests extends AbstractTests {
 	}
 
 	@Test
+	@Ignore
 	public void testLink1() {
 		herold("html/a/Link1.html", DocumentElementType.BOOK);
 	}

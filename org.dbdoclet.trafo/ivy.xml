@@ -9,7 +9,6 @@
     <dependency org="org.dbdoclet" name="org.dbdoclet.commons" rev="8.0.0" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.getopts" rev="8.0.0" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.xiphias" rev="8.0.0" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.html.parser" rev="8.0.0" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.jive" rev="8.0.0" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.html.parser" rev="8.0.0" revConstraint="latest.integration"/>
   </dependencies>

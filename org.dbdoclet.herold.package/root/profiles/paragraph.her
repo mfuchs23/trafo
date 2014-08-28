@@ -6,6 +6,6 @@ section HTML {
 }
 
 section DocBook {
-	document-element = "paragraph";
+	document-element = "para";
 	encoding = "UTF-8";
 }

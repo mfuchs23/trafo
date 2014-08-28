@@ -17,44 +17,45 @@ import org.dbdoclet.trafo.html.EditorInstruction;
 
 public class FontEditor extends DocBookEditor {
 
-    @Override
-	public EditorInstruction edit(EditorInstruction values) throws EditorException {
+	@Override
+	public EditorInstruction edit(EditorInstruction values)
+			throws EditorException {
 
-	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = getTagFactory();
+		setValues(super.edit(values));
+		DocBookTagFactory dbfactory = getTagFactory();
 
-	traverse(true);
-	Font font = (Font) values.getHtmlElement();
+		traverse(true);
+		Font font = (Font) values.getHtmlElement();
 
-	String color = font.getAttribute("color");
+		String color = font.getAttribute("color");
 
-	if (color == null || color.trim().length() == 0) {
-	    return finalizeValues();
+		if (color == null || color.trim().length() == 0) {
+			return finalizeValues();
+		}
+
+		Emphasis emphasis = dbfactory.createEmphasis();
+		emphasis.setRole("color");
+		emphasis.setCondition(color);
+
+		setCurrent(emphasis);
+
+		if (emphasis.isValidParent("FontEditor.edit", getParent()) == false) {
+
+			SimPara candidate = dbfactory.createSimPara();
+			candidate.setParentNode(getParent());
+
+			if (candidate.isValidParent("FontEditor", getParent())) {
+
+				getParent().appendChild(candidate);
+				candidate.appendChild(getCurrent());
+			}
+
+		} else {
+
+			getCurrent().setParentNode(getParent());
+			getParent().appendChild(getCurrent());
+		}
+
+		return finalizeValues();
 	}
-
-	Emphasis emphasis = dbfactory.createEmphasis();
-	emphasis.setRole("color");
-	emphasis.setCondition(color);
-
-	setCurrent(emphasis);
-
-	if (emphasis.isValidParent(getParent()) == false) {
-
-	    SimPara candidate = dbfactory.createSimPara();
-	    candidate.setParentNode(getParent());
-
-	    if (candidate.validate()) {
-
-		getParent().appendChild(candidate);
-		candidate.appendChild(getCurrent());
-	    }
-
-	} else {
-
-	    getCurrent().setParentNode(getParent());
-	    getParent().appendChild(getCurrent());
-	}
-
-	return finalizeValues();
-    }
 }

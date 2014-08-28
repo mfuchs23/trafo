@@ -11,6 +11,7 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -88,15 +89,21 @@ public class ImgEditor extends DocBookEditor {
 		logger.debug("Parameter use-absolute-image-path is set to "
 				+ useAbsoluteImagePath);
 
-		String imagePath = script.getTextParameter(TrafoConstants.SECTION_DOCBOOK,
-				TrafoConstants.PARAM_IMAGE_PATH, TrafoConstants.DEFAULT_IMAGE_PATH);
+		String imagePath = script.getTextParameter(
+				TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_IMAGE_PATH,
+				TrafoConstants.DEFAULT_IMAGE_PATH);
 
-		Param<?> param = script
-				.getVariable(TrafoConstants.VAR_IMAGE_SUBPATH);
+		Param<?> param = script.getVariable(TrafoConstants.VAR_IMAGE_SUBPATH);
 
 		if (param != null) {
-			imagePath = FileServices.appendPath(imagePath, param.getValueAsText());
+			imagePath = FileServices.appendPath(imagePath,
+					param.getValueAsText());
 		}
+
+		List<String> additionalFormats = script.getTextParameterList(
+				TrafoConstants.SECTION_DOCBOOK,
+				TrafoConstants.PARAM_IMAGEDATA_FORMATS);
 
 		logger.debug("Configuration property imagePath is set to " + imagePath);
 
@@ -114,6 +121,12 @@ public class ImgEditor extends DocBookEditor {
 
 		validateSrc(src);
 
+		File file = new File(src);
+
+		if (useAbsoluteImagePath) {
+			file = file.getAbsoluteFile();
+		}
+
 		DocBookElement media;
 		NodeImpl parent = getParent();
 
@@ -126,7 +139,14 @@ public class ImgEditor extends DocBookEditor {
 			parent.appendChild(media);
 			media.setParentNode(getCurrent());
 
-			setAnything(media.getParentNode());
+			try {
+
+				dbfactory.createHtmlImageData(media, dbfactory, img, file, additionalFormats);
+				dbfactory.createFoImageData(media, dbfactory, img, file, additionalFormats);
+
+			} catch (IOException oops) {
+				throw new EditorException(oops);
+			}
 
 		} else {
 
@@ -140,41 +160,24 @@ public class ImgEditor extends DocBookEditor {
 				figure = dbfactory.createInformalFigure();
 			}
 
-			figure.setParentNode(parent);
+			media = dbfactory.createMediaObject();
+			parent.appendChild(figure);
+			figure.appendChild(media);
 
-			if (figure.validate()) {
+			try {
 
-				parent.appendChild(figure);
+				dbfactory.createHtmlImageData(media, dbfactory, img, file,
+						additionalFormats);
+				dbfactory.createFoImageData(media, dbfactory, img, file,
+						additionalFormats);
 
-				media = dbfactory.createMediaObject();
-				figure.appendChild(media);
-
-				setAnything(figure);
-
-			} else {
-
-				traverse(true);
-				return finalizeValues();
+			} catch (IOException oops) {
+				throw new EditorException(oops);
 			}
 		}
 
 		traverse(false);
 		setCurrent(parent);
-
-		File file = new File(src);
-
-		if (useAbsoluteImagePath) {
-			file = file.getAbsoluteFile();
-		}
-
-		try {
-
-			dbfactory.createHtmlImageData(media, dbfactory, img, file);
-			dbfactory.createFoImageData(media, dbfactory, img, file);
-
-		} catch (IOException oops) {
-			throw new EditorException(oops);
-		}
 
 		return finalizeValues();
 	}

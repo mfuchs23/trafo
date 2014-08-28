@@ -8,8 +8,8 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
+import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.Literal;
 import org.dbdoclet.tag.html.Code;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -17,33 +17,29 @@ import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class CodeEditor extends DocBookEditor {
 
-    @Override
-    public EditorInstruction edit(EditorInstruction values) throws EditorException {
+	@Override
+	public EditorInstruction edit(EditorInstruction values)
+			throws EditorException {
 
-	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = getTagFactory();
+		setValues(super.edit(values));
+		DocBookTagFactory dbfactory = getTagFactory();
 
-	Code code = (Code) getHtmlElement();
-	NodeImpl parent = getParent();
+		Code code = (Code) getHtmlElement();
+		NodeImpl parent = getParent();
 
-	if (isContentModel(parent) == true) {
+		DocBookElement candidate = dbfactory.createLiteral(code.getTextContent());
 
-	    setCurrent(dbfactory.createProgramListing());
-	    parent.appendChild(getCurrent());
-	    traverse(true);
-
-	} else {
-
-	    Literal candidate = dbfactory.createLiteral(code.getTextContent());
-	    candidate.setParentNode(parent);
-
-	    if (candidate.validate()) {
-	    	parent.appendChild(candidate);
-	    }
-
-	    traverse(false);
+		if (candidate.isValidParent("CodeEditor", parent)) {
+		
+			parent.appendChild(candidate);
+			traverse(false);
+			return finalizeValues();
+		}
+		
+		candidate = dbfactory.createProgramListing();
+		setCurrent(candidate);
+		parent.appendChild(getCurrent());
+		traverse(true);
+		return finalizeValues();
 	}
-
-	return finalizeValues();
-    }
 }

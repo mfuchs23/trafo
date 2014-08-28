@@ -21,6 +21,10 @@
     </sequential>
   </macrodef>
 
+  <target name="distclean">
+    <iterate target="distclean"/>
+  </target>
+
   <target name="build">
     <iterate target="build"/>
   </target>

@@ -316,7 +316,7 @@ public class SectionDetector {
 			map = partIntroMap;
 		}
 
-		if (isRoot(Sect1.getTag())) {
+		if (isRoot(Sect1.tagName)) {
 			map = sect1Map;
 		}
 
@@ -332,15 +332,15 @@ public class SectionDetector {
 			map = referenceMap;
 		}
 
-		if (isRoot(RefSect1.getTag())) {
+		if (isRoot(RefSect1.tagName)) {
 			map = refSect1Map;
 		}
 
-		if (isRoot(RefSect2.getTag())) {
+		if (isRoot(RefSect2.tagName)) {
 			map = refSect2Map;
 		}
 
-		if (isRoot(RefSect3.getTag())) {
+		if (isRoot(RefSect3.tagName)) {
 			map = refSect3Map;
 		}
 
@@ -577,7 +577,7 @@ public class SectionDetector {
 			para = dbfactory.createPara();
 
 			if (((Para) para)
-					.isValidParent((DocBookElement) values.getParent())) {
+					.isValidParent("SectionDetector", (DocBookElement) values.getParent())) {
 				values.getParent().appendChild(para);
 			} else {
 				para = (DocBookElement) values.getParent();
