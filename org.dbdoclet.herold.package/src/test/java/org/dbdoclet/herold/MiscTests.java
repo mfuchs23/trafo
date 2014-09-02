@@ -7,12 +7,14 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 public class MiscTests extends AbstractTests {
 
 	@Test
+	@Ignore
 	public void concurrentModificationException() throws IOException,
 			SAXException, ParserConfigurationException {
 
