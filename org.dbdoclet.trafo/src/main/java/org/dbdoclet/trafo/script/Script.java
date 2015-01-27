@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.dbdoclet.service.StringServices;
 import org.dbdoclet.service.UnicodeServices;
+import org.dbdoclet.tag.ITransformPosition;
 import org.dbdoclet.trafo.param.BooleanParam;
 import org.dbdoclet.trafo.param.NumberParam;
 import org.dbdoclet.trafo.param.Param;
@@ -26,12 +27,13 @@ public class Script {
 	private LinkedHashMap<String, Param<?>> currentParamMap;
 	private final LinkedHashMap<String, Param<?>> variableMap;
 	private ArrayList<ScriptListener> listeners;
+	private ITransformPosition transformPosition;
 	private ArrayList<String> contextList;
 
 	public Script() {
 		namespaceMap = new LinkedHashMap<>();
 		variableMap = new LinkedHashMap<>();
-		contextList = new ArrayList<>();
+		contextList = new ArrayList<String>();
 	}
 
 	public void addBoolParam(String name, boolean flag) {
@@ -54,6 +56,10 @@ public class Script {
 	public void addBoolParam(String name, String bool) {
 
 		addBoolParam(name, Boolean.valueOf(bool));
+	}
+
+	public void addContext(String context) {
+		contextList.add(0, context);
 	}
 
 	public void addNumberParam(String name, int number) {
@@ -353,6 +359,10 @@ public class Script {
 		return list;
 	}
 
+	public ITransformPosition getTransformPosition() {
+		return transformPosition;
+	}
+
 	public Param<?> getVariable(String param) {
 		return variableMap.get(param);
 	}
@@ -442,6 +452,10 @@ public class Script {
 		}
 	}
 
+	public void removeContext(String context) {
+		contextList.remove(context);
+	}
+
 	public void removeScriptListener(ScriptListener listener) {
 
 		if (listeners == null || listener == null) {
@@ -514,20 +528,16 @@ public class Script {
 		TextParam param = new TextParam(name, new String(text));
 		currentParamMap.put(name, param);
 	}
+	
+	public void setTransformPosition(ITransformPosition transformPosition) {
+		this.transformPosition = transformPosition;
+	}
 
 	public void setVariable(Param<?> param) {
 		variableMap.put(param.getName(), param);
 	}
-	
+
 	public void unsetVariable(String varname) {
 		variableMap.remove(varname);
-	}
-
-	public void addContext(String context) {
-		contextList.add(0, context);
-	}
-
-	public void removeContext(String context) {
-		contextList.remove(context);
 	}
 }

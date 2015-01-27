@@ -24,7 +24,7 @@ public class AbbrEditor extends DocBookEditor {
 
 		Abbrev candidate = dbfactory.createAbbrev();
 
-		if (candidate.isValidParent("AbrEditor", getParent())) {
+		if (candidate.isValidParent(script.getTransformPosition(), getParent())) {
 
 			setCurrent(candidate);
 			getParent().appendChild(getCurrent());

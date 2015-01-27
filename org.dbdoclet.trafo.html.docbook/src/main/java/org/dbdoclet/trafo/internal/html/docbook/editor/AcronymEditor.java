@@ -24,7 +24,7 @@ public class AcronymEditor extends DocBookEditor {
 
 		Acronym candidate = dbfactory.createAcronym();
 
-		if (candidate.isValidParent("AcronymEditor", getParent())) {
+		if (candidate.isValidParent(script.getTransformPosition(), getParent())) {
 			setCurrent(candidate);
 			getParent().appendChild(getCurrent());
 		}

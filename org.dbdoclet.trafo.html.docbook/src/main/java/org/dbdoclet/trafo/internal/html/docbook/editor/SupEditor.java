@@ -25,7 +25,7 @@ public class SupEditor extends DocBookEditor {
 	candidate.setParentNode(getParent());
 	copyCommonAttributes(getHtmlElement(), candidate);
 	
-	if (candidate.isValidParent("SupEditor", getParent())) {
+	if (candidate.isValidParent(script.getTransformPosition(), getParent())) {
 
 	    setCurrent(candidate);
 	    getParent().appendChild(getCurrent());

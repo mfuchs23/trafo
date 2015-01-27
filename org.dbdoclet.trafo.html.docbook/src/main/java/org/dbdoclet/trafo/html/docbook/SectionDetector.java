@@ -577,7 +577,7 @@ public class SectionDetector {
 			para = dbfactory.createPara();
 
 			if (((Para) para)
-					.isValidParent("SectionDetector", (DocBookElement) values.getParent())) {
+					.isValidParent(script.getTransformPosition(), (DocBookElement) values.getParent())) {
 				values.getParent().appendChild(para);
 			} else {
 				para = (DocBookElement) values.getParent();

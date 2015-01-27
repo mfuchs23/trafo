@@ -218,7 +218,9 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 					TrafoConstants.PARAM_ADD_INDEX, false);
 
 			Index index = dbfactory.createIndex();
-			if (addIndex == true && index.isValidParent("addIndex", documentElement)) {
+			if (addIndex == true
+					&& documentElement instanceof DocumentFragment == false
+					&& index.isValidParent(script.getTransformPosition(), documentElement)) {
 				documentElement.appendChild(index);
 			}
 
@@ -238,7 +240,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 				NodeSerializer serializer = new NodeSerializer();
 				// serializer.setValidationEnabled(true);
 				// serializer.setIndentationEnabled(false);
-				
+
 				serializer.addProgressListeners(listeners);
 				serializer.setSystemId(getSystemId());
 				serializer.setEncoding(encoding);

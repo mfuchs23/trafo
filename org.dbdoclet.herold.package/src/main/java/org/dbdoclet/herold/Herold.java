@@ -308,7 +308,7 @@ public class Herold {
 			script = mgr.parseScript(profileFile);
 			logger.info(String.format("Using profile file %s.",
 					profileFile.getAbsolutePath()));
-
+			
 			if (logger.isTraceEnabled()) {
 				StringWriter buffer = new StringWriter();
 				mgr.writeScript(script, buffer);

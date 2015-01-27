@@ -39,12 +39,12 @@ public class FontEditor extends DocBookEditor {
 
 		setCurrent(emphasis);
 
-		if (emphasis.isValidParent("FontEditor.edit", getParent()) == false) {
+		if (emphasis.isValidParent(script.getTransformPosition(), getParent()) == false) {
 
 			SimPara candidate = dbfactory.createSimPara();
 			candidate.setParentNode(getParent());
 
-			if (candidate.isValidParent("FontEditor", getParent())) {
+			if (candidate.isValidParent(script.getTransformPosition(), getParent())) {
 
 				getParent().appendChild(candidate);
 				candidate.appendChild(getCurrent());

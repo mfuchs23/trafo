@@ -122,7 +122,7 @@ public class AEditor extends DocBookEditor {
 				linkElement = ulink;
 			}
 
-			if (linkElement.isValidParent("VarEditor", ancestor)) {
+			if (linkElement.isValidParent(script.getTransformPosition(), ancestor)) {
 
 				setCurrent(linkElement);
 				ancestor.appendChild(getCurrent());
@@ -133,7 +133,7 @@ public class AEditor extends DocBookEditor {
 				SimPara candidate = dbfactory.createSimPara();
 				candidate.setParentNode(ancestor);
 
-				if (candidate.isValidParent("VarEditor", ancestor)) {
+				if (candidate.isValidParent(script.getTransformPosition(), ancestor)) {
 
 					ancestor.appendChild(candidate);
 					candidate.appendChild(ancestor);

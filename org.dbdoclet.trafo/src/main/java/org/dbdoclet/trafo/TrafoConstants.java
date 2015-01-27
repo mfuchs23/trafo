@@ -7,7 +7,7 @@ public class TrafoConstants {
 	public static final String DEFAULT_EMPHASIS_ROLE_BOLD = "bold";
 	public static final String DEFAULT_EMPHASIS_ROLE_ITALIC = "italic";
 	public static final String DEFAULT_EMPHASIS_ROLE_UNDERLINE = "underline";
-	public static final String DEFAULT_IMAGE_PATH = "img";
+	public static final String DEFAULT_IMAGE_PATH = "./";
 	public static final int DEFAULT_MAX_LINE_WIDTH = 75;
 	public static final String DEFAULT_SOURCE_ENCODING = "UTF-8";
 	public static final String DEFAULT_TABLE_STYLE = "all";

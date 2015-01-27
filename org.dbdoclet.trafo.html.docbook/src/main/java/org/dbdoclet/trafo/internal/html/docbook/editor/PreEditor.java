@@ -53,7 +53,7 @@ public class PreEditor extends DocBookEditor {
 
 		candidate.setParentNode(parent);
 
-		if (candidate.isValidParent("PreEditor", parent)) {
+		if (candidate.isValidParent(script.getTransformPosition(), parent)) {
 
 			setCurrent(candidate);
 			parent.appendChild(candidate);

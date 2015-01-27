@@ -24,7 +24,7 @@ public class SubEditor extends DocBookEditor {
 	Subscript candidate = dbfactory.createSubscript();
 	candidate.setParentNode(getParent());
 
-	if (candidate.isValidParent("SubEditor", getParent())) {
+	if (candidate.isValidParent(script.getTransformPosition(), getParent())) {
 
 	    setCurrent(candidate);
 	    getParent().appendChild(getCurrent());

@@ -29,7 +29,7 @@ public class CodeEditor extends DocBookEditor {
 
 		DocBookElement candidate = dbfactory.createLiteral(code.getTextContent());
 
-		if (candidate.isValidParent("CodeEditor", parent)) {
+		if (candidate.isValidParent(script.getTransformPosition(), parent)) {
 		
 			parent.appendChild(candidate);
 			traverse(false);

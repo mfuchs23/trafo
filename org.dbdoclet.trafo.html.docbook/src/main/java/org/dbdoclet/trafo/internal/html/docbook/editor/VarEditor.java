@@ -38,7 +38,7 @@ public class VarEditor extends DocBookEditor {
 			DocBookElement candidate = dbfactory.createLiteral();
 			candidate.setParentNode(ancestor);
 
-			if (candidate.isValidParent("VarEditor", ancestor)) {
+			if (candidate.isValidParent(script.getTransformPosition(), ancestor)) {
 
 				setCurrent(candidate);
 				ancestor.appendChild(candidate);

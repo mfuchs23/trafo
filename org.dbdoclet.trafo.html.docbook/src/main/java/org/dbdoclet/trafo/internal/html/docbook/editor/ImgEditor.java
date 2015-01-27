@@ -96,7 +96,7 @@ public class ImgEditor extends DocBookEditor {
 
 		Param<?> param = script.getVariable(TrafoConstants.VAR_IMAGE_SUBPATH);
 
-		if (param != null) {
+		if (imagePath != null && param != null) {
 			imagePath = FileServices.appendPath(imagePath,
 					param.getValueAsText());
 		}

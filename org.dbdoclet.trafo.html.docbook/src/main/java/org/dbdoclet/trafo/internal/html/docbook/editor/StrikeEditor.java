@@ -29,12 +29,12 @@ public class StrikeEditor extends DocBookEditor {
 
 		setCurrent(emphasis);
 
-		if (emphasis.isValidParent("StrikeEditor.edit", getParent()) == false) {
+		if (emphasis.isValidParent(script.getTransformPosition(), getParent()) == false) {
 
 			SimPara candidate = dbfactory.createSimPara();
 			candidate.setParentNode(getParent());
 
-			if (candidate.isValidParent("StrikeEditor", getParent())) {
+			if (candidate.isValidParent(script.getTransformPosition(), getParent())) {
 
 				getParent().appendChild(candidate);
 				candidate.appendChild(getCurrent());

@@ -47,11 +47,11 @@ public abstract class AbstractInlineEditor extends DocBookEditor {
 			}
 		}
 
-		if (inlineElement.isValidParent("AbstractInlineEditor", parent) == false) {
+		if (inlineElement.isValidParent(script.getTransformPosition(), parent) == false) {
 
 			Para candidate = dbfactory.createPara();
 
-			if (candidate.isValidParent("AbstractInlineEditor", parent)) {
+			if (candidate.isValidParent(script.getTransformPosition(), parent)) {
 
 				setParent(candidate);
 				parent.appendChild(candidate);
