@@ -10,8 +10,10 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dbdoclet.ValidationResult;
 import org.dbdoclet.service.StringServices;
 import org.dbdoclet.tag.docbook.DocBookElement;
+import org.dbdoclet.tag.docbook.DocBookSchemaValidator;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.DocBookVersion;
 import org.dbdoclet.tag.docbook.Para;
@@ -30,6 +32,8 @@ import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 public abstract class DocBookEditor implements IEditor {
 
@@ -47,6 +51,21 @@ public abstract class DocBookEditor implements IEditor {
 	private DocumentElementType documentElementType;
 	private DocBookTagFactory tagFactory;
 	protected Script script;
+
+	protected void checkNode(Node node) {
+
+		try {
+			DocBookSchemaValidator validator = DocBookSchemaValidator
+					.getInstance();
+			ValidationResult result = validator.validate(
+					script.getTransformPosition(), node);
+			if (result.isValid() == false) {
+				logger.warn(result.getMessage());
+			}
+		} catch (SAXException oops) {
+			logger.fatal("Checking Node failed!", oops);
+		}
+	}
 
 	public void copyCommonAttributes(HtmlElement html, DocBookElement dbk) {
 
@@ -155,6 +174,8 @@ public abstract class DocBookEditor implements IEditor {
 		values.setParent(parent);
 		values.setCharacterDataNode(characterDataNode);
 
+		checkNode(current);
+
 		return values;
 	}
 
@@ -245,6 +266,34 @@ public abstract class DocBookEditor implements IEditor {
 		} else {
 			return false;
 		}
+	}
+
+	protected boolean isList(NodeImpl parentNode) {
+
+		if (parentNode instanceof DocBookElement) {
+
+			DocBookElement parent = (DocBookElement) parentNode;
+
+			if (parent.isList()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected boolean isSection(NodeImpl parentNode) {
+
+		if (parentNode instanceof DocBookElement) {
+
+			DocBookElement parent = (DocBookElement) parentNode;
+
+			if (parent.isSection()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void setChild(HtmlElement newChild) {
@@ -345,33 +394,5 @@ public abstract class DocBookEditor implements IEditor {
 		}
 
 		return src;
-	}
-
-	protected boolean isList(NodeImpl parentNode) {
-
-		if (parentNode instanceof DocBookElement) {
-
-			DocBookElement parent = (DocBookElement) parentNode;
-
-			if (parent.isList()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	protected boolean isSection(NodeImpl parentNode) {
-
-		if (parentNode instanceof DocBookElement) {
-
-			DocBookElement parent = (DocBookElement) parentNode;
-
-			if (parent.isSection()) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 }

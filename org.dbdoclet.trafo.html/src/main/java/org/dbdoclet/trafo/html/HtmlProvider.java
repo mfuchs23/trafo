@@ -135,6 +135,7 @@ public class HtmlProvider implements IHtmlProvider {
 						logger.debug(indent
 								+ " Nach der Kommentarbearbeitung: " + child
 								+ ".\n");
+						
 						targetNode = values.getParent();
 
 						if (targetNode == null) {
@@ -180,6 +181,7 @@ public class HtmlProvider implements IHtmlProvider {
 					logger.debug(indent + " Vor der Textbearbeitung: " + child
 							+ ".\n");
 					values = editor.edit(values);
+					
 					logger.debug(indent + " Nach der Textbearbeitung: " + child
 							+ ".\n");
 

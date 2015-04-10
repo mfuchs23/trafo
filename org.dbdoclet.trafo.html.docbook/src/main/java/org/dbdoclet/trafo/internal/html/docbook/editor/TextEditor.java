@@ -9,6 +9,7 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.ListItem;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
@@ -24,26 +25,34 @@ public class TextEditor extends DocBookEditor {
 		try {
 
 			setValues(super.edit(values));
-			
+
 			DocBookTagFactory dbfactory = getTagFactory();
 			NodeImpl current = getCurrent();
 			NodeImpl parent = getParent();
-			
+
 			if (isSection(parent)) {
 
 				if (getCharacterDataNode().getNodeType() == NodeImpl.TEXT_NODE) {
 
 					Para para = dbfactory.createPara();
 					parent.appendChild(para);
-
 					setParent(para);
 					parent = para;
-
 					setCurrent(para);
 					current = para;
 				}
 			}
 
+			if (isList(parent)) {
+				
+				ListItem item = dbfactory.createListItem();
+				parent.appendChild(item);
+				setParent(item);
+				parent = item;
+				setCurrent(item);
+				current = item;
+			}
+			
 			String text = getCharacterDataNode().getData();
 
 			if (script.isParameterOn(TrafoConstants.SECTION_DOCBOOK,
@@ -51,7 +60,7 @@ public class TextEditor extends DocBookEditor {
 				text = text.replace('\u00a0', ' ');
 			}
 
-			current.appendChild(text);
+			current.appendChild(text);						
 			return finalizeValues();
 
 		} catch (Exception oops) {
