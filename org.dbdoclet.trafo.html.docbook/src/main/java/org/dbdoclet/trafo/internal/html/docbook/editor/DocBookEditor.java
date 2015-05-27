@@ -60,7 +60,7 @@ public abstract class DocBookEditor implements IEditor {
 			ValidationResult result = validator.validate(
 					script.getTransformPosition(), node);
 			if (result.isValid() == false) {
-				logger.warn(result.getMessage());
+				logger.debug(result.getMessage());
 			}
 		} catch (SAXException oops) {
 			logger.fatal("Checking Node failed!", oops);
