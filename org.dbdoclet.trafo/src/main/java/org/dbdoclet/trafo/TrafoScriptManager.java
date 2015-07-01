@@ -9,17 +9,21 @@ import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.dbdoclet.trafo.param.Param;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.trafo.script.parser.TrafoScriptLexer;
+import org.dbdoclet.trafo.script.parser.TrafoScriptListener;
+import org.dbdoclet.trafo.script.parser.TrafoScriptListenerImpl;
 import org.dbdoclet.trafo.script.parser.TrafoScriptParser;
-import org.dbdoclet.trafo.script.parser.TrafoScriptWalker;
+import org.dbdoclet.trafo.script.parser.TrafoScriptParserErrorListener;
 
 public class TrafoScriptManager {
 
@@ -60,7 +64,7 @@ public class TrafoScriptManager {
 
 		try {
 			TrafoScriptLexer lex = new TrafoScriptLexer(new ANTLRInputStream(
-					instr, "UTF8"));
+					instr));
 			parseScript(script, lex, namespace);
 		} catch (Exception oops) {
 			throw new TrafoException(oops);
@@ -79,8 +83,7 @@ public class TrafoScriptManager {
 	public Script parseScript(String scriptBuffer) throws IOException,
 			RecognitionException, TrafoException {
 
-		TrafoScriptLexer lex = new TrafoScriptLexer(new ANTLRStringStream(
-				scriptBuffer));
+		TrafoScriptLexer lex = new TrafoScriptLexer(new ANTLRInputStream(scriptBuffer));
 
 		Script script = new Script();
 		parseScript(script, lex, "");
@@ -93,19 +96,21 @@ public class TrafoScriptManager {
 		CommonTokenStream tokens = new CommonTokenStream(lex);
 
 		TrafoScriptParser parser = new TrafoScriptParser(tokens);
-		TrafoScriptParser.parse_return r = parser.parse();
+		parser.removeErrorListeners();
+		TrafoScriptParserErrorListener errorListener = new TrafoScriptParserErrorListener();
+		parser.addErrorListener(errorListener);
+		ParseTree parserTree  = parser.parse();
 
-		List<String> errors = parser.getErrors();
+		List<String> errors = errorListener.getErrors();
 
 		if (errors != null && errors.size() > 0) {
 			throw new TrafoException(errors.get(0));
 		}
 
-		CommonTreeNodeStream nodes = new CommonTreeNodeStream(r.getTree());
-
-		TrafoScriptWalker walker = new TrafoScriptWalker(nodes);
-		walker.parse(script, namespace);
-
+		ParseTreeWalker walker = new ParseTreeWalker();
+		TrafoScriptListener listener = new TrafoScriptListenerImpl(script, namespace);
+		walker.walk(listener, parserTree);
+		
 		return script;
 	}
 
@@ -113,7 +118,7 @@ public class TrafoScriptManager {
 			throws TrafoException {
 
 		try {
-			TrafoScriptLexer lex = new TrafoScriptLexer(new ANTLRStringStream(
+			TrafoScriptLexer lex = new TrafoScriptLexer(new ANTLRInputStream(
 					scriptBuffer));
 			parseScript(script, lex, "");
 		} catch (Exception oops) {

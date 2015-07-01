@@ -1,742 +1,615 @@
-// $ANTLR 3.4 /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g 2014-07-22 16:28:14
+// Generated from TrafoScript.g4 by ANTLR 4.5
 
 package org.dbdoclet.trafo.script.parser;
 
 import java.util.LinkedList;
 
 
-
-import org.antlr.runtime.*;
-import java.util.Stack;
+import org.antlr.v4.runtime.atn.*;
+import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.*;
 import java.util.List;
+import java.util.Iterator;
 import java.util.ArrayList;
 
-import org.antlr.runtime.tree.*;
-
-
-@SuppressWarnings({"all", "warnings", "unchecked"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class TrafoScriptParser extends Parser {
-    public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "BC", "BO", "BOOL", "COMMENT", "EOS", "EQ", "ID", "LINE_COMMENT", "MULTILINE", "NUMBER", "REGEXP", "SECTION", "TEXT", "TRAN", "WS", "','", "'['", "']'"
-    };
-
-    public static final int EOF=-1;
-    public static final int T__19=19;
-    public static final int T__20=20;
-    public static final int T__21=21;
-    public static final int BC=4;
-    public static final int BO=5;
-    public static final int BOOL=6;
-    public static final int COMMENT=7;
-    public static final int EOS=8;
-    public static final int EQ=9;
-    public static final int ID=10;
-    public static final int LINE_COMMENT=11;
-    public static final int MULTILINE=12;
-    public static final int NUMBER=13;
-    public static final int REGEXP=14;
-    public static final int SECTION=15;
-    public static final int TEXT=16;
-    public static final int TRAN=17;
-    public static final int WS=18;
-
-    // delegates
-    public Parser[] getDelegates() {
-        return new Parser[] {};
-    }
-
-    // delegators
-
-
-    public TrafoScriptParser(TokenStream input) {
-        this(input, new RecognizerSharedState());
-    }
-    public TrafoScriptParser(TokenStream input, RecognizerSharedState state) {
-        super(input, state);
-    }
-
-protected TreeAdaptor adaptor = new CommonTreeAdaptor();
-
-public void setTreeAdaptor(TreeAdaptor adaptor) {
-    this.adaptor = adaptor;
-}
-public TreeAdaptor getTreeAdaptor() {
-    return adaptor;
-}
-    public String[] getTokenNames() { return TrafoScriptParser.tokenNames; }
-    public String getGrammarFileName() { return "/home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g"; }
-
-
-      
-      private List<String> errors = new LinkedList<String>();
-
-      public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
-     
-        String hdr = getErrorHeader(e);
-        String msg = getErrorMessage(e, tokenNames);
-        errors.add(hdr + " " + msg);
-      }
-
-      public List<String> getErrors() {
-        return errors;
-      }
-
-
-    public static class parse_return extends ParserRuleReturnScope {
-        CommonTree tree;
-        public Object getTree() { return tree; }
-    };
-
-
-    // $ANTLR start "parse"
-    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:35:1: parse : transformation ( section )* EOF ;
-    public final TrafoScriptParser.parse_return parse() throws RecognitionException {
-        TrafoScriptParser.parse_return retval = new TrafoScriptParser.parse_return();
-        retval.start = input.LT(1);
-
-
-        CommonTree root_0 = null;
-
-        Token EOF3=null;
-        TrafoScriptParser.transformation_return transformation1 =null;
-
-        TrafoScriptParser.section_return section2 =null;
-
-
-        CommonTree EOF3_tree=null;
-
-        try {
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:35:7: ( transformation ( section )* EOF )
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:35:9: transformation ( section )* EOF
-            {
-            root_0 = (CommonTree)adaptor.nil();
-
-
-            pushFollow(FOLLOW_transformation_in_parse54);
-            transformation1=transformation();
-
-            state._fsp--;
-
-            adaptor.addChild(root_0, transformation1.getTree());
-
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:35:24: ( section )*
-            loop1:
-            do {
-                int alt1=2;
-                int LA1_0 = input.LA(1);
-
-                if ( (LA1_0==SECTION) ) {
-                    alt1=1;
-                }
-
-
-                switch (alt1) {
-            	case 1 :
-            	    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:35:25: section
-            	    {
-            	    pushFollow(FOLLOW_section_in_parse57);
-            	    section2=section();
-
-            	    state._fsp--;
-
-            	    adaptor.addChild(root_0, section2.getTree());
-
-            	    }
-            	    break;
-
-            	default :
-            	    break loop1;
-                }
-            } while (true);
-
-
-            EOF3=(Token)match(input,EOF,FOLLOW_EOF_in_parse61); 
-            EOF3_tree = 
-            (CommonTree)adaptor.create(EOF3)
-            ;
-            adaptor.addChild(root_0, EOF3_tree);
-
-
-            }
-
-            retval.stop = input.LT(-1);
-
-
-            retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
-            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-    	retval.tree = (CommonTree)adaptor.errorNode(input, retval.start, input.LT(-1), re);
-
-        }
-
-        finally {
-        	// do for sure before leaving
-        }
-        return retval;
-    }
-    // $ANTLR end "parse"
-
-
-    public static class transformation_return extends ParserRuleReturnScope {
-        CommonTree tree;
-        public Object getTree() { return tree; }
-    };
-
-
-    // $ANTLR start "transformation"
-    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:37:1: transformation : TRAN ^ ID EOS !;
-    public final TrafoScriptParser.transformation_return transformation() throws RecognitionException {
-        TrafoScriptParser.transformation_return retval = new TrafoScriptParser.transformation_return();
-        retval.start = input.LT(1);
-
-
-        CommonTree root_0 = null;
-
-        Token TRAN4=null;
-        Token ID5=null;
-        Token EOS6=null;
-
-        CommonTree TRAN4_tree=null;
-        CommonTree ID5_tree=null;
-        CommonTree EOS6_tree=null;
-
-        try {
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:38:2: ( TRAN ^ ID EOS !)
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:38:4: TRAN ^ ID EOS !
-            {
-            root_0 = (CommonTree)adaptor.nil();
-
-
-            TRAN4=(Token)match(input,TRAN,FOLLOW_TRAN_in_transformation70); 
-            TRAN4_tree = 
-            (CommonTree)adaptor.create(TRAN4)
-            ;
-            root_0 = (CommonTree)adaptor.becomeRoot(TRAN4_tree, root_0);
-
-
-            ID5=(Token)match(input,ID,FOLLOW_ID_in_transformation73); 
-            ID5_tree = 
-            (CommonTree)adaptor.create(ID5)
-            ;
-            adaptor.addChild(root_0, ID5_tree);
-
-
-            EOS6=(Token)match(input,EOS,FOLLOW_EOS_in_transformation75); 
-
-            }
-
-            retval.stop = input.LT(-1);
-
-
-            retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
-            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-    	retval.tree = (CommonTree)adaptor.errorNode(input, retval.start, input.LT(-1), re);
-
-        }
-
-        finally {
-        	// do for sure before leaving
-        }
-        return retval;
-    }
-    // $ANTLR end "transformation"
-
-
-    public static class section_return extends ParserRuleReturnScope {
-        CommonTree tree;
-        public Object getTree() { return tree; }
-    };
-
-
-    // $ANTLR start "section"
-    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:40:1: section : SECTION ! ( ID ^| REGEXP ^) BO ! ( param )* BC !;
-    public final TrafoScriptParser.section_return section() throws RecognitionException {
-        TrafoScriptParser.section_return retval = new TrafoScriptParser.section_return();
-        retval.start = input.LT(1);
-
-
-        CommonTree root_0 = null;
-
-        Token SECTION7=null;
-        Token ID8=null;
-        Token REGEXP9=null;
-        Token BO10=null;
-        Token BC12=null;
-        TrafoScriptParser.param_return param11 =null;
-
-
-        CommonTree SECTION7_tree=null;
-        CommonTree ID8_tree=null;
-        CommonTree REGEXP9_tree=null;
-        CommonTree BO10_tree=null;
-        CommonTree BC12_tree=null;
-
-        try {
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:40:9: ( SECTION ! ( ID ^| REGEXP ^) BO ! ( param )* BC !)
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:40:11: SECTION ! ( ID ^| REGEXP ^) BO ! ( param )* BC !
-            {
-            root_0 = (CommonTree)adaptor.nil();
-
-
-            SECTION7=(Token)match(input,SECTION,FOLLOW_SECTION_in_section85); 
-
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:40:20: ( ID ^| REGEXP ^)
-            int alt2=2;
-            int LA2_0 = input.LA(1);
-
-            if ( (LA2_0==ID) ) {
-                alt2=1;
-            }
-            else if ( (LA2_0==REGEXP) ) {
-                alt2=2;
-            }
-            else {
-                NoViableAltException nvae =
-                    new NoViableAltException("", 2, 0, input);
-
-                throw nvae;
-
-            }
-            switch (alt2) {
-                case 1 :
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:40:21: ID ^
-                    {
-                    ID8=(Token)match(input,ID,FOLLOW_ID_in_section89); 
-                    ID8_tree = 
-                    (CommonTree)adaptor.create(ID8)
-                    ;
-                    root_0 = (CommonTree)adaptor.becomeRoot(ID8_tree, root_0);
-
-
-                    }
-                    break;
-                case 2 :
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:40:25: REGEXP ^
-                    {
-                    REGEXP9=(Token)match(input,REGEXP,FOLLOW_REGEXP_in_section92); 
-                    REGEXP9_tree = 
-                    (CommonTree)adaptor.create(REGEXP9)
-                    ;
-                    root_0 = (CommonTree)adaptor.becomeRoot(REGEXP9_tree, root_0);
-
-
-                    }
-                    break;
-
-            }
-
-
-            BO10=(Token)match(input,BO,FOLLOW_BO_in_section96); 
-
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:40:38: ( param )*
-            loop3:
-            do {
-                int alt3=2;
-                int LA3_0 = input.LA(1);
-
-                if ( (LA3_0==ID) ) {
-                    alt3=1;
-                }
-
-
-                switch (alt3) {
-            	case 1 :
-            	    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:40:39: param
-            	    {
-            	    pushFollow(FOLLOW_param_in_section100);
-            	    param11=param();
-
-            	    state._fsp--;
-
-            	    adaptor.addChild(root_0, param11.getTree());
-
-            	    }
-            	    break;
-
-            	default :
-            	    break loop3;
-                }
-            } while (true);
-
-
-            BC12=(Token)match(input,BC,FOLLOW_BC_in_section104); 
-
-            }
-
-            retval.stop = input.LT(-1);
-
-
-            retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
-            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-    	retval.tree = (CommonTree)adaptor.errorNode(input, retval.start, input.LT(-1), re);
-
-        }
-
-        finally {
-        	// do for sure before leaving
-        }
-        return retval;
-    }
-    // $ANTLR end "section"
-
-
-    public static class param_return extends ParserRuleReturnScope {
-        CommonTree tree;
-        public Object getTree() { return tree; }
-    };
-
-
-    // $ANTLR start "param"
-    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:42:1: param : ID ^ EQ ! expr EOS !;
-    public final TrafoScriptParser.param_return param() throws RecognitionException {
-        TrafoScriptParser.param_return retval = new TrafoScriptParser.param_return();
-        retval.start = input.LT(1);
-
-
-        CommonTree root_0 = null;
-
-        Token ID13=null;
-        Token EQ14=null;
-        Token EOS16=null;
-        TrafoScriptParser.expr_return expr15 =null;
-
-
-        CommonTree ID13_tree=null;
-        CommonTree EQ14_tree=null;
-        CommonTree EOS16_tree=null;
-
-        try {
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:42:7: ( ID ^ EQ ! expr EOS !)
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:42:9: ID ^ EQ ! expr EOS !
-            {
-            root_0 = (CommonTree)adaptor.nil();
-
-
-            ID13=(Token)match(input,ID,FOLLOW_ID_in_param113); 
-            ID13_tree = 
-            (CommonTree)adaptor.create(ID13)
-            ;
-            root_0 = (CommonTree)adaptor.becomeRoot(ID13_tree, root_0);
-
-
-            EQ14=(Token)match(input,EQ,FOLLOW_EQ_in_param116); 
-
-            pushFollow(FOLLOW_expr_in_param119);
-            expr15=expr();
-
-            state._fsp--;
-
-            adaptor.addChild(root_0, expr15.getTree());
-
-            EOS16=(Token)match(input,EOS,FOLLOW_EOS_in_param121); 
-
-            }
-
-            retval.stop = input.LT(-1);
-
-
-            retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
-            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-    	retval.tree = (CommonTree)adaptor.errorNode(input, retval.start, input.LT(-1), re);
-
-        }
-
-        finally {
-        	// do for sure before leaving
-        }
-        return retval;
-    }
-    // $ANTLR end "param"
-
-
-    public static class expr_return extends ParserRuleReturnScope {
-        CommonTree tree;
-        public Object getTree() { return tree; }
-    };
-
-
-    // $ANTLR start "expr"
-    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:44:1: expr : ( TEXT | MULTILINE | NUMBER | BOOL | '[' ! ']' !| '[' ! expr ( ',' ! expr )* ']' !);
-    public final TrafoScriptParser.expr_return expr() throws RecognitionException {
-        TrafoScriptParser.expr_return retval = new TrafoScriptParser.expr_return();
-        retval.start = input.LT(1);
-
-
-        CommonTree root_0 = null;
-
-        Token TEXT17=null;
-        Token MULTILINE18=null;
-        Token NUMBER19=null;
-        Token BOOL20=null;
-        Token char_literal21=null;
-        Token char_literal22=null;
-        Token char_literal23=null;
-        Token char_literal25=null;
-        Token char_literal27=null;
-        TrafoScriptParser.expr_return expr24 =null;
-
-        TrafoScriptParser.expr_return expr26 =null;
-
-
-        CommonTree TEXT17_tree=null;
-        CommonTree MULTILINE18_tree=null;
-        CommonTree NUMBER19_tree=null;
-        CommonTree BOOL20_tree=null;
-        CommonTree char_literal21_tree=null;
-        CommonTree char_literal22_tree=null;
-        CommonTree char_literal23_tree=null;
-        CommonTree char_literal25_tree=null;
-        CommonTree char_literal27_tree=null;
-
-        try {
-            // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:44:7: ( TEXT | MULTILINE | NUMBER | BOOL | '[' ! ']' !| '[' ! expr ( ',' ! expr )* ']' !)
-            int alt5=6;
-            switch ( input.LA(1) ) {
-            case TEXT:
-                {
-                alt5=1;
-                }
-                break;
-            case MULTILINE:
-                {
-                alt5=2;
-                }
-                break;
-            case NUMBER:
-                {
-                alt5=3;
-                }
-                break;
-            case BOOL:
-                {
-                alt5=4;
-                }
-                break;
-            case 20:
-                {
-                int LA5_5 = input.LA(2);
-
-                if ( (LA5_5==21) ) {
-                    alt5=5;
-                }
-                else if ( (LA5_5==BOOL||(LA5_5 >= MULTILINE && LA5_5 <= NUMBER)||LA5_5==TEXT||LA5_5==20) ) {
-                    alt5=6;
-                }
-                else {
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 5, 5, input);
-
-                    throw nvae;
-
-                }
-                }
-                break;
-            default:
-                NoViableAltException nvae =
-                    new NoViableAltException("", 5, 0, input);
-
-                throw nvae;
-
-            }
-
-            switch (alt5) {
-                case 1 :
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:44:9: TEXT
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
-
-
-                    TEXT17=(Token)match(input,TEXT,FOLLOW_TEXT_in_expr131); 
-                    TEXT17_tree = 
-                    (CommonTree)adaptor.create(TEXT17)
-                    ;
-                    adaptor.addChild(root_0, TEXT17_tree);
-
-
-                    }
-                    break;
-                case 2 :
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:45:4: MULTILINE
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
-
-
-                    MULTILINE18=(Token)match(input,MULTILINE,FOLLOW_MULTILINE_in_expr137); 
-                    MULTILINE18_tree = 
-                    (CommonTree)adaptor.create(MULTILINE18)
-                    ;
-                    adaptor.addChild(root_0, MULTILINE18_tree);
-
-
-                    }
-                    break;
-                case 3 :
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:46:8: NUMBER
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
-
-
-                    NUMBER19=(Token)match(input,NUMBER,FOLLOW_NUMBER_in_expr146); 
-                    NUMBER19_tree = 
-                    (CommonTree)adaptor.create(NUMBER19)
-                    ;
-                    adaptor.addChild(root_0, NUMBER19_tree);
-
-
-                    }
-                    break;
-                case 4 :
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:47:8: BOOL
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
-
-
-                    BOOL20=(Token)match(input,BOOL,FOLLOW_BOOL_in_expr155); 
-                    BOOL20_tree = 
-                    (CommonTree)adaptor.create(BOOL20)
-                    ;
-                    adaptor.addChild(root_0, BOOL20_tree);
-
-
-                    }
-                    break;
-                case 5 :
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:48:8: '[' ! ']' !
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
-
-
-                    char_literal21=(Token)match(input,20,FOLLOW_20_in_expr164); 
-
-                    char_literal22=(Token)match(input,21,FOLLOW_21_in_expr167); 
-
-                    }
-                    break;
-                case 6 :
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:49:8: '[' ! expr ( ',' ! expr )* ']' !
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
-
-
-                    char_literal23=(Token)match(input,20,FOLLOW_20_in_expr177); 
-
-                    pushFollow(FOLLOW_expr_in_expr180);
-                    expr24=expr();
-
-                    state._fsp--;
-
-                    adaptor.addChild(root_0, expr24.getTree());
-
-                    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:49:18: ( ',' ! expr )*
-                    loop4:
-                    do {
-                        int alt4=2;
-                        int LA4_0 = input.LA(1);
-
-                        if ( (LA4_0==19) ) {
-                            alt4=1;
-                        }
-
-
-                        switch (alt4) {
-                    	case 1 :
-                    	    // /home/michael/Java/workspaces/trafo8/org.dbdoclet.trafo/src/main/java/org/dbdoclet/trafo/script/parser/TrafoScript.g:49:19: ',' ! expr
-                    	    {
-                    	    char_literal25=(Token)match(input,19,FOLLOW_19_in_expr183); 
-
-                    	    pushFollow(FOLLOW_expr_in_expr186);
-                    	    expr26=expr();
-
-                    	    state._fsp--;
-
-                    	    adaptor.addChild(root_0, expr26.getTree());
-
-                    	    }
-                    	    break;
-
-                    	default :
-                    	    break loop4;
-                        }
-                    } while (true);
-
-
-                    char_literal27=(Token)match(input,21,FOLLOW_21_in_expr190); 
-
-                    }
-                    break;
-
-            }
-            retval.stop = input.LT(-1);
-
-
-            retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
-            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-    	retval.tree = (CommonTree)adaptor.errorNode(input, retval.start, input.LT(-1), re);
-
-        }
-
-        finally {
-        	// do for sure before leaving
-        }
-        return retval;
-    }
-    // $ANTLR end "expr"
-
-    // Delegated rules
-
-
- 
-
-    public static final BitSet FOLLOW_transformation_in_parse54 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_section_in_parse57 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_EOF_in_parse61 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TRAN_in_transformation70 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_ID_in_transformation73 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_EOS_in_transformation75 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SECTION_in_section85 = new BitSet(new long[]{0x0000000000004400L});
-    public static final BitSet FOLLOW_ID_in_section89 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_REGEXP_in_section92 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_BO_in_section96 = new BitSet(new long[]{0x0000000000000410L});
-    public static final BitSet FOLLOW_param_in_section100 = new BitSet(new long[]{0x0000000000000410L});
-    public static final BitSet FOLLOW_BC_in_section104 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_param113 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_EQ_in_param116 = new BitSet(new long[]{0x0000000000113040L});
-    public static final BitSet FOLLOW_expr_in_param119 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_EOS_in_param121 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TEXT_in_expr131 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MULTILINE_in_expr137 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUMBER_in_expr146 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BOOL_in_expr155 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_20_in_expr164 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_21_in_expr167 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_20_in_expr177 = new BitSet(new long[]{0x0000000000113040L});
-    public static final BitSet FOLLOW_expr_in_expr180 = new BitSet(new long[]{0x0000000000280000L});
-    public static final BitSet FOLLOW_19_in_expr183 = new BitSet(new long[]{0x0000000000113040L});
-    public static final BitSet FOLLOW_expr_in_expr186 = new BitSet(new long[]{0x0000000000280000L});
-    public static final BitSet FOLLOW_21_in_expr190 = new BitSet(new long[]{0x0000000000000002L});
-
+	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
+
+	protected static final DFA[] _decisionToDFA;
+	protected static final PredictionContextCache _sharedContextCache =
+		new PredictionContextCache();
+	public static final int
+		BO=1, BC=2, SBO=3, SBC=4, BOOL=5, EQ=6, EOS=7, COMMA=8, NUMBER=9, NODE=10, 
+		ATTRIBUTE=11, SECTION=12, TRAN=13, ID=14, REGEXP=15, TEXT=16, MULTILINE=17, 
+		WS=18, COMMENT=19, LINE_COMMENT=20;
+	public static final int
+		RULE_parse = 0, RULE_transformation = 1, RULE_section = 2, RULE_node = 3, 
+		RULE_attribute = 4, RULE_param = 5, RULE_expr = 6;
+	public static final String[] ruleNames = {
+		"parse", "transformation", "section", "node", "attribute", "param", "expr"
+	};
+
+	private static final String[] _LITERAL_NAMES = {
+		null, "'{'", "'}'", "'['", "']'", null, "'='", "';'", "','", null, "'node'", 
+		"'attribute'", "'section'", "'transformation'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, "BO", "BC", "SBO", "SBC", "BOOL", "EQ", "EOS", "COMMA", "NUMBER", 
+		"NODE", "ATTRIBUTE", "SECTION", "TRAN", "ID", "REGEXP", "TEXT", "MULTILINE", 
+		"WS", "COMMENT", "LINE_COMMENT"
+	};
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
+
+	@Override
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
+
+	@Override
+	public String getGrammarFileName() { return "TrafoScript.g4"; }
+
+	@Override
+	public String[] getRuleNames() { return ruleNames; }
+
+	@Override
+	public String getSerializedATN() { return _serializedATN; }
+
+	@Override
+	public ATN getATN() { return _ATN; }
+
+	public TrafoScriptParser(TokenStream input) {
+		super(input);
+		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
+	}
+	public static class ParseContext extends ParserRuleContext {
+		public TransformationContext transformation() {
+			return getRuleContext(TransformationContext.class,0);
+		}
+		public TerminalNode EOF() { return getToken(TrafoScriptParser.EOF, 0); }
+		public List<SectionContext> section() {
+			return getRuleContexts(SectionContext.class);
+		}
+		public SectionContext section(int i) {
+			return getRuleContext(SectionContext.class,i);
+		}
+		public List<NodeContext> node() {
+			return getRuleContexts(NodeContext.class);
+		}
+		public NodeContext node(int i) {
+			return getRuleContext(NodeContext.class,i);
+		}
+		public List<AttributeContext> attribute() {
+			return getRuleContexts(AttributeContext.class);
+		}
+		public AttributeContext attribute(int i) {
+			return getRuleContext(AttributeContext.class,i);
+		}
+		public ParseContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_parse; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).enterParse(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitParse(this);
+		}
+	}
+
+	public final ParseContext parse() throws RecognitionException {
+		ParseContext _localctx = new ParseContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_parse);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(14);
+			transformation();
+			setState(20);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NODE) | (1L << ATTRIBUTE) | (1L << SECTION))) != 0)) {
+				{
+				setState(18);
+				switch (_input.LA(1)) {
+				case SECTION:
+					{
+					setState(15);
+					section();
+					}
+					break;
+				case NODE:
+					{
+					setState(16);
+					node();
+					}
+					break;
+				case ATTRIBUTE:
+					{
+					setState(17);
+					attribute();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
+				}
+				setState(22);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(23);
+			match(EOF);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class TransformationContext extends ParserRuleContext {
+		public TerminalNode TRAN() { return getToken(TrafoScriptParser.TRAN, 0); }
+		public TerminalNode ID() { return getToken(TrafoScriptParser.ID, 0); }
+		public TerminalNode EOS() { return getToken(TrafoScriptParser.EOS, 0); }
+		public TransformationContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_transformation; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).enterTransformation(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitTransformation(this);
+		}
+	}
+
+	public final TransformationContext transformation() throws RecognitionException {
+		TransformationContext _localctx = new TransformationContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_transformation);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(25);
+			match(TRAN);
+			setState(26);
+			match(ID);
+			setState(27);
+			match(EOS);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class SectionContext extends ParserRuleContext {
+		public TerminalNode SECTION() { return getToken(TrafoScriptParser.SECTION, 0); }
+		public TerminalNode BO() { return getToken(TrafoScriptParser.BO, 0); }
+		public TerminalNode BC() { return getToken(TrafoScriptParser.BC, 0); }
+		public TerminalNode ID() { return getToken(TrafoScriptParser.ID, 0); }
+		public TerminalNode REGEXP() { return getToken(TrafoScriptParser.REGEXP, 0); }
+		public List<ParamContext> param() {
+			return getRuleContexts(ParamContext.class);
+		}
+		public ParamContext param(int i) {
+			return getRuleContext(ParamContext.class,i);
+		}
+		public SectionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_section; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).enterSection(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitSection(this);
+		}
+	}
+
+	public final SectionContext section() throws RecognitionException {
+		SectionContext _localctx = new SectionContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_section);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(29);
+			match(SECTION);
+			setState(30);
+			_la = _input.LA(1);
+			if ( !(_la==ID || _la==REGEXP) ) {
+			_errHandler.recoverInline(this);
+			} else {
+				consume();
+			}
+			setState(31);
+			match(BO);
+			setState(35);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==ID) {
+				{
+				{
+				setState(32);
+				param();
+				}
+				}
+				setState(37);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(38);
+			match(BC);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class NodeContext extends ParserRuleContext {
+		public TerminalNode NODE() { return getToken(TrafoScriptParser.NODE, 0); }
+		public TerminalNode TEXT() { return getToken(TrafoScriptParser.TEXT, 0); }
+		public TerminalNode BO() { return getToken(TrafoScriptParser.BO, 0); }
+		public TerminalNode BC() { return getToken(TrafoScriptParser.BC, 0); }
+		public List<ParamContext> param() {
+			return getRuleContexts(ParamContext.class);
+		}
+		public ParamContext param(int i) {
+			return getRuleContext(ParamContext.class,i);
+		}
+		public NodeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_node; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).enterNode(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitNode(this);
+		}
+	}
+
+	public final NodeContext node() throws RecognitionException {
+		NodeContext _localctx = new NodeContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_node);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(40);
+			match(NODE);
+			setState(41);
+			match(TEXT);
+			setState(42);
+			match(BO);
+			setState(46);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==ID) {
+				{
+				{
+				setState(43);
+				param();
+				}
+				}
+				setState(48);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(49);
+			match(BC);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class AttributeContext extends ParserRuleContext {
+		public TerminalNode ATTRIBUTE() { return getToken(TrafoScriptParser.ATTRIBUTE, 0); }
+		public TerminalNode TEXT() { return getToken(TrafoScriptParser.TEXT, 0); }
+		public TerminalNode BO() { return getToken(TrafoScriptParser.BO, 0); }
+		public TerminalNode BC() { return getToken(TrafoScriptParser.BC, 0); }
+		public List<ParamContext> param() {
+			return getRuleContexts(ParamContext.class);
+		}
+		public ParamContext param(int i) {
+			return getRuleContext(ParamContext.class,i);
+		}
+		public AttributeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_attribute; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).enterAttribute(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitAttribute(this);
+		}
+	}
+
+	public final AttributeContext attribute() throws RecognitionException {
+		AttributeContext _localctx = new AttributeContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_attribute);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(51);
+			match(ATTRIBUTE);
+			setState(52);
+			match(TEXT);
+			setState(53);
+			match(BO);
+			setState(57);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==ID) {
+				{
+				{
+				setState(54);
+				param();
+				}
+				}
+				setState(59);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(60);
+			match(BC);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ParamContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(TrafoScriptParser.ID, 0); }
+		public TerminalNode EQ() { return getToken(TrafoScriptParser.EQ, 0); }
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public TerminalNode EOS() { return getToken(TrafoScriptParser.EOS, 0); }
+		public ParamContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_param; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).enterParam(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitParam(this);
+		}
+	}
+
+	public final ParamContext param() throws RecognitionException {
+		ParamContext _localctx = new ParamContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_param);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(62);
+			match(ID);
+			setState(63);
+			match(EQ);
+			setState(64);
+			expr();
+			setState(65);
+			match(EOS);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ExprContext extends ParserRuleContext {
+		public TerminalNode BOOL() { return getToken(TrafoScriptParser.BOOL, 0); }
+		public TerminalNode NUMBER() { return getToken(TrafoScriptParser.NUMBER, 0); }
+		public TerminalNode TEXT() { return getToken(TrafoScriptParser.TEXT, 0); }
+		public TerminalNode MULTILINE() { return getToken(TrafoScriptParser.MULTILINE, 0); }
+		public TerminalNode SBO() { return getToken(TrafoScriptParser.SBO, 0); }
+		public TerminalNode SBC() { return getToken(TrafoScriptParser.SBC, 0); }
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
+		public List<TerminalNode> COMMA() { return getTokens(TrafoScriptParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(TrafoScriptParser.COMMA, i);
+		}
+		public ExprContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_expr; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).enterExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitExpr(this);
+		}
+	}
+
+	public final ExprContext expr() throws RecognitionException {
+		ExprContext _localctx = new ExprContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_expr);
+		int _la;
+		try {
+			setState(81);
+			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(67);
+				_la = _input.LA(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOL) | (1L << NUMBER) | (1L << TEXT) | (1L << MULTILINE))) != 0)) ) {
+				_errHandler.recoverInline(this);
+				} else {
+					consume();
+				}
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(68);
+				match(SBO);
+				setState(69);
+				match(SBC);
+				}
+				break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(70);
+				match(SBO);
+				setState(71);
+				expr();
+				setState(76);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==COMMA) {
+					{
+					{
+					setState(72);
+					match(COMMA);
+					setState(73);
+					expr();
+					}
+					}
+					setState(78);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(79);
+				match(SBC);
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static final String _serializedATN =
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\26V\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\3\2\3\2\3\2\3\2\7\2\25\n\2"+
+		"\f\2\16\2\30\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\7\4$\n\4\f\4"+
+		"\16\4\'\13\4\3\4\3\4\3\5\3\5\3\5\3\5\7\5/\n\5\f\5\16\5\62\13\5\3\5\3\5"+
+		"\3\6\3\6\3\6\3\6\7\6:\n\6\f\6\16\6=\13\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3"+
+		"\b\3\b\3\b\3\b\3\b\3\b\3\b\7\bM\n\b\f\b\16\bP\13\b\3\b\3\b\5\bT\n\b\3"+
+		"\b\2\2\t\2\4\6\b\n\f\16\2\4\3\2\20\21\5\2\7\7\13\13\22\23W\2\20\3\2\2"+
+		"\2\4\33\3\2\2\2\6\37\3\2\2\2\b*\3\2\2\2\n\65\3\2\2\2\f@\3\2\2\2\16S\3"+
+		"\2\2\2\20\26\5\4\3\2\21\25\5\6\4\2\22\25\5\b\5\2\23\25\5\n\6\2\24\21\3"+
+		"\2\2\2\24\22\3\2\2\2\24\23\3\2\2\2\25\30\3\2\2\2\26\24\3\2\2\2\26\27\3"+
+		"\2\2\2\27\31\3\2\2\2\30\26\3\2\2\2\31\32\7\2\2\3\32\3\3\2\2\2\33\34\7"+
+		"\17\2\2\34\35\7\20\2\2\35\36\7\t\2\2\36\5\3\2\2\2\37 \7\16\2\2 !\t\2\2"+
+		"\2!%\7\3\2\2\"$\5\f\7\2#\"\3\2\2\2$\'\3\2\2\2%#\3\2\2\2%&\3\2\2\2&(\3"+
+		"\2\2\2\'%\3\2\2\2()\7\4\2\2)\7\3\2\2\2*+\7\f\2\2+,\7\22\2\2,\60\7\3\2"+
+		"\2-/\5\f\7\2.-\3\2\2\2/\62\3\2\2\2\60.\3\2\2\2\60\61\3\2\2\2\61\63\3\2"+
+		"\2\2\62\60\3\2\2\2\63\64\7\4\2\2\64\t\3\2\2\2\65\66\7\r\2\2\66\67\7\22"+
+		"\2\2\67;\7\3\2\28:\5\f\7\298\3\2\2\2:=\3\2\2\2;9\3\2\2\2;<\3\2\2\2<>\3"+
+		"\2\2\2=;\3\2\2\2>?\7\4\2\2?\13\3\2\2\2@A\7\20\2\2AB\7\b\2\2BC\5\16\b\2"+
+		"CD\7\t\2\2D\r\3\2\2\2ET\t\3\2\2FG\7\5\2\2GT\7\6\2\2HI\7\5\2\2IN\5\16\b"+
+		"\2JK\7\n\2\2KM\5\16\b\2LJ\3\2\2\2MP\3\2\2\2NL\3\2\2\2NO\3\2\2\2OQ\3\2"+
+		"\2\2PN\3\2\2\2QR\7\6\2\2RT\3\2\2\2SE\3\2\2\2SF\3\2\2\2SH\3\2\2\2T\17\3"+
+		"\2\2\2\t\24\26%\60;NS";
+	public static final ATN _ATN =
+		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+	static {
+		_decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
+		for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {
+			_decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
+		}
+	}
 }

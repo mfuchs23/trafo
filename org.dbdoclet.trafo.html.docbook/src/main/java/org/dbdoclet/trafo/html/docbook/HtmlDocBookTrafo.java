@@ -235,7 +235,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 				result.setRootNode(document);
 			}
 
-			if (out != null) {
+ 			if (out != null) {
 
 				NodeSerializer serializer = new NodeSerializer();
 				// serializer.setValidationEnabled(true);

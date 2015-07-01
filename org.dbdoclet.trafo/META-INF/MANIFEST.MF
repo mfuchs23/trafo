@@ -3,13 +3,16 @@ Service-Component: OSGI-INF/component-description.xml
 Bundle-ManifestVersion: 2
 Bundle-Name: Trafo Plug-in
 Bundle-SymbolicName: org.dbdoclet.trafo
-Bundle-Version: 7.0.0
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Version: 8.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.dbdoclet.trafo,
  org.dbdoclet.trafo.param,
  org.dbdoclet.trafo.script
-Import-Package: org.antlr.runtime;version="3.2.0",
- org.antlr.runtime.tree;version="3.2.0",
+Import-Package: org.antlr.v4.runtime,
+ org.antlr.v4.runtime.atn,
+ org.antlr.v4.runtime.dfa,
+ org.antlr.v4.runtime.misc,
+ org.antlr.v4.runtime.tree,
  org.apache.commons.logging,
  org.dbdoclet,
  org.dbdoclet.html.tokenizer,
@@ -21,6 +24,7 @@ Import-Package: org.antlr.runtime;version="3.2.0",
  org.dbdoclet.progress,
  org.dbdoclet.service,
  org.dbdoclet.tag,
+ org.dbdoclet.trafo.script,
  org.dbdoclet.xiphias,
  org.dbdoclet.xiphias.dom,
  org.osgi.framework;version="1.5.0",

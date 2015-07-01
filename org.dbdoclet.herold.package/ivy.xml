@@ -6,7 +6,7 @@
   	<artifact name="herold"/>
   </publications>
   <dependencies>
- 	<dependency org="org.antlr" name="org.antlr.runtime" rev="3.2"/>
+ 	<dependency org="org.antlr" name="org.antlr.runtime" rev="4.5"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.commons" rev="8.0.0" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.getopts" rev="8.0.0" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.tag" rev="8.0.1" revConstraint="latest.integration"/>
