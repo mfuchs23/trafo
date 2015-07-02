@@ -5,7 +5,7 @@ Bundle-Name: org.dbdoclet.trafo.html.dita
 Bundle-SymbolicName: org.dbdoclet.trafo.html.dita
 Bundle-Version: 7.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: org.antlr.runtime;version="3.4.0",
+Import-Package: org.antlr.v4.runtime,
  org.apache.commons.logging,
  org.dbdoclet,
  org.dbdoclet.html.parser,

@@ -2,7 +2,7 @@
 <!--
 ### Copyright (C) 2001-2012 Michael Fuchs ###
 -->
-<project name="common" default="build">
+<project name="trafo" default="build">
 
   <property name="resolveMode" value="default"/>
 

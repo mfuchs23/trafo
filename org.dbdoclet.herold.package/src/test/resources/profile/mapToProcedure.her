@@ -1,0 +1,5 @@
+transformation html2docbook;
+
+node "//ol[@class='procedure']" {
+	map-to = "procedure";
+}

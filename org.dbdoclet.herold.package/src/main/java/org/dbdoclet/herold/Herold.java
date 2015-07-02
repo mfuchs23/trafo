@@ -42,7 +42,11 @@ import org.dbdoclet.trafo.TrafoResult;
 import org.dbdoclet.trafo.TrafoScriptManager;
 import org.dbdoclet.trafo.html.dita.HtmlDitaTrafo;
 import org.dbdoclet.trafo.html.docbook.HtmlDocBookTrafo;
+import org.dbdoclet.trafo.param.BooleanParam;
+import org.dbdoclet.trafo.param.TextParam;
+import org.dbdoclet.trafo.script.Namespace;
 import org.dbdoclet.trafo.script.Script;
+import org.dbdoclet.trafo.script.Section;
 
 /**
  * The class <code>Herold</code> implements a console converter to transform
@@ -467,33 +471,38 @@ public class Herold {
 
 	public File processCommandLineOptions(OptionList options, Script script) {
 
+		Namespace namespace = script.getNamespace();
+		Section section = null;
+		
 		for (Option<?> option : options) {
 
 			String name = option.getLongName();
 
 			if (name.startsWith(TrafoConstants.SECTION_DOCBOOK.toLowerCase())) {
-				script.selectSection(TrafoConstants.SECTION_DOCBOOK);
+				
+				section = namespace.findOrCreateSection(TrafoConstants.SECTION_DOCBOOK);
 				name = StringServices.cutPrefix(name,
 						TrafoConstants.SECTION_DOCBOOK.toLowerCase());
 
 			} else if (name.startsWith(TrafoConstants.SECTION_HTML
 					.toLowerCase())) {
-				script.selectSection(TrafoConstants.SECTION_HTML);
+
+				section = namespace.findOrCreateSection(TrafoConstants.SECTION_HTML);
 				name = StringServices.cutPrefix(name,
 						TrafoConstants.SECTION_HTML.toLowerCase());
 			}
 
 			name = StringServices.cutPrefix(name, "-");
 
-			if (option.isUnset() == false) {
+			if (section != null && option.isUnset() == false) {
 				switch (option.getType()) {
 
 				case BOOLEAN:
-					script.setBoolParameter(name, (Boolean) option.getValue());
+					section.setParam(new BooleanParam(name, (Boolean) option.getValue()));
 					break;
 
 				default:
-					script.setTextParameter(name, option.getValue().toString());
+					section.setParam(new TextParam(name, option.getValue().toString()));
 					break;
 				}
 			}

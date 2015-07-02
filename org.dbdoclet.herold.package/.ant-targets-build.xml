@@ -17,9 +17,12 @@ distclean.deepAll
 doc
 install
 javadoc
+mvn-bundle
 publish
+release
 resolve
 resources
+scratch
 test
 test.all
 test.ant

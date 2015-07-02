@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 
 import org.dbdoclet.jive.widget.GridPanel;
 import org.dbdoclet.jive.widget.LanguageListBox;
+import org.dbdoclet.trafo.param.TextParam;
+import org.dbdoclet.trafo.script.Namespace;
 import org.dbdoclet.trafo.script.Script;
 
 public abstract class AbstractPanelProvider extends GridPanel {
@@ -27,13 +29,16 @@ public abstract class AbstractPanelProvider extends GridPanel {
 		structureList = new ArrayList<>();
 		Component[] jcomponentArray = panel.getComponents();
 		getComponentsList(jcomponentArray);
-		script.selectSection("", "project");
-		script.setListParam("structure", structureList);
+		script.getNamespace().findSection("project").setListParam("structure", structureList);
 		return script;
 	}
 
 	private void getComponentsList(Component[] jcomponentArray) {
 
+		String panelName = "Panel";
+		
+		Namespace namespace = script.getNamespace();
+		
 		for (Component comp : jcomponentArray) {
 
 			if (comp instanceof JPanel) {
@@ -41,14 +46,16 @@ public abstract class AbstractPanelProvider extends GridPanel {
 					getComponentsList(((JPanel) comp).getComponents());
 					continue;
 				}
-				script.selectSection("", comp.getName());
+				
+				panelName = comp.getName();
 				getComponentsList(((JPanel) comp).getComponents());
+				
 			} else if (comp instanceof JTabbedPane) {
 				getComponentsList(((JTabbedPane) comp).getComponents());
 			} else if (comp instanceof JLabel == false) {
 				if (comp instanceof JTextField) {
-					script.setTextParameter(comp.getName(),
-							((JTextField) comp).getText());
+					namespace.findOrCreateSection(panelName).setParam(new TextParam(comp.getName(),
+							((JTextField) comp).getText()));
 					continue;
 				}
 
@@ -57,21 +64,21 @@ public abstract class AbstractPanelProvider extends GridPanel {
 						structureList.add(((JCheckBox) comp).getToolTipText());
 						continue;
 					}
-					script.setTextParameter(comp.getName(), (new Boolean(
-							((JCheckBox) comp).isSelected())).toString());
+					namespace.findOrCreateSection(panelName).setParam(new TextParam(comp.getName(), (new Boolean(
+							((JCheckBox) comp).isSelected())).toString()));
 					continue;
 				}
 
 				if (comp instanceof LanguageListBox) {
-					script.setTextParameter(comp.getName(),
+					namespace.findOrCreateSection(panelName).setParam(new TextParam(comp.getName(),
 							((LanguageListBox) comp).getSelectedLocale()
-									.toString().toUpperCase());
+									.toString().toUpperCase()));
 					continue;
 				}
 
 				if (comp instanceof JComboBox) {
-					script.setTextParameter(comp.getName(), ((JComboBox<?>) comp)
-							.getSelectedItem().toString());
+					namespace.findOrCreateSection(panelName).setParam(new TextParam(comp.getName(), ((JComboBox<?>) comp)
+							.getSelectedItem().toString()));
 					continue;
 				}
 			}

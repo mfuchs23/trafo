@@ -2,10 +2,6 @@
 
 package org.dbdoclet.trafo.script.parser;
 
-import java.util.LinkedList;
-
-
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

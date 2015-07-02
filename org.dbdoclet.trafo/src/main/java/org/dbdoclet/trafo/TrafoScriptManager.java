@@ -6,11 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -18,7 +15,11 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.dbdoclet.trafo.param.Param;
+import org.dbdoclet.trafo.script.AttributeRule;
+import org.dbdoclet.trafo.script.Namespace;
+import org.dbdoclet.trafo.script.NodeRule;
 import org.dbdoclet.trafo.script.Script;
+import org.dbdoclet.trafo.script.Section;
 import org.dbdoclet.trafo.script.parser.TrafoScriptLexer;
 import org.dbdoclet.trafo.script.parser.TrafoScriptListener;
 import org.dbdoclet.trafo.script.parser.TrafoScriptListenerImpl;
@@ -139,7 +140,7 @@ public class TrafoScriptManager {
 		writeScript(Script.DEFAULT_NAMESPACE, script, writer);
 	}
 
-	public void writeScript(String namespace, Script script, Writer writer)
+	public void writeScript(String namespaceName, Script script, Writer writer)
 			throws IOException {
 
 		PrintWriter printWriter = null;
@@ -150,7 +151,7 @@ public class TrafoScriptManager {
 
 			String transformationName = "trafo";
 
-			Param<?> sysparam = script.getSystemParameter(namespace,
+			Param<?> sysparam = script.getSystemParameter(namespaceName,
 					Script.SYSPARAM_TRANSFORMATION_NAME);
 
 			if (sysparam != null) {
@@ -160,30 +161,53 @@ public class TrafoScriptManager {
 			printWriter.println(String.format("transformation %s;",
 					transformationName));
 
-			LinkedHashMap<String, LinkedHashMap<String, Param<?>>> sectionMap = script
-					.getSectionMap(namespace);
+			Namespace namespace = script.getNamespace(namespaceName);
+			
+			if (namespace == null) {
+				return;
+			}
+			
+			for (Section section: namespace.getSections()) {
 
-			if (sectionMap != null) {
-
-				for (String sectionName : sectionMap.keySet()) {
-
-					if (sectionName.startsWith("SYS ")) {
+				if (section.getName().startsWith("SYS ")) {
 						continue;
-					}
+				}
 
-					printWriter.println(String.format("%nsection %s {",
-							sectionName));
+				printWriter.println(String.format("%nsection %s {",
+							section.getName()));
 
-					LinkedHashMap<String, Param<?>> paramMap = sectionMap
-							.get(sectionName);
-
-					for (Param<?> param : paramMap.values()) {
+				for (Param<?> param : section.getParameters()) {
 						printWriter.println(String.format("\t%s;",
 								param.toString()));
-					}
-
-					printWriter.println("}");
 				}
+
+				printWriter.println("}");				
+			}
+
+			for (NodeRule nodeRule : namespace.getNodeRules()) {
+
+				printWriter.println(String.format("%nnode %s {",
+							nodeRule.getName()));
+
+				for (Param<?> param : nodeRule.getParameters()) {
+						printWriter.println(String.format("\t%s;",
+								param.toString()));
+				}
+
+				printWriter.println("}");				
+			}
+
+			for (AttributeRule attributeRule : namespace.getAttributeRules()) {
+
+				printWriter.println(String.format("%nattribute %s {",
+							attributeRule.getName()));
+
+				for (Param<?> param : attributeRule.getParameters()) {
+						printWriter.println(String.format("\t%s;",
+								param.toString()));
+				}
+
+				printWriter.println("}");				
 			}
 
 		} finally {

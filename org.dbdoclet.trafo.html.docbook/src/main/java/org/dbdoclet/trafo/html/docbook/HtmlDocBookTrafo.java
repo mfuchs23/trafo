@@ -32,10 +32,13 @@ import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage1;
 import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage2;
 import org.dbdoclet.trafo.internal.html.docbook.PostprocessStage3;
 import org.dbdoclet.trafo.internal.html.docbook.PreprocessStage1;
+import org.dbdoclet.trafo.param.TextParam;
+import org.dbdoclet.trafo.script.Namespace;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.trafo.script.ScriptEvent;
 import org.dbdoclet.trafo.script.ScriptEvent.Type;
 import org.dbdoclet.trafo.script.ScriptListener;
+import org.dbdoclet.trafo.script.Section;
 import org.dbdoclet.xiphias.NodeSerializer;
 import org.dbdoclet.xiphias.dom.DocumentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
@@ -132,15 +135,16 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 					}
 				}
 
-				script.selectSection(TrafoConstants.SECTION_HTML);
-				script.setTextParameter(TrafoConstants.PARAM_ENCODING,
-						htmlDocBookPanel.getSourceEncoding());
+				Namespace namespace = script.getNamespace();
+				Section section = namespace.findOrCreateSection(TrafoConstants.SECTION_HTML);
+				section.setParam(new TextParam(TrafoConstants.PARAM_ENCODING,
+						htmlDocBookPanel.getSourceEncoding()));
 
-				script.selectSection(TrafoConstants.SECTION_DOCBOOK);
-				script.setTextParameter(TrafoConstants.PARAM_LANGUAGE,
-						htmlDocBookPanel.getLanguage());
-				script.setTextParameter(TrafoConstants.PARAM_DOCUMENT_ELEMENT,
-						htmlDocBookPanel.getDocumentType());
+				section = namespace.findOrCreateSection(TrafoConstants.SECTION_DOCBOOK);
+				section.setParam(new TextParam(TrafoConstants.PARAM_LANGUAGE,
+						htmlDocBookPanel.getLanguage()));
+				section.setParam(new TextParam(TrafoConstants.PARAM_DOCUMENT_ELEMENT,
+						htmlDocBookPanel.getDocumentType()));
 			}
 
 			DocBookVisitor visitor = new DocBookVisitor();

@@ -387,6 +387,11 @@ public class HtmlProvider implements IHtmlProvider {
 		HtmlDocument htmlDocument = parser.parseDocument(htmlCode);
 		ElementImpl documentElement = (ElementImpl) htmlDocument.getDocumentElement();
 		documentElement.removeAttribute("xmlns");
+		parseAfter(documentElement);
+		return htmlDocument;
+	}
+
+	private void parseAfter(NodeImpl contextNode) {
 		
 		TextParam excludeParam = (TextParam) script.getParameter(
 				TrafoConstants.SECTION_HTML, TrafoConstants.PARAM_EXCLUDE);
@@ -396,7 +401,7 @@ public class HtmlProvider implements IHtmlProvider {
 			for (String excludeXpath : excludeParam.getValues()) {
 
 				ArrayList<Node> nodeList = XPathServices.getNodes(
-						documentElement, excludeXpath);
+						contextNode, excludeXpath);
 
 				for (Node node : nodeList) {
 					if (node.getParentNode() != null) {
@@ -405,8 +410,6 @@ public class HtmlProvider implements IHtmlProvider {
 				}
 			}
 		}
-
-		return htmlDocument;
 	}
 
 	@Override
@@ -419,25 +422,8 @@ public class HtmlProvider implements IHtmlProvider {
 		}
 		
 		HtmlFragment htmlFragment = parser.parseFragment(htmlCode);
-
-		TextParam excludeParam = (TextParam) script.getParameter(
-				TrafoConstants.SECTION_HTML, TrafoConstants.PARAM_EXCLUDE);
-
-		if (excludeParam != null) {
-
-			for (String excludeXpath : excludeParam.getValues()) {
-
-				ArrayList<Node> nodeList = XPathServices.getNodes(
-						htmlFragment, excludeXpath);
-
-				for (Node node : nodeList) {
-					if (node.getParentNode() != null) {
-						node.getParentNode().removeChild(node);
-					}
-				}
-			}
-		}
-
+		parseAfter(htmlFragment);
+		
 		return htmlFragment;
 	}
 

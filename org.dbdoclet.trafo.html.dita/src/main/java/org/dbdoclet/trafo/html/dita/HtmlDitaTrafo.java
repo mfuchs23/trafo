@@ -17,7 +17,6 @@ import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.progress.ProgressManager;
 import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.tag.dita.DitaTagFactory;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlFragment;
 import org.dbdoclet.trafo.AbstractTrafoService;
@@ -31,10 +30,13 @@ import org.dbdoclet.trafo.internal.html.dita.PostprocessStage1;
 import org.dbdoclet.trafo.internal.html.dita.PostprocessStage2;
 import org.dbdoclet.trafo.internal.html.dita.PostprocessStage3;
 import org.dbdoclet.trafo.internal.html.dita.PreprocessStage1;
+import org.dbdoclet.trafo.param.TextParam;
+import org.dbdoclet.trafo.script.Namespace;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.trafo.script.ScriptEvent;
 import org.dbdoclet.trafo.script.ScriptEvent.Type;
 import org.dbdoclet.trafo.script.ScriptListener;
+import org.dbdoclet.trafo.script.Section;
 import org.dbdoclet.xiphias.NodeSerializer;
 import org.dbdoclet.xiphias.dom.DocumentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
@@ -75,7 +77,7 @@ public class HtmlDitaTrafo extends AbstractTrafoService implements
 		return script;
 	}
 
-	public	DitaTagFactory getTagFactory() {
+	public DitaTagFactory getTagFactory() {
 		return tagFactory;
 	}
 
@@ -131,15 +133,18 @@ public class HtmlDitaTrafo extends AbstractTrafoService implements
 					}
 				}
 
-				script.selectSection(TrafoConstants.SECTION_HTML);
-				script.setTextParameter(TrafoConstants.PARAM_ENCODING,
-						htmlDitaPanel.getSourceEncoding());
+				Namespace namespace = script.getNamespace();
+				Section section = namespace
+						.findSection(TrafoConstants.SECTION_HTML);
+				section.setParam(new TextParam(TrafoConstants.PARAM_ENCODING,
+						htmlDitaPanel.getSourceEncoding()));
 
-				script.selectSection(TrafoConstants.SECTION_DOCBOOK);
-				script.setTextParameter(TrafoConstants.PARAM_LANGUAGE,
-						htmlDitaPanel.getLanguage());
-				script.setTextParameter(TrafoConstants.PARAM_DOCUMENT_ELEMENT,
-						htmlDitaPanel.getDocumentType());
+				section = namespace.findSection(TrafoConstants.SECTION_DOCBOOK);
+				section.setParam(new TextParam(TrafoConstants.PARAM_LANGUAGE,
+						htmlDitaPanel.getLanguage()));
+				section.setParam(new TextParam(
+						TrafoConstants.PARAM_DOCUMENT_ELEMENT, htmlDitaPanel
+								.getDocumentType()));
 			}
 
 			DitaVisitor visitor = new DitaVisitor();
@@ -251,19 +256,19 @@ public class HtmlDitaTrafo extends AbstractTrafoService implements
 	private String retrieveHtmlCode(InputStream in, String encoding)
 			throws IOException {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream(); 
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		byte[] buffer = new byte[4096];
-		
+
 		int n = in.read(buffer);
-		while ( n != -1) {
+		while (n != -1) {
 			out.write(buffer, 0, n);
 			n = in.read(buffer);
 		}
 
 		in.close();
 		out.close();
-		
+
 		return new String(out.toByteArray(), encoding);
 	}
 

@@ -1,15 +1,13 @@
 package org.dbdoclet.trafo.script;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.dbdoclet.service.StringServices;
-import org.dbdoclet.service.UnicodeServices;
 import org.dbdoclet.tag.ITransformPosition;
-import org.dbdoclet.trafo.param.BooleanParam;
-import org.dbdoclet.trafo.param.NumberParam;
 import org.dbdoclet.trafo.param.Param;
 import org.dbdoclet.trafo.param.TextParam;
 
@@ -23,64 +21,25 @@ public class Script {
 	private static final String SECTION_OUTPUT = "output";
 	private static final String PARAM_FORMAT = "format";
 
-	private final LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Param<?>>>> namespaceMap;
-	private LinkedHashMap<String, Param<?>> currentParamMap;
 	private final LinkedHashMap<String, Param<?>> variableMap;
+	private final LinkedHashMap<String, Namespace> namespaceMap;
+	
 	private ArrayList<ScriptListener> listeners;
 	private ITransformPosition transformPosition;
 	private ArrayList<String> contextList;
 
+	public enum SectionType {
+		SECTION, NODE, ATTRIBUTE;
+	};
+	
 	public Script() {
 		namespaceMap = new LinkedHashMap<>();
 		variableMap = new LinkedHashMap<>();
-		contextList = new ArrayList<String>();
-	}
-
-	public void addBoolParam(String name, boolean flag) {
-
-		if (currentParamMap == null) {
-			throw new IllegalStateException(
-					"Field currentParamMap must not be null!");
-		}
-
-		BooleanParam param = (BooleanParam) currentParamMap.get(name);
-
-		if (param == null) {
-			param = new BooleanParam(name, flag);
-			currentParamMap.put(name, param);
-		} else {
-			param.addValue(flag);
-		}
-	}
-
-	public void addBoolParam(String name, String bool) {
-
-		addBoolParam(name, Boolean.valueOf(bool));
+		contextList = new ArrayList<>();
 	}
 
 	public void addContext(String context) {
 		contextList.add(0, context);
-	}
-
-	public void addNumberParam(String name, int number) {
-
-		if (currentParamMap == null) {
-			throw new IllegalStateException(
-					"Field currentParamMap must not be null!");
-		}
-
-		NumberParam param = (NumberParam) currentParamMap.get(name);
-
-		if (param == null) {
-			param = new NumberParam(name, number);
-			currentParamMap.put(name, param);
-		} else {
-			param.addValue(number);
-		}
-	}
-
-	public void addNumberParam(String name, String number) {
-		addNumberParam(name, Integer.valueOf(number));
 	}
 
 	public void addScriptListener(ScriptListener listener) {
@@ -98,45 +57,31 @@ public class Script {
 		}
 	}
 
-	public void addTextParam(String name, String text) {
-
-		if (currentParamMap == null) {
-			throw new IllegalStateException(
-					"Field currentParamMap must not be null!");
-		}
-
-		text = UnicodeServices.unescape(text);
-		TextParam param = (TextParam) currentParamMap.get(name);
-
-		if (param == null) {
-			param = new TextParam(name, new String(text));
-			currentParamMap.put(name, param);
-		} else {
-			param.addValue(new String(text));
-		}
-	}
-
 	public String dump() {
 
 		StringBuilder buffer = new StringBuilder();
 
-		for (String namespace : namespaceMap.keySet()) {
+		for (String namespaceName : namespaceMap.keySet()) {
 
-			System.out.println("\n+++ Namespace: " + namespace);
-
-			LinkedHashMap<String, LinkedHashMap<String, Param<?>>> sectionMap = namespaceMap
-					.get(namespace);
-
-			for (String section : sectionMap.keySet()) {
-
-				System.out.println("> Section: " + section);
-
-				LinkedHashMap<String, Param<?>> paramMap = sectionMap
-						.get(section);
-
-				for (String name : paramMap.keySet()) {
-
-					Param<?> param = paramMap.get(name);
+			System.out.println("\n+++ Namespace: " + namespaceName);
+			Namespace namespace = namespaceMap.get(namespaceName);
+			
+			for (Section section : namespace.getSections()) {
+				System.out.println("> Section: " + section.getName());
+				for (Param<?> param : section.getParameters()) {
+					System.out.println(param.toString());
+				}
+			}
+			
+			for (NodeRule nodeRule: namespace.getNodeRules()) {
+				System.out.println("> Section: " + nodeRule.getName());
+				for (Param<?> param : nodeRule.getParameters()) {
+					System.out.println(param.toString());
+				}
+			}
+			for (Section section : namespace.getSections()) {
+				System.out.println("> Section: " + section.getName());
+				for (Param<?> param : section.getParameters()) {
 					System.out.println(param.toString());
 				}
 			}
@@ -145,33 +90,23 @@ public class Script {
 		return buffer.toString();
 	}
 
-	private LinkedHashMap<String, Param<?>> findParamMap(String namespace,
-			String section) {
+	private Section findSection(String namespaceName, String name) {
+
+		if (namespaceName == null) {
+			namespaceName = DEFAULT_NAMESPACE;
+		}
+
+		if (name == null) {
+			name = DEFAULT_SECTION;
+		}
+
+		Namespace namespace = namespaceMap.get(namespaceName);
 
 		if (namespace == null) {
-			namespace = DEFAULT_NAMESPACE;
+			return null;
 		}
 
-		if (section == null) {
-			section = DEFAULT_SECTION;
-		}
-
-		LinkedHashMap<String, LinkedHashMap<String, Param<?>>> sectionMap = namespaceMap
-				.get(namespace);
-
-		if (sectionMap == null) {
-			sectionMap = new LinkedHashMap<String, LinkedHashMap<String, Param<?>>>();
-			namespaceMap.put(namespace, sectionMap);
-		}
-
-		LinkedHashMap<String, Param<?>> paramMap = sectionMap.get(section);
-
-		if (paramMap == null) {
-			paramMap = new LinkedHashMap<String, Param<?>>();
-			sectionMap.put(section, paramMap);
-		}
-
-		return paramMap;
+		return namespace.findSection(name);
 	}
 
 	public void fireScriptEvent(ScriptEvent<?> event) {
@@ -217,27 +152,41 @@ public class Script {
 		return getTextParameter(namespace, SECTION_OUTPUT, PARAM_FORMAT, null);
 	}
 
+	public Collection<NodeRule> getNodeRules(String section, String name) {
+		return getNodeRules(DEFAULT_NAMESPACE, section, name);
+	}
+
+	private Collection<NodeRule> getNodeRules(
+			String namespaceName, String section, String name) {
+		
+		Namespace namespace = namespaceMap.get(namespaceName);
+		if (namespace == null) {
+			return null;
+		}
+		
+		return namespace.getNodeRules();
+	}
+
 	public Param<?> getParameter(String section, String name) {
 		return getParameter(DEFAULT_NAMESPACE, section, name);
 	}
 
-	public Param<?> getParameter(String namespace, String section, String name) {
+	public Param<?> getParameter(String namespaceName, String sectionName, String paramName) {
 
-		LinkedHashMap<String, LinkedHashMap<String, Param<?>>> sectionMap = namespaceMap
-				.get(namespace);
+		Namespace namespace = namespaceMap.get(namespaceName);
 
-		if (sectionMap == null) {
+		if (namespace == null) {
 			return null;
 		}
 
-		List<String> specificSectionList = sectionMap.keySet().stream()
-				.filter(sectionName -> contextList.contains(sectionName))
+		List<Section> specificSectionList = namespace.getSections().stream()
+				.filter(section -> contextList.contains(section.getName()))
 				.collect(Collectors.toList());
 			
-		List<String> regexpSectionList = sectionMap.keySet().stream()
-				.filter(sectionName -> {
-					if (sectionName.startsWith("/") && sectionName.endsWith("/")) {
-						String regexp = StringServices.trim(sectionName, "/");
+		List<Section> regexpSectionList = namespace.getSections().stream()
+				.filter(section -> {
+					if (section.getName().startsWith("/") && section.getName().endsWith("/")) {
+						String regexp = StringServices.trim(section.getName(), "/");
 						return contextList.stream().filter(contextName -> contextName.matches(regexp)).collect(Collectors.toList()).size() > 0;
 					} else {
 						return false;
@@ -246,27 +195,27 @@ public class Script {
 				.collect(Collectors.toList());
 
 		
-		LinkedHashMap<String, Param<?>> paramMap = sectionMap.get(section);
+		Section section = namespace.findSection(sectionName);
 
 		if (specificSectionList != null && specificSectionList.size() > 0) {
-			LinkedHashMap<String, Param<?>> specificParamMap = sectionMap.get(specificSectionList.get(0));
-			if (specificParamMap.get(name) != null) {
-				return specificParamMap.get(name);
+			Param<?> param = specificSectionList.get(0).findParameter(paramName);
+			if (param != null) {
+				return param;
 			}
 		}		
 
 		if (regexpSectionList != null && regexpSectionList.size() > 0) {
-			LinkedHashMap<String, Param<?>> regexpParamMap = sectionMap.get(regexpSectionList.get(0));
-			if (regexpParamMap.get(name) != null) {
-				return regexpParamMap.get(name);
+			Param<?> param = regexpSectionList.get(0).findParameter(paramName);
+			if (param != null) {
+				return param;
 			}
 		}
 		
-		if (paramMap == null) {
+		if (section == null) {
 			return null;
 		}
-
-		return paramMap.get(name);
+		
+		return section.findParameter(paramName);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -300,17 +249,21 @@ public class Script {
 		return getParameterValue(DEFAULT_NAMESPACE, section, name, def);
 	}
 
-	public LinkedHashMap<String, LinkedHashMap<String, Param<?>>> getSectionMap(
-			String namespace) {
-		return namespaceMap.get(namespace);
+	public Namespace getNamespace(
+			String namespaceName) {
+		return namespaceMap.get(namespaceName);
 	}
 
 	public Param<?> getSystemParameter(String namespace, String name) {
 
-		LinkedHashMap<String, Param<?>> paramMap = findParamMap(namespace,
-				SECTION_SYSTEM);
+		Section section = findSection(namespace, SECTION_SYSTEM);
 
-		return paramMap.get(name);
+		if (section == null) {
+			return null;
+			
+		}
+		
+		return section.findParameter(name);
 	}
 
 	public String getTextParameter(String section, String name, String def) {
@@ -406,48 +359,39 @@ public class Script {
 
 	public void mergeNamespaces() {
 
-		LinkedHashMap<String, LinkedHashMap<String, Param<?>>> defSectionMap = namespaceMap
-				.get(DEFAULT_NAMESPACE);
+		Namespace defNamespace = namespaceMap.get(DEFAULT_NAMESPACE);
 
-		if (defSectionMap == null) {
-			defSectionMap = new LinkedHashMap<String, LinkedHashMap<String, Param<?>>>();
+		if (defNamespace == null) {
+			defNamespace = new Namespace(DEFAULT_NAMESPACE);
 		}
 
-		ArrayList<String> removeList = new ArrayList<String>();
+		ArrayList<Namespace> removeList = new ArrayList<Namespace>();
 
-		for (String namespace : namespaceMap.keySet()) {
+		for (Namespace namespace : namespaceMap.values()) {
 
-			if (namespace.equals(DEFAULT_NAMESPACE)) {
+			if (namespace.getName().equals(DEFAULT_NAMESPACE)) {
 				continue;
 			}
 
-			LinkedHashMap<String, LinkedHashMap<String, Param<?>>> sectionMap = namespaceMap
-					.get(namespace);
+			for (Section section : namespace.getSections()) {
 
-			for (String section : sectionMap.keySet()) {
-
-				LinkedHashMap<String, Param<?>> paramMap = sectionMap
-						.get(section);
-
-				LinkedHashMap<String, Param<?>> defParamMap = defSectionMap
-						.get(section);
-
-				if (defParamMap == null) {
-					defParamMap = new LinkedHashMap<String, Param<?>>();
-					defSectionMap.put(section, defParamMap);
+				
+				Section defSection = defNamespace.findSection(section.getName());
+				
+				if (defSection == null) {
+					defSection = new Section(section.getName());
+					defNamespace.addSection(defSection);
 				}
-
-				for (String name : paramMap.keySet()) {
-
-					Param<?> param = paramMap.get(name);
-					defParamMap.put(name, param);
+				
+				for (Param<?> param : section.getParameters()) {
+					defSection.addParam(param);
 				}
 			}
 
 			removeList.add(namespace);
 		}
 
-		for (String namespace : removeList) {
+		for (Namespace namespace : removeList) {
 			namespaceMap.remove(namespace);
 		}
 	}
@@ -467,28 +411,19 @@ public class Script {
 		}
 	}
 
-	public void selectSection(String section) {
-		selectSection(DEFAULT_NAMESPACE, section);
-	}
-
-	public void selectSection(String namespace, String section) {
-
-		LinkedHashMap<String, Param<?>> paramMap = findParamMap(namespace,
-				section);
-		currentParamMap = paramMap;
-	}
-
+	/*
 	public void setBoolParameter(String name, boolean flag) {
 
-		if (currentParamMap == null) {
+		if (currentMap == null) {
 			throw new IllegalStateException(
 					"Field currentParamMap must not be null!");
 		}
 
 		BooleanParam param = new BooleanParam(name, flag);
-		currentParamMap.put(name, param);
+		currentMap.put(name, param);
 	}
-
+	*/
+	
 	public void setEnabled(String section, String name, boolean flag) {
 
 		Param<?> param = getParameter(section, name);
@@ -498,35 +433,27 @@ public class Script {
 		}
 	}
 
-	public void setListParam(String name, ArrayList<String> textList) {
-
-		@SuppressWarnings("unchecked")
-		Param<ArrayList<String>> param = (Param<ArrayList<String>>) currentParamMap
-				.get(name);
-		param = new Param<ArrayList<String>>(name, textList);
-		currentParamMap.put(name, param);
-	}
-
 	public void setSystemParameter(String name, String value) {
 		setSystemParameter(DEFAULT_NAMESPACE, name, value);
 	}
 
-	public void setSystemParameter(String namespace, String name, String value) {
+	public void setSystemParameter(String namespaceName, String name, String value) {
 
-		LinkedHashMap<String, Param<?>> paramMap = findParamMap(namespace,
-				SECTION_SYSTEM);
-		paramMap.put(name, new TextParam(name, value));
-	}
-
-	public void setTextParameter(String name, String text) {
-
-		if (currentParamMap == null) {
-			throw new IllegalStateException(
-					"The field currentParamMap must not be null! Select a scetion first.");
+		Namespace namespace = namespaceMap.get(namespaceName);
+		
+		if (namespace == null) {
+			namespace = new Namespace(namespaceName);
+			namespaceMap.put(namespaceName, namespace);
 		}
-
-		TextParam param = new TextParam(name, new String(text));
-		currentParamMap.put(name, param);
+		
+		Section section = namespace.findSection(SECTION_SYSTEM);
+		
+		if (section == null) {
+			section = new Section(SECTION_SYSTEM);
+			namespace.addSection(section);
+		}
+		
+		section.addParam(new TextParam(name, value));
 	}
 	
 	public void setTransformPosition(ITransformPosition transformPosition) {
@@ -539,5 +466,21 @@ public class Script {
 
 	public void unsetVariable(String varname) {
 		variableMap.remove(varname);
+	}
+
+	public void addNamespace(Namespace namespace) {
+		namespaceMap.put(namespace.getName(), namespace);
+	}
+
+	public Namespace getNamespace() {
+		
+		Namespace namespace = getNamespace(DEFAULT_NAMESPACE);
+		
+		if (namespace == null) {
+			namespace = new Namespace(DEFAULT_NAMESPACE);
+			addNamespace(namespace);
+		}
+		
+		return namespace;
 	}
 }

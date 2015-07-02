@@ -101,8 +101,14 @@ public class AbstractTests {
 		try {
 
 			TrafoScriptManager mgr = new TrafoScriptManager();
+			
+			String pathname = "./src/test/resources/profile/" + profile;
+			if (pathname.endsWith(".her") == false) {
+				pathname += ".her";
+			}
+			
 			Script script = mgr.parseScript(new File(
-					"./src/test/resources/profile/" + profile + ".her"));
+					pathname));
 
 			StringWriter buffer = new StringWriter();
 			mgr.writeScript(script, buffer);

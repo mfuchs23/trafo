@@ -47,10 +47,6 @@ public class Param<T> {
 		return valueList;
 	}
 
-	public void addValue(T value) {
-		valueList.add(value);
-	}
-
 	public void setValue(T value) {
 
 		valueList.clear();
@@ -152,5 +148,9 @@ public class Param<T> {
 
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	public void addValue(T value) {
+		valueList.add(value);
 	}
 }
