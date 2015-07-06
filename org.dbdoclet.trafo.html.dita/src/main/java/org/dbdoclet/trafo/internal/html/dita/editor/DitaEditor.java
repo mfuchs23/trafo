@@ -10,6 +10,7 @@ package org.dbdoclet.trafo.internal.html.dita.editor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dbdoclet.tag.TagFactory;
 import org.dbdoclet.tag.dita.DitaElement;
 import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.dita.P;
@@ -169,7 +170,7 @@ public abstract class DitaEditor implements IEditor {
 		return parent;
 	}
 
-	@Override
+	// @Override
 	public DitaTagFactory getTagFactory() {
 
 		if (tagFactory == null) {
