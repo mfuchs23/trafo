@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.TreeMap;
 
 import org.dbdoclet.trafo.param.Param;
+import org.dbdoclet.trafo.param.TextParam;
 
 public class Section {
 
@@ -66,6 +67,17 @@ public class Section {
 
 		Param<ArrayList<String>> param = new Param<>(name, textList);
 		parameterMap.put(name, param);
+	}
+
+	public TextParam findTextParameter(String paramName) {
+
+		Param<?> p = findParameter(paramName);
+		
+		if (TextParam.class.isInstance(p)) {
+			return (TextParam) p;
+		}
+		
+		return null;
 	}
 	
 }

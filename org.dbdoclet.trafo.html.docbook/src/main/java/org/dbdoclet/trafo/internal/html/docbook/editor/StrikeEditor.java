@@ -8,9 +8,9 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
-import org.dbdoclet.tag.docbook.SimPara;
+import org.dbdoclet.tag.docbook.Simpara;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
@@ -21,7 +21,7 @@ public class StrikeEditor extends DocBookEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 
 		traverse(true);
 		Emphasis emphasis = dbfactory.createEmphasis();
@@ -31,7 +31,7 @@ public class StrikeEditor extends DocBookEditor {
 
 		if (emphasis.isValidParent(script.getTransformPosition(), getParent()) == false) {
 
-			SimPara candidate = dbfactory.createSimPara();
+			Simpara candidate = dbfactory.createSimpara();
 			candidate.setParentNode(getParent());
 
 			if (candidate.isValidParent(script.getTransformPosition(), getParent())) {

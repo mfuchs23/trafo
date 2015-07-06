@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.ValidationResult;
 import org.dbdoclet.service.StringServices;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookSchemaValidator;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
@@ -137,7 +138,7 @@ public abstract class DocBookEditor implements IEditor {
 		}
 
 		setValues(vo);
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 
 		if (parent instanceof Row) {
 
@@ -331,7 +332,6 @@ public abstract class DocBookEditor implements IEditor {
 					"Der Parameter Script darf nicht null sein!");
 		}
 
-		values.getAnything();
 		child = values.getHtmlElement();
 		current = values.getCurrent();
 		doIgnore = values.doIgnore();

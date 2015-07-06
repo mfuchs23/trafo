@@ -19,7 +19,7 @@ public class CaptionEditor extends DitaEditor {
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DitaTagFactory tagFactory = getTagFactory();
+	DitaTagFactory tagFactory = (DitaTagFactory) getTagFactory();
 
 	Title title = tagFactory.createTitle();
 

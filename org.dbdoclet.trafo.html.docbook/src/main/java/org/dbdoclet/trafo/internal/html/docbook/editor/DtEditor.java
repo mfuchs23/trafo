@@ -8,11 +8,11 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Term;
-import org.dbdoclet.tag.docbook.VarListEntry;
-import org.dbdoclet.tag.docbook.VariableList;
+import org.dbdoclet.tag.docbook.Varlistentry;
+import org.dbdoclet.tag.docbook.Variablelist;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.ElementImpl;
@@ -26,26 +26,26 @@ public class DtEditor extends DocBookEditor {
 		DocBookElement entry = null;
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 
-		if (getParent() instanceof VariableList) {
+		if (getParent() instanceof Variablelist) {
 
-			entry = dbfactory.createVarListEntry();
+			entry = dbfactory.createVarlistentry();
 			entry.setParentNode(getParent());
 			getParent().appendChild(entry);
 
-		} else if (getParent() instanceof VarListEntry) {
+		} else if (getParent() instanceof Varlistentry) {
 
 			setParent((DocBookElement) getParent().getParentNode());
 
-			if ((getParent() != null) && getParent() instanceof VariableList) {
+			if ((getParent() != null) && getParent() instanceof Variablelist) {
 
 				getCurrent().appendChild(
-						dbfactory.createListItem().appendChild(
+						dbfactory.createListitem().appendChild(
 								dbfactory.createPara().setFormatType(
 										ElementImpl.FORMAT_INLINE)));
 
-				entry = dbfactory.createVarListEntry();
+				entry = dbfactory.createVarlistentry();
 				entry.setParentNode(getParent());
 				getParent().appendChild(entry);
 				

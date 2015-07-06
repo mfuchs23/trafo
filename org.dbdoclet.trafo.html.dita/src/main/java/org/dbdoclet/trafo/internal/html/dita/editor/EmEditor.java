@@ -10,7 +10,6 @@ package org.dbdoclet.trafo.internal.html.dita.editor;
 
 import org.dbdoclet.tag.dita.B;
 import org.dbdoclet.tag.dita.DitaTagFactory;
-import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
@@ -21,7 +20,7 @@ public class EmEditor extends AbstractInlineEditor {
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
-        DitaTagFactory tagFactory = getTagFactory();
+        DitaTagFactory tagFactory = (DitaTagFactory) getTagFactory();
         emphasis = tagFactory.createB();
         setInlineElement(emphasis);
         return super.edit(values);

@@ -8,12 +8,12 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Term;
-import org.dbdoclet.tag.docbook.VarListEntry;
-import org.dbdoclet.tag.docbook.VariableList;
+import org.dbdoclet.tag.docbook.Varlistentry;
+import org.dbdoclet.tag.docbook.Variablelist;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
@@ -26,23 +26,23 @@ public class DdEditor extends DocBookEditor {
 		DocBookElement list = null;
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 
 		// Try to detect two sequenced dd tags.
-		if (getParent() instanceof VariableList) {
+		if (getParent() instanceof Variablelist) {
 
-			VarListEntry entry = dbfactory.createVarListEntry();
+			Varlistentry entry = dbfactory.createVarlistentry();
 			getParent().appendChild(entry);
 
 			Term term = dbfactory.createTerm();
 			entry.appendChild(term);
 
-			list = dbfactory.createListItem();
+			list = dbfactory.createListitem();
 			entry.appendChild(list);
 
-		} else if (getParent() instanceof VarListEntry) {
+		} else if (getParent() instanceof Varlistentry) {
 
-			list = dbfactory.createListItem();
+			list = dbfactory.createListitem();
 			getParent().appendChild(list);
 			setParent((DocBookElement) getParent().getParentNode());
 		}

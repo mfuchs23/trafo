@@ -8,7 +8,7 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.Subscript;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -19,7 +19,7 @@ public class SubEditor extends DocBookEditor {
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = getTagFactory();
+	BaseTagFactory dbfactory = getTagFactory();
 
 	Subscript candidate = dbfactory.createSubscript();
 	candidate.setParentNode(getParent());

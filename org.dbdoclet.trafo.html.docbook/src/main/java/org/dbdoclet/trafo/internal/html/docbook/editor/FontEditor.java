@@ -8,9 +8,9 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
-import org.dbdoclet.tag.docbook.SimPara;
+import org.dbdoclet.tag.docbook.Simpara;
 import org.dbdoclet.tag.html.Font;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -22,7 +22,7 @@ public class FontEditor extends DocBookEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 
 		traverse(true);
 		Font font = (Font) values.getHtmlElement();
@@ -41,7 +41,7 @@ public class FontEditor extends DocBookEditor {
 
 		if (emphasis.isValidParent(script.getTransformPosition(), getParent()) == false) {
 
-			SimPara candidate = dbfactory.createSimPara();
+			Simpara candidate = dbfactory.createSimpara();
 			candidate.setParentNode(getParent());
 
 			if (candidate.isValidParent(script.getTransformPosition(), getParent())) {

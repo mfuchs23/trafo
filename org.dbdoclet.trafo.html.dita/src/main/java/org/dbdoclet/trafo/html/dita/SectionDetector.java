@@ -22,7 +22,6 @@ import org.dbdoclet.xiphias.dom.DocumentFragmentImpl;
 import org.dbdoclet.xiphias.dom.DocumentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
-import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 

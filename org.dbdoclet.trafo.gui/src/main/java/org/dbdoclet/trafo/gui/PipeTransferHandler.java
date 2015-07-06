@@ -16,9 +16,9 @@ import org.dbdoclet.trafo.TrafoService;
 public class PipeTransferHandler extends TransferHandler {
 
 	private static final long serialVersionUID = 1L;
-	private final DefaultListModel trafoServiceListModel;
+	private final DefaultListModel<?> trafoServiceListModel;
 
-	public PipeTransferHandler(DefaultListModel trafoServiceListModel) {
+	public PipeTransferHandler(DefaultListModel<?> trafoServiceListModel) {
 		this.trafoServiceListModel = trafoServiceListModel;
 	}
 
@@ -73,8 +73,9 @@ public class PipeTransferHandler extends TransferHandler {
 			TrafoService trafoService = findTrafoService(trafoServiceId);
 
 			if (trafoService != null && comp instanceof JList) {
-				JList pipeList = (JList) comp;
-				DefaultListModel model = (DefaultListModel) pipeList.getModel();
+				JList<?> pipeList = (JList<?>) comp;
+				@SuppressWarnings("unchecked")
+				DefaultListModel<TrafoService> model = (DefaultListModel<TrafoService>) pipeList.getModel();
 				model.addElement(trafoService);
 			}
 

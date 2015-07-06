@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Entry;
-import org.dbdoclet.tag.docbook.EntryTbl;
+import org.dbdoclet.tag.docbook.Entrytbl;
 import org.dbdoclet.tag.html.Td;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
@@ -97,7 +97,7 @@ public class TableEditor extends DocBookEditor {
 
 		ArrayList<String> colWidthList = htmlTable.getColWidths();
 
-		EntryTbl entrytbl = dbfactory.createEntryTbl();
+		Entrytbl entrytbl = dbfactory.createEntrytbl();
 		entrytbl.setCols(htmlTable.getNumOfCols());
 
 		Iterator<String> iterator = colWidthList.iterator();
@@ -133,7 +133,7 @@ public class TableEditor extends DocBookEditor {
 
 		} else {
 
-			table = dbfactory.createInformalTable();
+			table = dbfactory.createInformaltable();
 		}
 
 		copyCommonAttributes(htmlTable, table);

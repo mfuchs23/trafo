@@ -11,7 +11,7 @@ package org.dbdoclet.trafo.internal.html.docbook.editor;
 import org.dbdoclet.service.StringServices;
 import org.dbdoclet.tag.docbook.Anchor;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.IndexTerm;
+import org.dbdoclet.tag.docbook.Indexterm;
 import org.dbdoclet.tag.docbook.Primary;
 import org.dbdoclet.tag.docbook.Secondary;
 import org.dbdoclet.tag.html.Span;
@@ -60,7 +60,7 @@ public class SpanEditor extends DocBookEditor {
 					primaryText = primaryText.substring(0, indexSecondary);
 				}
 
-				IndexTerm indexTerm = dbfactory.createIndexTerm();
+				Indexterm indexTerm = dbfactory.createIndexterm();
 				indexTerm.setParentNode(getParent());
 
 				Primary primary = dbfactory.createPrimary(primaryText);

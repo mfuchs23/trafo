@@ -29,7 +29,7 @@ public class BrEditor extends DitaEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DitaTagFactory tagFactory = getTagFactory();
+		DitaTagFactory tagFactory = (DitaTagFactory) getTagFactory();
 		traverse(false);
 
 		Br brElement = (Br) values.getHtmlElement();

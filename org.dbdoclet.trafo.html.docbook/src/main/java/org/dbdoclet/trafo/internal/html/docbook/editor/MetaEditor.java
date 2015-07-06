@@ -12,8 +12,8 @@ import java.util.List;
 
 import org.dbdoclet.tag.docbook.Abstract;
 import org.dbdoclet.tag.docbook.Author;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.Date;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Info;
 import org.dbdoclet.tag.docbook.Keyword;
 import org.dbdoclet.tag.docbook.Keywordset;
@@ -35,7 +35,7 @@ public class MetaEditor extends DocBookEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 		traverse(false);
 
 		NodeImpl current = getCurrent();
@@ -79,7 +79,7 @@ public class MetaEditor extends DocBookEditor {
 		return finalizeValues();
 	}
 
-	private void insertAuthor(DocBookTagFactory dbfactory, ElementImpl info,
+	private void insertAuthor(BaseTagFactory dbfactory, ElementImpl info,
 			String content) {
 
 		Author author = dbfactory.createAuthor();
@@ -96,7 +96,7 @@ public class MetaEditor extends DocBookEditor {
 		}
 	}
 
-	private void insertDate(DocBookTagFactory dbfactory, ElementImpl info,
+	private void insertDate(BaseTagFactory dbfactory, ElementImpl info,
 			String content) {
 
 		Date date = dbfactory.createDate();
@@ -111,7 +111,7 @@ public class MetaEditor extends DocBookEditor {
 		}
 	}
 
-	private void insertAbstract(DocBookTagFactory dbfactory, ElementImpl info,
+	private void insertAbstract(BaseTagFactory dbfactory, ElementImpl info,
 			String content) {
 
 		Abstract description = dbfactory.createAbstract();
@@ -128,7 +128,7 @@ public class MetaEditor extends DocBookEditor {
 		}
 	}
 
-	private void insertKeywordset(DocBookTagFactory dbfactory,
+	private void insertKeywordset(BaseTagFactory dbfactory,
 			ElementImpl info, String content) {
 
 		if (content == null || content.trim().length() == 0) {
@@ -153,7 +153,7 @@ public class MetaEditor extends DocBookEditor {
 		}
 	}
 
-	private void insertSubjectset(DocBookTagFactory dbfactory,
+	private void insertSubjectset(BaseTagFactory dbfactory,
 			ElementImpl info, String content) {
 
 		if (content == null || content.trim().length() == 0) {

@@ -8,11 +8,11 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Entry;
 import org.dbdoclet.tag.docbook.Example;
-import org.dbdoclet.tag.docbook.InformalExample;
+import org.dbdoclet.tag.docbook.Informalexample;
 import org.dbdoclet.tag.docbook.SectionElement;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
@@ -26,7 +26,7 @@ public class PreEditor extends DocBookEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 		HtmlElement pre = values.getHtmlElement();
 
 		DocBookElement candidate;
@@ -37,9 +37,9 @@ public class PreEditor extends DocBookEditor {
 			candidate = dbfactory.createScreen();
 
 		} else if (getParent() instanceof Example
-				|| getParent() instanceof InformalExample) {
+				|| getParent() instanceof Informalexample) {
 
-			candidate = dbfactory.createProgramListing();
+			candidate = dbfactory.createProgramlisting();
 
 		} else {
 

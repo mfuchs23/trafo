@@ -8,7 +8,7 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.Row;
 import org.dbdoclet.tag.html.Tr;
 import org.dbdoclet.trafo.TrafoConstants;
@@ -21,7 +21,7 @@ public class TrEditor extends DocBookEditor {
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
         setValues(super.edit(values));
-        DocBookTagFactory dbfactory = getTagFactory();
+        BaseTagFactory dbfactory = getTagFactory();
 
 		boolean decomposeTables = script.isParameterOn(
 				TrafoConstants.SECTION_DOCBOOK,
@@ -42,7 +42,7 @@ public class TrEditor extends DocBookEditor {
         }
         
         if (getParent() instanceof org.dbdoclet.tag.docbook.Tgroup
-                || getParent() instanceof org.dbdoclet.tag.docbook.EntryTbl) {
+                || getParent() instanceof org.dbdoclet.tag.docbook.Entrytbl) {
 
             setCurrent(dbfactory.createTbody());
             getCurrent().setParentNode(getParent());

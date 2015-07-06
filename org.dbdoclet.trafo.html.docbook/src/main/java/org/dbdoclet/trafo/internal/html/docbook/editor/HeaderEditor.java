@@ -8,8 +8,8 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Info;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -23,7 +23,7 @@ public class HeaderEditor extends DocBookEditor {
 
 		setValues(super.edit(values));
 
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 		DocBookElement parent = (DocBookElement) values.getParent();
 		
 		if (parent.isSection()) {

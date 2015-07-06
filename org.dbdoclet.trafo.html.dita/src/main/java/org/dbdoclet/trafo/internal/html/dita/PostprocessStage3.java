@@ -5,20 +5,18 @@ import java.util.HashMap;
 import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.EntryTbl;
-import org.dbdoclet.tag.docbook.InformalTable;
+import org.dbdoclet.tag.docbook.Entrytbl;
+import org.dbdoclet.tag.docbook.Informaltable;
 import org.dbdoclet.tag.docbook.Tgroup;
-import org.dbdoclet.tag.docbook.XRef;
+import org.dbdoclet.tag.docbook.Xref;
 
 public class PostprocessStage3 {
 
-	private final DitaTagFactory tagFactory;
-	private final HashMap<EntryTbl, DocBookElement> subtables;
+	private final HashMap<Entrytbl, DocBookElement> subtables;
 
 	public PostprocessStage3(DitaTagFactory tagFactory,
-			HashMap<EntryTbl, DocBookElement> subtables) {
+			HashMap<Entrytbl, DocBookElement> subtables) {
 
-		this.tagFactory = tagFactory;
 		this.subtables = subtables;
 	}
 
@@ -30,10 +28,10 @@ public class PostprocessStage3 {
 
 			int index = 1;
 
-			for (EntryTbl entrytbl : subtables.keySet()) {
+			for (Entrytbl entrytbl : subtables.keySet()) {
 
 				String id = "subtable." + index;
-				XRef xref = dbfactory.createXRef(id);
+				Xref xref = dbfactory.createXref(id);
 
 				DocBookElement table = subtables.get(entrytbl);
 
@@ -43,7 +41,7 @@ public class PostprocessStage3 {
 				entryTblParent.replaceChild(dbfactory.createEntry()
 						.appendChild(xref), entrytbl);
 
-				InformalTable it = dbfactory.createInformalTable();
+				Informaltable it = dbfactory.createInformaltable();
 				it.setId(id);
 				it.setXrefLabel("#" + index);
 

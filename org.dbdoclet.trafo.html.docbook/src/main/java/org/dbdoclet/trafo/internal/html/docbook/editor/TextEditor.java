@@ -8,8 +8,8 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.ListItem;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
+import org.dbdoclet.tag.docbook.Listitem;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
@@ -26,7 +26,7 @@ public class TextEditor extends DocBookEditor {
 
 			setValues(super.edit(values));
 
-			DocBookTagFactory dbfactory = getTagFactory();
+			BaseTagFactory dbfactory = getTagFactory();
 			NodeImpl current = getCurrent();
 			NodeImpl parent = getParent();
 
@@ -45,7 +45,7 @@ public class TextEditor extends DocBookEditor {
 
 			if (isList(parent)) {
 				
-				ListItem item = dbfactory.createListItem();
+				Listitem item = dbfactory.createListitem();
 				parent.appendChild(item);
 				setParent(item);
 				parent = item;

@@ -7,13 +7,13 @@ import java.util.List;
 import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.service.StringServices;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.EntryTbl;
-import org.dbdoclet.tag.docbook.InformalTable;
-import org.dbdoclet.tag.docbook.ItemizedList;
-import org.dbdoclet.tag.docbook.ListItem;
-import org.dbdoclet.tag.docbook.OrderedList;
+import org.dbdoclet.tag.docbook.Entrytbl;
+import org.dbdoclet.tag.docbook.Informaltable;
+import org.dbdoclet.tag.docbook.Itemizedlist;
+import org.dbdoclet.tag.docbook.Listitem;
+import org.dbdoclet.tag.docbook.Orderedlist;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Table;
 import org.dbdoclet.trafo.TrafoConstants;
@@ -28,17 +28,17 @@ import org.w3c.dom.Text;
 public class PostprocessStage1 extends AbstractNodeVisitor {
 
 	private final ArrayList<Node> removeList;
-	private final HashMap<EntryTbl, DocBookElement> subtables;
+	private final HashMap<Entrytbl, DocBookElement> subtables;
 	private final Script script;
 
-	public PostprocessStage1(DocBookTagFactory dbfactory, Script script,
+	public PostprocessStage1(BaseTagFactory dbfactory, Script script,
 			ArrayList<ProgressListener> listeners) {
 
 		super(listeners);
 
 		this.script = script;
 		removeList = new ArrayList<Node>();
-		subtables = new HashMap<EntryTbl, DocBookElement>();
+		subtables = new HashMap<Entrytbl, DocBookElement>();
 	}
 
 	@Override
@@ -70,16 +70,16 @@ public class PostprocessStage1 extends AbstractNodeVisitor {
 		List<String> stripPrefixesList = new ArrayList<String>();
 		String text = elem.getTextContent();
 
-		if (elem instanceof ListItem
-				&& elem.getParentNode() instanceof ItemizedList) {
+		if (elem instanceof Listitem
+				&& elem.getParentNode() instanceof Itemizedlist) {
 
 			stripPrefixesList = script.getTextParameterList(
 					TrafoConstants.SECTION_LIST_DETECTION,
 					TrafoConstants.PARAM_ITEMIZED_STRIP_PREFIX);
 		}
 
-		if (elem instanceof ListItem
-				&& elem.getParentNode() instanceof OrderedList) {
+		if (elem instanceof Listitem
+				&& elem.getParentNode() instanceof Orderedlist) {
 
 			stripPrefixesList = script.getTextParameterList(
 					TrafoConstants.SECTION_LIST_DETECTION,
@@ -99,9 +99,9 @@ public class PostprocessStage1 extends AbstractNodeVisitor {
 
 	private void processEntryTbl(NodeImpl elem) {
 		Node node;
-		if (elem instanceof EntryTbl) {
+		if (elem instanceof Entrytbl) {
 
-			node = NodeImpl.findParent(elem.getParentNode(), EntryTbl.class);
+			node = NodeImpl.findParent(elem.getParentNode(), Entrytbl.class);
 
 			if (node != null) {
 
@@ -110,11 +110,11 @@ public class PostprocessStage1 extends AbstractNodeVisitor {
 
 				if (parentTable == null) {
 					parentTable = (DocBookElement) NodeImpl.findParent(elem,
-							InformalTable.class);
+							Informaltable.class);
 				}
 
 				if (parentTable != null) {
-					subtables.put((EntryTbl) elem, parentTable);
+					subtables.put((Entrytbl) elem, parentTable);
 				}
 			}
 		}
@@ -137,7 +137,7 @@ public class PostprocessStage1 extends AbstractNodeVisitor {
 		removeNodes(removeList);
 	}
 
-	public HashMap<EntryTbl, DocBookElement> getSubtables() {
+	public HashMap<Entrytbl, DocBookElement> getSubtables() {
 		return subtables;
 	}
 

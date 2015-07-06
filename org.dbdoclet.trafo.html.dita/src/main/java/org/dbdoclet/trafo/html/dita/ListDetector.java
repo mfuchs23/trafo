@@ -6,10 +6,10 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
-import org.dbdoclet.tag.docbook.ItemizedList;
-import org.dbdoclet.tag.docbook.ListItem;
-import org.dbdoclet.tag.docbook.OrderedList;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
+import org.dbdoclet.tag.docbook.Itemizedlist;
+import org.dbdoclet.tag.docbook.Listitem;
+import org.dbdoclet.tag.docbook.Orderedlist;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -62,11 +62,11 @@ public class ListDetector {
 		// isOrderedListElement(
 		// (HtmlElement) previous, script))) {
 
-		if (parent instanceof ListItem) {
+		if (parent instanceof Listitem) {
 			parent = (ElementImpl) parent.getParentNode();
 		}
 
-		if (parent instanceof ItemizedList || parent instanceof OrderedList) {
+		if (parent instanceof Itemizedlist || parent instanceof Orderedlist) {
 			values.setParent((ElementImpl) parent.getParentNode());
 			values.setCurrent((ElementImpl) parent.getParentNode());
 		}
@@ -94,8 +94,8 @@ public class ListDetector {
 			NodeImpl parent = values.getParent();
 
 			// Eingebettete Liste finden
-			while (parent != null && parent instanceof ItemizedList == false
-					&& parent instanceof OrderedList == false) {
+			while (parent != null && parent instanceof Itemizedlist == false
+					&& parent instanceof Orderedlist == false) {
 
 				Node parentNode = parent.getParentNode();
 
@@ -117,8 +117,8 @@ public class ListDetector {
 				// Übergeordnete Liste suchen
 				parent = (ElementImpl) parent.getParentNode();
 				while (parent != null
-						&& parent instanceof ItemizedList == false
-						&& parent instanceof OrderedList == false) {
+						&& parent instanceof Itemizedlist == false
+						&& parent instanceof Orderedlist == false) {
 
 					Node parentNode = parent.getParentNode();
 					if (parentNode instanceof ElementImpl == false) {
@@ -145,7 +145,7 @@ public class ListDetector {
 		}
 	}
 
-	public void edit(EditorInstruction values, DocBookTagFactory dbfactory) {
+	public void edit(EditorInstruction values, BaseTagFactory dbfactory) {
 
 		HtmlElement htmlElement = values.getHtmlElement();
 		Script script = values.getScript();
@@ -186,7 +186,7 @@ public class ListDetector {
 		return true;
 	}
 
-	public void edit(EditorInstruction values, DocBookTagFactory dbfactory, ListType type) {
+	public void edit(EditorInstruction values, BaseTagFactory dbfactory, ListType type) {
 
 		HtmlElement htmlElement = values.getHtmlElement();
 		String cssClass = htmlElement.getCssClass();
@@ -195,7 +195,7 @@ public class ListDetector {
 
 		NodeImpl parent = values.getParent();
 
-		if (isNestedList(cssClass) == false && parent instanceof ListItem) {
+		if (isNestedList(cssClass) == false && parent instanceof Listitem) {
 			parent = (ElementImpl) parent.getParentNode();
 		}
 
@@ -206,25 +206,25 @@ public class ListDetector {
 			parent = values.getParent();
 		}
 
-		ListItem listItem = dbfactory.createListItem();
+		Listitem listItem = dbfactory.createListitem();
 		parent.appendChild(listItem);
 		values.setParent(listItem);
 		values.setCurrent(listItem);
 	}
 
 	private NodeImpl createListElement(ListType type, String cssClass,
-			DocBookTagFactory dbfactory, NodeImpl parent) {
+			BaseTagFactory dbfactory, NodeImpl parent) {
 
 		if (type == ListType.ITEMIZED
-				&& parent instanceof ItemizedList == false) {
-			ItemizedList itemizedList = dbfactory.createItemizedList();
+				&& parent instanceof Itemizedlist == false) {
+			Itemizedlist itemizedList = dbfactory.createItemizedlist();
 			parent.appendChild(itemizedList);
 			parent = itemizedList;
 			cssClassStack.push(cssClass);
 		}
 
-		if (type == ListType.ORDERED && parent instanceof OrderedList == false) {
-			OrderedList orderedList = dbfactory.createOrderedList();
+		if (type == ListType.ORDERED && parent instanceof Orderedlist == false) {
+			Orderedlist orderedList = dbfactory.createOrderedlist();
 			parent.appendChild(orderedList);
 			parent = orderedList;
 			cssClassStack.push(cssClass);

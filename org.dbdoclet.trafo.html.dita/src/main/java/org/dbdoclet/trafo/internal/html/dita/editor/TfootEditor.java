@@ -8,8 +8,6 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.dita.DitaTagFactory;
-import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
@@ -20,7 +18,7 @@ public class TfootEditor extends DitaEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DitaTagFactory tagFactory = getTagFactory();
+		getTagFactory();
 		return finalizeValues();
 	}
 }

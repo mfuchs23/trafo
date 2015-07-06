@@ -1,7 +1,7 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.Anchor;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -18,7 +18,7 @@ public class DefaultEditor extends DocBookEditor {
         
         if (htmlId != null) {
         
-            DocBookTagFactory dbf = getTagFactory();
+            BaseTagFactory dbf = getTagFactory();
             Anchor anchor = dbf.createAnchor();
             copyCommonAttributes(html, anchor);
             

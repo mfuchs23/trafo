@@ -1,7 +1,7 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Subscript;
 import org.dbdoclet.tag.docbook.Superscript;
@@ -29,7 +29,7 @@ public abstract class AbstractInlineEditor extends DocBookEditor {
 		setCurrent(inlineElement);
 		copyCommonAttributes(getHtmlElement(), inlineElement);
 
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 		traverse(true);
 
 		NodeImpl parent = getParent();

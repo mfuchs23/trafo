@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
@@ -31,7 +32,7 @@ public class BrEditorTests extends AbstractTests {
 		P p = (P) fragment.getChildElementList().get(0);
 		Br br = (Br) p.findChildElement("br");
 
-		DocBookTagFactory tf = new DocBookTagFactory();
+		BaseTagFactory tf = new DocBookTagFactory();
 		Section section = tf.createSection();
 		Para para = tf.createPara();
 		section.appendChild(para);

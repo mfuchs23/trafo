@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.SectionElement;
 import org.dbdoclet.trafo.SectionNumberRemover;
 import org.dbdoclet.trafo.SpaceNormalizer;
@@ -17,11 +17,11 @@ import org.w3c.dom.Node;
 
 public class PostprocessStage2 extends AbstractNodeVisitor {
 
-	private final DocBookTagFactory dbfactory;
+	private final BaseTagFactory dbfactory;
 	private final ArrayList<Node> removeList;
 	private final Script script;
 
-	public PostprocessStage2(DocBookTagFactory dbfactory, Script script,
+	public PostprocessStage2(BaseTagFactory dbfactory, Script script,
 			ArrayList<ProgressListener> listeners) {
 
 		super(listeners);

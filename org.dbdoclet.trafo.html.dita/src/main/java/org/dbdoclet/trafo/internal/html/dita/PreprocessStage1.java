@@ -17,6 +17,7 @@ public class PreprocessStage1 extends AbstractNodeVisitor {
 		removeList = new ArrayList<Node>();
 	}
 
+	@Override
 	public void accept(Node node) {
 
 		fireProgressEvent(node.toString(), ProgressEvent.STAGE_ACTION);
@@ -32,10 +33,12 @@ public class PreprocessStage1 extends AbstractNodeVisitor {
 		removeNodes(removeList);
 	}
 
+	@Override
 	public void openTag(Node node) throws Exception {
 		//
 	}
 
+	@Override
 	public void closeTag(Node node) throws Exception {
 		//
 	}

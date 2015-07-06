@@ -29,13 +29,13 @@ public class HeadingEditor extends DitaEditor {
 				HtmlElement.getAttributeMap());
 		validHtmlParentPathMap.put(org.dbdoclet.tag.html.Html.getTag(),
 				HtmlElement.getAttributeMap());
-		validHtmlParentPathMap.put(org.dbdoclet.tag.html.Body.getTag(),
+		validHtmlParentPathMap.put(HtmlElement.getTag(),
 				HtmlElement.getAttributeMap());
-		validHtmlParentPathMap.put(org.dbdoclet.tag.html.Center.getTag(),
+		validHtmlParentPathMap.put(HtmlElement.getTag(),
 				HtmlElement.getAttributeMap());
-		validHtmlParentPathMap.put(org.dbdoclet.tag.html.Div.getTag(),
+		validHtmlParentPathMap.put(HtmlElement.getTag(),
 				HtmlElement.getAttributeMap());
-		validHtmlParentPathMap.put(org.dbdoclet.tag.html.A.getTag(),
+		validHtmlParentPathMap.put(HtmlElement.getTag(),
 				HtmlElement.getAttributeMap());
 	}
 

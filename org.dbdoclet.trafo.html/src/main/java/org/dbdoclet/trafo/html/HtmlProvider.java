@@ -3,6 +3,7 @@ package org.dbdoclet.trafo.html;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,17 +19,24 @@ import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.tag.html.HtmlFragment;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.param.TextParam;
+import org.dbdoclet.trafo.script.AttributeRule;
+import org.dbdoclet.trafo.script.Namespace;
+import org.dbdoclet.trafo.script.NodeRule;
 import org.dbdoclet.trafo.script.Script;
+import org.dbdoclet.trafo.script.Section;
 import org.dbdoclet.xiphias.XPathServices;
+import org.dbdoclet.xiphias.annotation.MapToAttributeAnnotation;
+import org.dbdoclet.xiphias.annotation.MapToNodeAnnotation;
 import org.dbdoclet.xiphias.dom.CommentImpl;
 import org.dbdoclet.xiphias.dom.DocumentFragmentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 import org.dbdoclet.xiphias.dom.NodeListImpl;
 import org.dbdoclet.xiphias.dom.TextImpl;
-import org.dbdoclet.xiphias.dom.TransformInstruction;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
@@ -36,17 +44,97 @@ public class HtmlProvider implements IHtmlProvider {
 
 	private static Log logger = LogFactory.getLog(HtmlProvider.class);
 
-	private String indent = "";
-	private ProgressManager pm;
 	public ArrayList<ProgressListener> listeners;
 	private IEditorFactory editorFactory;
-	private IHtmlVisitor visitor;
+	private String indent = "";
+	private ProgressManager pm;
 	private Script script;
+	private IHtmlVisitor visitor;
 
 	public HtmlProvider(Script script) {
 		this.script = script;
 		listeners = new ArrayList<ProgressListener>();
 		pm = new ProgressManager(listeners);
+	}
+
+	public boolean isFragment(String htmlCode) throws IOException,
+			TokenizerException {
+
+		HtmlParser parser = new HtmlParser();
+		return parser.isFragment(htmlCode);
+	}
+
+	@Override
+	public HtmlDocument parseDocument(String htmlCode) throws IOException,
+			ParserException, TokenizerException {
+
+		HtmlParser parser = new HtmlParser();
+
+		if (listeners != null && listeners.size() > 0) {
+			parser.addProgressListener(listeners.get(0));
+		}
+
+		HtmlDocument htmlDocument = parser.parseDocument(htmlCode);
+		ElementImpl documentElement = (ElementImpl) htmlDocument
+				.getDocumentElement();
+		documentElement.removeAttribute("xmlns");
+		parseAfter(documentElement);
+		return htmlDocument;
+	}
+
+	@Override
+	public HtmlFragment parseFragment(String htmlCode) throws IOException,
+			ParserException, TokenizerException {
+
+		HtmlParser parser = new HtmlParser();
+		if (listeners != null && listeners.size() > 0) {
+			parser.addProgressListener(listeners.get(0));
+		}
+
+		HtmlFragment htmlFragment = parser.parseFragment(htmlCode);
+		parseAfter(htmlFragment);
+
+		return htmlFragment;
+	}
+
+	@Override
+	public void setProgressListeners(ArrayList<ProgressListener> listeners) {
+		this.listeners = listeners;
+	}
+
+	@Override
+	public Document traverse(HtmlDocument htmlDocument, IHtmlVisitor visitor)
+			throws Exception {
+
+		this.visitor = visitor;
+
+		if (htmlDocument == null) {
+			return null;
+		}
+
+		editorFactory = visitor.getEditorFactory();
+		Document doc = visitor.createDocument(htmlDocument);
+		edit((ElementImpl) htmlDocument.getDocumentElement(),
+				(ElementImpl) doc.getDocumentElement());
+
+		return doc;
+	}
+
+	@Override
+	public DocumentFragment traverse(HtmlFragment htmlFragment,
+			IHtmlVisitor visitor) {
+		this.visitor = visitor;
+
+		if (htmlFragment == null) {
+			return null;
+		}
+
+		editorFactory = visitor.getEditorFactory();
+		DocumentFragmentImpl fragment = visitor
+				.createDocumentFragment(htmlFragment);
+		edit((ElementImpl) htmlFragment, fragment);
+
+		return fragment;
 	}
 
 	private void afterEdit(EditorInstruction values) {
@@ -77,16 +165,8 @@ public class HtmlProvider implements IHtmlProvider {
 		boolean doIgnore = false;
 
 		NodeImpl child = null;
-		HtmlElement htmlElement;
 
-		NodeImpl element;
 		NodeImpl oldParent = targetNode;
-		NodeImpl childParent = null;
-
-		Object anything = null;
-		IEditor editor;
-
-		int index = 0;
 
 		logger.debug(indent
 				+ "\n>>>==================================================");
@@ -97,8 +177,6 @@ public class HtmlProvider implements IHtmlProvider {
 
 		while (iterator.hasNext()) {
 
-			index++;
-
 			child = iterator.next();
 
 			pm.fireProgressEvent(new ProgressEvent("Transforming "
@@ -106,199 +184,33 @@ public class HtmlProvider implements IHtmlProvider {
 
 			logger.debug(indent + " HTML element is " + child + ".");
 
-			element = targetNode;
+			NodeImpl element = targetNode;
 			doTraverse = true;
+			EditorInstruction editorInstruction = null;
 
 			if (child instanceof CommentImpl) {
-
-				try {
-
-					CommentImpl comment = (CommentImpl) child;
-
-					if (isInstruction(comment)) {
-
-						EditorInstruction values = new EditorInstruction(
-								visitor.getScript());
-						values.setAnything(null);
-						values.setHtmlElement(null);
-						values.setCurrent(targetNode);
-						values.setParent(targetNode);
-						values.setCharacterDataNode((CommentImpl) child);
-
-						editor = editorFactory.getCommentEditor();
-
-						logger.debug(indent + " Vor der Kommentarbearbeitung: "
-								+ child + ".\n");
-
-						values = editor.edit(values);
-
-						logger.debug(indent
-								+ " Nach der Kommentarbearbeitung: " + child
-								+ ".\n");
-						
-						targetNode = values.getParent();
-
-						if (targetNode == null) {
-							throw new NullPointerException("[Node #" + index
-									+ "]"
-									+ "DocBook parent element for element '"
-									+ child + "' is null!");
-						}
-
-						element = values.getCurrent();
-						doTraverse = values.doTraverse();
-
-					} else {
-
-						pm.fireProgressEvent(new ProgressEvent("Comment"));
-						targetNode.appendChild(child);
-						continue;
-					}
-
-				} catch (EditorException oops) {
-					logger.debug(indent + " EditorException "
-							+ oops.getMessage());
-				}
+				editorInstruction = editComment(child, targetNode);
 			}
 
 			if (child instanceof TextImpl) {
-
-				logger.debug("Text='" + ((Text) child).toString() + "'");
-
-				try {
-
-					EditorInstruction values = new EditorInstruction(
-							visitor.getScript());
-
-					values.setAnything(null);
-					values.setHtmlElement(null);
-					values.setCurrent(targetNode);
-					values.setParent(targetNode);
-					values.setCharacterDataNode((TextImpl) child);
-
-					editor = editorFactory.getTextEditor();
-
-					logger.debug(indent + " Vor der Textbearbeitung: " + child
-							+ ".\n");
-					values = editor.edit(values);
-					
-					logger.debug(indent + " Nach der Textbearbeitung: " + child
-							+ ".\n");
-
-					targetNode = values.getParent();
-
-					if (targetNode == null) {
-
-						throw new NullPointerException("[Node #" + index + "]"
-								+ "DocBook parent element for element '"
-								+ child + "' is null!");
-					}
-
-					element = values.getCurrent();
-					doTraverse = values.doTraverse();
-
-				} catch (EditorException oops) {
-
-					logger.fatal("EditorException", oops);
-				}
+				editorInstruction = editText(child, targetNode);
 			}
 
 			if (child instanceof HtmlElement) {
-
-				try {
-
-					htmlElement = (HtmlElement) child;
-
-					// if (!checkCodeContext(htmlElement)) {
-					//
-					// logger.warn(indent
-					// + " Element is not allowed in this code context("
-					// + documentType + ") '" + htmlElement + "'!");
-					//
-					// continue;
-					// }
-
-					editor = editorFactory.getChildEditor(htmlElement);
-
-					logger.debug("Setting editor values.");
-
-					EditorInstruction values = new EditorInstruction(
-							visitor.getScript());
-
-					values.setAnything(anything);
-					values.setHtmlElement((HtmlElement) child);
-					values.setCurrent(targetNode);
-					values.setParent(targetNode);
-					values.setCharacterDataNode(null);
-
-					logger.debug(indent + " Vor der Transformation: " + child
-							+ ".\n" + "Editor " + editor + "\n" + values);
-
-					if (child.getTransformInstruction() != null) {
-
-						TransformInstruction transformInstruction = child
-								.getTransformInstruction();
-
-						NodeImpl parent = values.getParent();
-						parent.appendChild(transformInstruction
-								.getReplacement());
-
-						Node replacement = transformInstruction
-								.getReplacement();
-						Node newParent = transformInstruction.getNewParent();
-
-						if (replacement != null
-								&& replacement instanceof ElementImpl) {
-							values.setCurrent((ElementImpl) replacement);
-						}
-
-						if (newParent != null
-								&& newParent instanceof ElementImpl) {
-							values.setParent((ElementImpl) newParent);
-						}
-
-					} else {
-
-						if (beforeEdit(values)) {
-							values = editor.edit(values);
-							afterEdit(values);
-						}
-					}
-
-					element = values.getCurrent();
-					// editor.copyCommonAttributes((HtmlElement) child,
-					// dbElement);
-
-					logger.debug(indent + " Nach der Transformation: " + child
-							+ ".\n" + "Editor " + editor + "\n" + values);
-
-					doTraverse = values.doTraverse();
-					doIgnore = values.doIgnore();
-
-					targetNode = values.getParent();
-
-					if (targetNode == null) {
-
-						throw new NullPointerException("[Node #" + index + "]"
-								+ "DocBook parent element for element " + child
-								+ " is null!");
-					}
-
-					anything = values.getAnything();
-
-				} catch (EditorFactoryException oops) {
-
-					logger.fatal("EditorFactoryException", oops);
-
-				} catch (EditorException oops) {
-
-					logger.fatal("EditorException", oops);
-				}
+				editorInstruction = editElement(child, targetNode);
 			}
+
+			if (editorInstruction == null) {
+				continue;
+			}
+
+			element = editorInstruction.getCurrent();
+			doTraverse = editorInstruction.doTraverse();
+			doIgnore = editorInstruction.doIgnore();
 
 			if (doTraverse == true) {
 
-				childParent = edit(child, element);
+				NodeImpl childParent = edit(child, element);
 
 				logger.debug(indent
 						+ "\n<<<==================================================");
@@ -348,6 +260,175 @@ public class HtmlProvider implements IHtmlProvider {
 		return targetNode;
 	}
 
+	private EditorInstruction editComment(NodeImpl child, NodeImpl targetNode) {
+
+		try {
+
+			CommentImpl comment = (CommentImpl) child;
+
+			if (isInstruction(comment)) {
+
+				EditorInstruction values = new EditorInstruction(
+						visitor.getScript());
+				values.setHtmlElement(null);
+				values.setCurrent(targetNode);
+				values.setParent(targetNode);
+				values.setCharacterDataNode((CommentImpl) child);
+
+				IEditor editor = editorFactory.getCommentEditor();
+
+				logger.debug(indent + " Vor der Kommentarbearbeitung: " + child
+						+ ".\n");
+
+				values = editor.edit(values);
+
+				logger.debug(indent + " Nach der Kommentarbearbeitung: "
+						+ child + ".\n");
+
+				targetNode = values.getParent();
+
+				if (targetNode == null) {
+					throw new NullPointerException("[Node]"
+							+ "DocBook parent element for element '" + child
+							+ "' is null!");
+				}
+
+				return values;
+
+			} else {
+
+				pm.fireProgressEvent(new ProgressEvent("Comment"));
+				targetNode.appendChild(child);
+				return null;
+			}
+
+		} catch (EditorException oops) {
+			logger.debug(indent + " EditorException " + oops.getMessage());
+		}
+
+		return null;
+	}
+
+	private EditorInstruction editElement(NodeImpl child, NodeImpl targetNode) {
+
+		try {
+
+			HtmlElement htmlElement = (HtmlElement) child;
+
+			IEditor editor = editorFactory.getChildEditor(htmlElement);
+
+			logger.debug("Setting editor values.");
+
+			EditorInstruction values = new EditorInstruction(
+					visitor.getScript());
+
+			values.setHtmlElement((HtmlElement) child);
+			values.setCurrent(targetNode);
+			values.setParent(targetNode);
+			values.setCharacterDataNode(null);
+
+			logger.debug(indent + " Vor der Transformation: " + child + ".\n"
+					+ "Editor " + editor + "\n" + values);
+
+			MapToNodeAnnotation mapToAnnotation = child
+					.getAnnotation(MapToNodeAnnotation.class);
+
+			if (mapToAnnotation != null) {
+
+				NodeImpl parent = values.getParent();
+				String mapTo = mapToAnnotation.getMapTo();
+				Element mapToElement = editor.getTagFactory().createElement(
+						mapTo);
+				parent.appendChild(mapToElement);
+				values.setCurrent((ElementImpl) mapToElement);
+
+			} else {
+
+				if (beforeEdit(values)) {
+					values = editor.edit(values);
+					afterEdit(values);
+				}
+			}
+
+			NodeImpl current = values.getCurrent();
+			List<MapToAttributeAnnotation> mapToAttributeList = child
+					.getAnnotations(MapToAttributeAnnotation.class);
+			
+			mapToAttributeList.stream().forEach(
+					annotation -> {
+						String attrValue = htmlElement.getAttribute(annotation
+								.getAttribute());
+						if (attrValue != null && current != null && current instanceof Element) {
+							((Element) current).setAttribute(annotation.getMapTo(), attrValue);
+						}
+					});
+
+			logger.debug(indent + " Nach der Transformation: " + child + ".\n"
+					+ "Editor " + editor + "\n" + values);
+
+			targetNode = values.getParent();
+
+			if (targetNode == null) {
+
+				throw new NullPointerException("[Node]"
+						+ " DocBook parent element for element " + child
+						+ " is null!");
+			}
+
+			return values;
+
+		} catch (EditorFactoryException oops) {
+
+			logger.fatal("EditorFactoryException", oops);
+
+		} catch (EditorException oops) {
+
+			logger.fatal("EditorException", oops);
+		}
+
+		return null;
+	}
+
+	private EditorInstruction editText(NodeImpl child, NodeImpl targetNode) {
+
+		logger.debug("Text='" + ((Text) child).toString() + "'");
+
+		try {
+
+			EditorInstruction values = new EditorInstruction(
+					visitor.getScript());
+
+			values.setHtmlElement(null);
+			values.setCurrent(targetNode);
+			values.setParent(targetNode);
+			values.setCharacterDataNode((TextImpl) child);
+
+			IEditor editor = editorFactory.getTextEditor();
+
+			logger.debug(indent + " Vor der Textbearbeitung: " + child + ".\n");
+			values = editor.edit(values);
+
+			logger.debug(indent + " Nach der Textbearbeitung: " + child + ".\n");
+
+			targetNode = values.getParent();
+
+			if (targetNode == null) {
+
+				throw new NullPointerException("[Node] "
+						+ "DocBook parent element for element '" + child
+						+ "' is null!");
+			}
+
+			return values;
+
+		} catch (EditorException oops) {
+
+			logger.fatal("EditorException", oops);
+		}
+
+		return null;
+	}
+
 	private boolean isInstruction(CommentImpl comment) {
 
 		if (comment == null) {
@@ -374,100 +455,68 @@ public class HtmlProvider implements IHtmlProvider {
 		return false;
 	}
 
-	@Override
-	public HtmlDocument parseDocument(String htmlCode)
-			throws IOException, ParserException, TokenizerException {
-
-		HtmlParser parser = new HtmlParser();
-		
-		if (listeners != null && listeners.size() > 0) {
-			parser.addProgressListener(listeners.get(0));
-		}
-		
-		HtmlDocument htmlDocument = parser.parseDocument(htmlCode);
-		ElementImpl documentElement = (ElementImpl) htmlDocument.getDocumentElement();
-		documentElement.removeAttribute("xmlns");
-		parseAfter(documentElement);
-		return htmlDocument;
-	}
-
 	private void parseAfter(NodeImpl contextNode) {
-		
-		TextParam excludeParam = (TextParam) script.getParameter(
-				TrafoConstants.SECTION_HTML, TrafoConstants.PARAM_EXCLUDE);
 
-		if (excludeParam != null) {
+		Namespace namespace = script.getNamespace();
+		Section section = namespace.findSection(TrafoConstants.SECTION_HTML);
 
-			for (String excludeXpath : excludeParam.getValues()) {
+		if (section != null) {
 
-				ArrayList<Node> nodeList = XPathServices.getNodes(
-						contextNode, excludeXpath);
+			TextParam excludeParam = section
+					.findTextParameter(TrafoConstants.PARAM_EXCLUDE);
 
-				for (Node node : nodeList) {
-					if (node.getParentNode() != null) {
-						node.getParentNode().removeChild(node);
+			if (excludeParam != null) {
+
+				for (String excludeXpath : excludeParam.getValues()) {
+
+					ArrayList<Node> nodeList = XPathServices.getNodes(
+							contextNode, excludeXpath);
+
+					for (Node node : nodeList) {
+						if (node.getParentNode() != null) {
+							node.getParentNode().removeChild(node);
+						}
 					}
 				}
 			}
 		}
-	}
 
-	@Override
-	public HtmlFragment parseFragment(String htmlCode)
-			throws IOException, ParserException, TokenizerException {
+		for (NodeRule nodeRule : namespace.getNodeRules()) {
 
-		HtmlParser parser = new HtmlParser();
-		if (listeners != null && listeners.size() > 0) {
-			parser.addProgressListener(listeners.get(0));
-		}
-		
-		HtmlFragment htmlFragment = parser.parseFragment(htmlCode);
-		parseAfter(htmlFragment);
-		
-		return htmlFragment;
-	}
+			String xpath = nodeRule.getName();
+			ArrayList<Node> nodes = XPathServices.getNodes(contextNode, xpath);
 
-	@Override
-	public Document traverse(HtmlDocument htmlDocument, IHtmlVisitor visitor) throws Exception { 
+			for (Node node : nodes) {
+				if (node instanceof HtmlElement) {
+					HtmlElement htmlElement = (HtmlElement) node;
+					TextParam paramMapTo = nodeRule.findTextParameter("map-to");
 
-		this.visitor = visitor;
-
-		if (htmlDocument == null) {
-			return null;
+					MapToNodeAnnotation annotation = new MapToNodeAnnotation();
+					annotation.setMapTo(paramMapTo.getValue());
+					htmlElement.addAnnotation(annotation);
+				}
+			}
 		}
 
-		editorFactory = visitor.getEditorFactory();
-		Document doc = visitor.createDocument(htmlDocument);
-		edit((ElementImpl) htmlDocument.getDocumentElement(),
-				(ElementImpl) doc.getDocumentElement());
-		
-		return doc;
-	}
+		for (AttributeRule attributeRule : namespace.getAttributeRules()) {
 
-	@Override
-	public DocumentFragment traverse(HtmlFragment htmlFragment,
-			IHtmlVisitor visitor) {
-				this.visitor = visitor;
+			String xpath = attributeRule.getName();
+			ArrayList<Node> nodes = XPathServices.getNodes(contextNode, xpath);
 
-		if (htmlFragment == null) {
-			return null;
+			for (Node node : nodes) {
+				if (node instanceof Attr) {
+
+					Attr attribute = (Attr) node;
+					HtmlElement htmlElement = (HtmlElement) attribute
+							.getOwnerElement();
+					TextParam paramMapTo = attributeRule
+							.findTextParameter("map-to");
+					MapToAttributeAnnotation annotation = new MapToAttributeAnnotation();
+					annotation.setMapTo(paramMapTo.getValue());
+					annotation.setAttribute(attribute.getName());
+					htmlElement.addAnnotation(annotation);
+				}
+			}
 		}
-
-		editorFactory = visitor.getEditorFactory();
-		DocumentFragmentImpl fragment = visitor.createDocumentFragment(htmlFragment);
-		edit((ElementImpl) htmlFragment, fragment);
-		
-		return fragment;
-	}
-
-	public boolean isFragment(String htmlCode) throws IOException, TokenizerException {
-
-		HtmlParser parser = new HtmlParser();
-		return parser.isFragment(htmlCode);
-	}
-
-	@Override
-	public void setProgressListeners(ArrayList<ProgressListener> listeners) {
-		this.listeners = listeners;
 	}
 }

@@ -7,7 +7,7 @@ import org.dbdoclet.option.OptionException;
 import org.dbdoclet.service.StringServices;
 import org.dbdoclet.tag.docbook.Article;
 import org.dbdoclet.tag.docbook.Book;
-import org.dbdoclet.tag.docbook.BridgeHead;
+import org.dbdoclet.tag.docbook.Bridgehead;
 import org.dbdoclet.tag.docbook.Chapter;
 import org.dbdoclet.tag.docbook.DocBookDocument;
 import org.dbdoclet.tag.docbook.DocBookElement;
@@ -15,16 +15,16 @@ import org.dbdoclet.tag.docbook.DocBookFragment;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Part;
-import org.dbdoclet.tag.docbook.PartIntro;
-import org.dbdoclet.tag.docbook.RefEntry;
-import org.dbdoclet.tag.docbook.RefName;
-import org.dbdoclet.tag.docbook.RefNameDiv;
-import org.dbdoclet.tag.docbook.RefPurpose;
-import org.dbdoclet.tag.docbook.RefSect1;
-import org.dbdoclet.tag.docbook.RefSect2;
-import org.dbdoclet.tag.docbook.RefSect3;
-import org.dbdoclet.tag.docbook.RefSect4;
-import org.dbdoclet.tag.docbook.RefSect5;
+import org.dbdoclet.tag.docbook.Partintro;
+import org.dbdoclet.tag.docbook.Refentry;
+import org.dbdoclet.tag.docbook.Refname;
+import org.dbdoclet.tag.docbook.Refnamediv;
+import org.dbdoclet.tag.docbook.Refpurpose;
+import org.dbdoclet.tag.docbook.Refsect1;
+import org.dbdoclet.tag.docbook.Refsect2;
+import org.dbdoclet.tag.docbook.Refsect3;
+import org.dbdoclet.tag.docbook.Refsect4;
+import org.dbdoclet.tag.docbook.Refsect5;
 import org.dbdoclet.tag.docbook.Reference;
 import org.dbdoclet.tag.docbook.Sect1;
 import org.dbdoclet.tag.docbook.Sect2;
@@ -55,7 +55,7 @@ public class SectionDetector {
 	private static Class<?>[] articleMap = { Article.class, Section.class,
 			Section.class, Section.class, Section.class, Section.class };
 
-	private static Class<?>[] partIntroMap = { PartIntro.class, Section.class,
+	private static Class<?>[] partIntroMap = { Partintro.class, Section.class,
 			Section.class, Section.class, Section.class, Section.class };
 
 	private static Class<?>[] chapterMap = { Chapter.class, Section.class,
@@ -70,17 +70,17 @@ public class SectionDetector {
 	private static Class<?>[] sect3Map = { Sect3.class, Sect4.class,
 			Sect5.class, Sect5.class, Sect5.class, Sect5.class };
 
-	private static Class<?>[] referenceMap = { Reference.class, RefEntry.class,
-			RefSect1.class, RefSect2.class, RefSect3.class, RefSect4.class };
+	private static Class<?>[] referenceMap = { Reference.class, Refentry.class,
+			Refsect1.class, Refsect2.class, Refsect3.class, Refsect4.class };
 
-	private static Class<?>[] refSect1Map = { RefSect1.class, RefSect2.class,
-			RefSect3.class, RefSect4.class, RefSect5.class, RefSect5.class };
+	private static Class<?>[] refSect1Map = { Refsect1.class, Refsect2.class,
+			Refsect3.class, Refsect4.class, Refsect5.class, Refsect5.class };
 
-	private static Class<?>[] refSect2Map = { RefSect2.class, RefSect3.class,
-			RefSect4.class, RefSect5.class, RefSect5.class, RefSect5.class };
+	private static Class<?>[] refSect2Map = { Refsect2.class, Refsect3.class,
+			Refsect4.class, Refsect5.class, Refsect5.class, Refsect5.class };
 
-	private static Class<?>[] refSect3Map = { RefSect3.class, RefSect4.class,
-			RefSect5.class, RefSect5.class, RefSect5.class, RefSect5.class };
+	private static Class<?>[] refSect3Map = { Refsect3.class, Refsect4.class,
+			Refsect5.class, Refsect5.class, Refsect5.class, Refsect5.class };
 
 	private static Class<?>[] saveMap = { Para.class, Para.class, Para.class,
 			Para.class, Para.class, Para.class };
@@ -241,23 +241,23 @@ public class SectionDetector {
 
 					levelParent.appendChild(sect);
 
-					if (sect instanceof RefEntry) {
+					if (sect instanceof Refentry) {
 
-						RefNameDiv refNameDiv = dbfactory.createRefNameDiv();
-						RefName refName = dbfactory.createRefName("");
-						RefPurpose refPurpose = dbfactory.createRefPurpose();
+						Refnamediv refNameDiv = dbfactory.createRefnamediv();
+						Refname refName = dbfactory.createRefname("");
+						Refpurpose refPurpose = dbfactory.createRefpurpose();
 
 						refNameDiv.appendChild(refName);
 						refNameDiv.appendChild(refPurpose);
 
-						RefSect1 refSect1 = dbfactory.createRefSect1();
+						Refsect1 refSect1 = dbfactory.createRefsect1();
 
 						sect.appendChild(refNameDiv);
 						sect.appendChild(refSect1);
 						sect = refSect1;
 					}
 
-					if (sect instanceof BridgeHead) {
+					if (sect instanceof Bridgehead) {
 
 						// setParent(sect);
 						values.setCurrent(sect);
@@ -312,7 +312,7 @@ public class SectionDetector {
 			map = chapterMap;
 		}
 
-		if (isRoot(PartIntro.getTag())) {
+		if (isRoot(Partintro.getTag())) {
 			map = partIntroMap;
 		}
 
@@ -332,15 +332,15 @@ public class SectionDetector {
 			map = referenceMap;
 		}
 
-		if (isRoot(RefSect1.tagName)) {
+		if (isRoot(Refsect1.tagName)) {
 			map = refSect1Map;
 		}
 
-		if (isRoot(RefSect2.tagName)) {
+		if (isRoot(Refsect2.tagName)) {
 			map = refSect2Map;
 		}
 
-		if (isRoot(RefSect3.tagName)) {
+		if (isRoot(Refsect3.tagName)) {
 			map = refSect3Map;
 		}
 
@@ -485,14 +485,14 @@ public class SectionDetector {
 
 		if (levelParent == null || levelParent instanceof Para
 				|| isValidHeader(header) == false) {
-			section = dbfactory.createBridgeHead();
+			section = dbfactory.createBridgehead();
 		}
 
 		if (levelParent instanceof Book || levelParent instanceof Part) {
 			section = dbfactory.createChapter();
 		}
 
-		if (levelParent instanceof Chapter || levelParent instanceof PartIntro) {
+		if (levelParent instanceof Chapter || levelParent instanceof Partintro) {
 			section = dbfactory.createSection();
 		}
 
@@ -521,35 +521,35 @@ public class SectionDetector {
 		}
 
 		if (levelParent instanceof Sect5) {
-			section = dbfactory.createSimpleSect();
+			section = dbfactory.createSimplesect();
 		}
 
 		if (levelParent instanceof Reference) {
-			section = dbfactory.createRefEntry();
+			section = dbfactory.createRefentry();
 		}
 
-		if (levelParent instanceof RefEntry) {
-			section = dbfactory.createRefSect1();
+		if (levelParent instanceof Refentry) {
+			section = dbfactory.createRefsect1();
 		}
 
-		if (levelParent instanceof RefSect1) {
-			section = dbfactory.createRefSect2();
+		if (levelParent instanceof Refsect1) {
+			section = dbfactory.createRefsect2();
 		}
 
-		if (levelParent instanceof RefSect2) {
-			section = dbfactory.createRefSect3();
+		if (levelParent instanceof Refsect2) {
+			section = dbfactory.createRefsect3();
 		}
 
-		if (levelParent instanceof RefSect3) {
-			section = dbfactory.createRefSect4();
+		if (levelParent instanceof Refsect3) {
+			section = dbfactory.createRefsect4();
 		}
 
-		if (levelParent instanceof RefSect4) {
-			section = dbfactory.createRefSect5();
+		if (levelParent instanceof Refsect4) {
+			section = dbfactory.createRefsect5();
 		}
 
-		if (levelParent instanceof RefSect5) {
-			section = dbfactory.createSimpleSect();
+		if (levelParent instanceof Refsect5) {
+			section = dbfactory.createSimplesect();
 		}
 
 		if (section != null) {
@@ -584,9 +584,9 @@ public class SectionDetector {
 			}
 		}
 
-		BridgeHead bridgeHead = dbfactory.createBridgeHead();
-		bridgeHead.appendChild(values.getHtmlElement().getTextContent());
-		para.appendChild(bridgeHead);
+		Bridgehead Bridgehead = dbfactory.createBridgehead();
+		Bridgehead.appendChild(values.getHtmlElement().getTextContent());
+		para.appendChild(Bridgehead);
 
 		// Emphasis emph = dbfactory.createEmphasis();
 		// emph.setRole(getOptions().getEmphasisBoldRole());

@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.tag.docbook.Link;
-import org.dbdoclet.tag.docbook.XRef;
+import org.dbdoclet.tag.docbook.Xref;
 import org.dbdoclet.tag.javadoc.Linkplain;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.docbook.editor.DocBookEditor;
@@ -71,7 +71,7 @@ public class LinkplainEditor extends DocBookEditor {
 
 			} else {
 				
-				XRef elem = dbfactory.createXRef(ref);
+				Xref elem = dbfactory.createXref(ref);
 				setCurrent(elem);
 			}
 

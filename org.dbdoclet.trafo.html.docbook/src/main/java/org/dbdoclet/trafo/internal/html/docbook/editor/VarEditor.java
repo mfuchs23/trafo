@@ -8,9 +8,9 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.BlockQuote;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
+import org.dbdoclet.tag.docbook.Blockquote;
 import org.dbdoclet.tag.docbook.DocBookElement;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.NodeImpl;
@@ -22,13 +22,13 @@ public class VarEditor extends DocBookEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 
 		NodeImpl parent = getParent();
 
-		if (parent instanceof BlockQuote) {
+		if (parent instanceof Blockquote) {
 
-			setCurrent(dbfactory.createProgramListing());
+			setCurrent(dbfactory.createProgramlisting());
 			traverse(true);
 
 		} else {

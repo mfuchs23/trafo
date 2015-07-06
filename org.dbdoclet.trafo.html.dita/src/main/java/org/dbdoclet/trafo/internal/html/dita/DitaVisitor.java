@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.tag.dita.Abstract;
 import org.dbdoclet.tag.dita.DitaTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.html.HtmlDocument;
 import org.dbdoclet.tag.html.HtmlElement;
@@ -42,7 +43,7 @@ public class DitaVisitor implements IHtmlVisitor {
 
 	private ArrayList<ProgressListener> listeners;
 	private LinkManager linkManager;
-	private DocBookTagFactory dbfactory = new DocBookTagFactory();
+	private BaseTagFactory dbfactory = new DocBookTagFactory();
 	private DitaTagFactory tagFactory;
 	private Script script;
 	private ListDetector listDetector;

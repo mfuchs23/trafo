@@ -14,6 +14,7 @@ import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.NodeImpl;
+import org.w3c.dom.Node;
 
 public class TextEditor extends DitaEditor {
 
@@ -31,7 +32,7 @@ public class TextEditor extends DitaEditor {
 
 			if (isContentModel(parent)) {
 
-				if (getCharacterDataNode().getNodeType() == NodeImpl.TEXT_NODE) {
+				if (getCharacterDataNode().getNodeType() == Node.TEXT_NODE) {
 
 					P para = tagFactory.createP();
 					parent.appendChild(para);

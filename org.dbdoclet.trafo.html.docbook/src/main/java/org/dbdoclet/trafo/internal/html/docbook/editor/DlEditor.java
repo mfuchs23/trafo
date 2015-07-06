@@ -33,13 +33,13 @@ public class DlEditor extends DocBookEditor {
 
 	if (isList(getParent())) {
 
-	    setCurrent(dbfactory.createListItem());
+	    setCurrent(dbfactory.createListitem());
 	    getCurrent().setParentNode(getParent());
 	    getParent().appendChild(getCurrent());
 	    setParent(getCurrent());
 	}
 
-	setCurrent(dbfactory.createVariableList());
+	setCurrent(dbfactory.createVariablelist());
 
 	if ((title != null) && (title.length() > 0)) {
 	    getCurrent().appendChild(dbfactory.createTitle(title));

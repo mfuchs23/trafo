@@ -8,7 +8,7 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.Emphasis;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -20,7 +20,7 @@ public class EmEditor extends AbstractInlineEditor {
     @Override
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
-        DocBookTagFactory dbfactory = getTagFactory();
+        BaseTagFactory dbfactory = getTagFactory();
         emphasis = dbfactory.createEmphasis();
         
         setInlineElement(emphasis);

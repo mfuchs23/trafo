@@ -15,9 +15,9 @@ import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Part;
-import org.dbdoclet.tag.docbook.RefEntry;
-import org.dbdoclet.tag.docbook.RefNameDiv;
-import org.dbdoclet.tag.docbook.RefSection;
+import org.dbdoclet.tag.docbook.Refentry;
+import org.dbdoclet.tag.docbook.Refnamediv;
+import org.dbdoclet.tag.docbook.Refsection;
 import org.dbdoclet.tag.docbook.Reference;
 import org.dbdoclet.tag.html.Div;
 import org.dbdoclet.trafo.html.EditorException;
@@ -124,7 +124,7 @@ public class DivEditor extends DocBookEditor {
 				if ((title != null) && (title.length() > 0)) {
 					setCurrent(dbfactory.createExample(title));
 				} else {
-					setCurrent(dbfactory.createInformalExample());
+					setCurrent(dbfactory.createInformalexample());
 				}
 
 				parent.appendChild(getCurrent());
@@ -135,9 +135,9 @@ public class DivEditor extends DocBookEditor {
 			if (type.startsWith("formalpara")) {
 
 				if ((title != null) && (title.length() > 0)) {
-					setCurrent(dbfactory.createFormalPara(title));
+					setCurrent(dbfactory.createFormalpara(title));
 				} else {
-					setCurrent(dbfactory.createFormalPara());
+					setCurrent(dbfactory.createFormalpara());
 				}
 
 				parent.appendChild(getCurrent());
@@ -190,17 +190,17 @@ public class DivEditor extends DocBookEditor {
 
 		if (parent instanceof Reference) {
 
-			RefEntry refEntry = dbfactory.createRefEntry();
+			Refentry refEntry = dbfactory.createRefentry();
 			parent.appendChild(refEntry);
 
-			RefNameDiv refNameDiv = dbfactory.createRefNameDiv();
+			Refnamediv refNameDiv = dbfactory.createRefnamediv();
 			refNameDiv.appendChild(dbfactory
-					.createRefName(AUTOMATICALLY_INSERTED));
-			refNameDiv.appendChild(dbfactory.createRefPurpose());
+					.createRefname(AUTOMATICALLY_INSERTED));
+			refNameDiv.appendChild(dbfactory.createRefpurpose());
 			refEntry.appendChild(refNameDiv);
 
-			RefSection refSection = dbfactory
-					.createRefSection(AUTOMATICALLY_INSERTED);
+			Refsection refSection = dbfactory
+					.createRefsection(AUTOMATICALLY_INSERTED);
 			refEntry.appendChild(refSection);
 
 			Para para = dbfactory.createPara();

@@ -14,9 +14,9 @@ import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Entry;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.docbook.Part;
-import org.dbdoclet.tag.docbook.RefEntry;
-import org.dbdoclet.tag.docbook.RefNameDiv;
-import org.dbdoclet.tag.docbook.RefSection;
+import org.dbdoclet.tag.docbook.Refentry;
+import org.dbdoclet.tag.docbook.Refnamediv;
+import org.dbdoclet.tag.docbook.Refsection;
 import org.dbdoclet.tag.docbook.Reference;
 import org.dbdoclet.tag.docbook.SectionElement;
 import org.dbdoclet.tag.html.P;
@@ -74,16 +74,16 @@ public class PEditor extends DocBookEditor {
 
 					setCurrent(candidate);
 
-					RefEntry refEntry = dbfactory.createRefEntry();
+					Refentry refEntry = dbfactory.createRefentry();
 					parent.appendChild(refEntry);
 
-					RefNameDiv refNameDiv = dbfactory.createRefNameDiv();
+					Refnamediv refNameDiv = dbfactory.createRefnamediv();
 					refNameDiv.appendChild(dbfactory
-							.createRefName(AUTOMATICALLY_INSERTED));
-					refNameDiv.appendChild(dbfactory.createRefPurpose());
+							.createRefname(AUTOMATICALLY_INSERTED));
+					refNameDiv.appendChild(dbfactory.createRefpurpose());
 					refEntry.appendChild(refNameDiv);
 
-					RefSection refSection = dbfactory.createRefSection();
+					Refsection refSection = dbfactory.createRefsection();
 					refEntry.appendChild(refSection);
 
 					refSection.appendChild(getCurrent());

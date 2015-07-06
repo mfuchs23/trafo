@@ -8,7 +8,7 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.xiphias.dom.NodeListImpl;
@@ -19,7 +19,7 @@ public class OlEditor extends DocBookEditor {
     public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DocBookTagFactory dbfactory = getTagFactory();
+	BaseTagFactory dbfactory = getTagFactory();
 
 	NodeListImpl children = getHtmlElement().getTrafoChildNodes();
 
@@ -30,13 +30,13 @@ public class OlEditor extends DocBookEditor {
 
 	if (isList(getParent())) {
 
-	    setCurrent(dbfactory.createListItem());
+	    setCurrent(dbfactory.createListitem());
 	    getCurrent().setParentNode(getParent());
 	    getParent().appendChild(getCurrent());
 	    setParent(getCurrent());
 	}
 
-	setCurrent(dbfactory.createOrderedList());
+	setCurrent(dbfactory.createOrderedlist());
 	getParent().appendChild(getCurrent());
 	traverse(true);
 

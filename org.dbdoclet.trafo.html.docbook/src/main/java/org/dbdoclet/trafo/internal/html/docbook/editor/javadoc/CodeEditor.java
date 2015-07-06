@@ -21,7 +21,7 @@ public class CodeEditor extends DocBookEditor {
 	DocBookTagFactory dbfactory = getTagFactory();
 
 	org.dbdoclet.tag.javadoc.Code code = (org.dbdoclet.tag.javadoc.Code) getHtmlElement();
-	getCurrent().appendChild(dbfactory.createComputerOutput(code.getTextContent()));
+	getCurrent().appendChild(dbfactory.createComputeroutput(code.getTextContent()));
 
 	traverse(false);
 

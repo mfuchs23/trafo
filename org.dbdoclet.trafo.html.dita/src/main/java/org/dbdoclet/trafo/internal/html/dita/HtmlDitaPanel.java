@@ -3,7 +3,6 @@ package org.dbdoclet.trafo.internal.html.dita;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
@@ -31,7 +30,7 @@ public class HtmlDitaPanel extends GridPanel implements ActionListener {
 
 	public HtmlDitaPanel() {
 
-		res = PropertyResourceBundle
+		res = ResourceBundle
 				.getBundle("org/dbdoclet/trafo/html/docbook/Resources");
 
 		jf = JiveFactory.getInstance();

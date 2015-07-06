@@ -9,7 +9,7 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.service.StringServices;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.tag.html.Br;
 import org.dbdoclet.trafo.TrafoConstants;
@@ -28,7 +28,7 @@ public class BrEditor extends DocBookEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 		traverse(false);
 
 		Br brElement = (Br) values.getHtmlElement();

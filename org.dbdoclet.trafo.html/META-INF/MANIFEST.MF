@@ -2,9 +2,21 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.dbdoclet.trafo.html
 Bundle-SymbolicName: org.dbdoclet.trafo.html
-Bundle-Version: 7.0.0
+Bundle-Version: 8.0.0
 Bundle-Vendor: Michael Fuchs
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: org.dbdoclet.trafo,
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.apache.commons.logging,
+ org.dbdoclet.html.parser,
+ org.dbdoclet.html.tokenizer,
+ org.dbdoclet.progress,
+ org.dbdoclet.service,
+ org.dbdoclet.tag,
+ org.dbdoclet.tag.html,
+ org.dbdoclet.trafo,
+ org.dbdoclet.trafo.param,
+ org.dbdoclet.trafo.script,
+ org.dbdoclet.xiphias,
+ org.dbdoclet.xiphias.annotation,
+ org.dbdoclet.xiphias.dom,
  org.osgi.framework;version="1.3.0"
 Export-Package: org.dbdoclet.trafo.html

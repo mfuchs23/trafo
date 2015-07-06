@@ -10,7 +10,6 @@ package org.dbdoclet.trafo.internal.html.dita.editor;
 
 import org.dbdoclet.tag.dita.DitaTagFactory;
 import org.dbdoclet.tag.dita.Tt;
-import org.dbdoclet.tag.docbook.Literal;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 

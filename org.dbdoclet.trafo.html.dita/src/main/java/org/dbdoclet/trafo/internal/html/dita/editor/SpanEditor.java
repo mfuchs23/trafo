@@ -8,16 +8,8 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.service.StringServices;
-import org.dbdoclet.tag.dita.DitaTagFactory;
-import org.dbdoclet.tag.docbook.Anchor;
-import org.dbdoclet.tag.docbook.IndexTerm;
-import org.dbdoclet.tag.docbook.Primary;
-import org.dbdoclet.tag.docbook.Secondary;
-import org.dbdoclet.tag.html.Span;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class SpanEditor extends DitaEditor {
 
@@ -26,7 +18,7 @@ public class SpanEditor extends DitaEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DitaTagFactory tagFactory = getTagFactory();
+		getTagFactory();
 		return finalizeValues();
 	}
 }

@@ -17,6 +17,7 @@ import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.progress.ProgressManager;
 import org.dbdoclet.service.ResourceServices;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Index;
 import org.dbdoclet.tag.html.HtmlDocument;
@@ -79,7 +80,7 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 		return script;
 	}
 
-	public DocBookTagFactory getTagFactory() {
+	public BaseTagFactory getTagFactory() {
 		return dbfactory;
 	}
 

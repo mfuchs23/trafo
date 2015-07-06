@@ -14,9 +14,9 @@ import org.dbdoclet.tag.docbook.DocBookElement;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Link;
 import org.dbdoclet.tag.docbook.Para;
-import org.dbdoclet.tag.docbook.SimPara;
+import org.dbdoclet.tag.docbook.Simpara;
 import org.dbdoclet.tag.docbook.ULink;
-import org.dbdoclet.tag.docbook.XRef;
+import org.dbdoclet.tag.docbook.Xref;
 import org.dbdoclet.tag.html.A;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
@@ -86,7 +86,7 @@ public class AEditor extends DocBookEditor {
 
 			} else {
 
-				XRef xref = dbfactory.createXRef(getLinkManager().getUniqueId(
+				Xref xref = dbfactory.createXref(getLinkManager().getUniqueId(
 						href));
 
 				xref.setParentNode(ancestor);
@@ -130,7 +130,7 @@ public class AEditor extends DocBookEditor {
 
 			} else {
 
-				SimPara candidate = dbfactory.createSimPara();
+				Simpara candidate = dbfactory.createSimpara();
 				candidate.setParentNode(ancestor);
 
 				if (candidate.isValidParent(script.getTransformPosition(), ancestor)) {

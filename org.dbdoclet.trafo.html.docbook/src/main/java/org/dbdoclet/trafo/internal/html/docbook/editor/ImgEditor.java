@@ -135,7 +135,7 @@ public class ImgEditor extends DocBookEditor {
 				|| parent instanceof Term || parent instanceof ULink
 				|| parent instanceof Link) {
 
-			media = dbfactory.createInlineMediaObject();
+			media = dbfactory.createInlinemediaobject();
 			parent.appendChild(media);
 			media.setParentNode(getCurrent());
 
@@ -157,10 +157,10 @@ public class ImgEditor extends DocBookEditor {
 			if ((title != null) && (title.length() > 0)) {
 				figure = dbfactory.createFigure(title);
 			} else {
-				figure = dbfactory.createInformalFigure();
+				figure = dbfactory.createInformalfigure();
 			}
 
-			media = dbfactory.createMediaObject();
+			media = dbfactory.createMediaobject();
 			parent.appendChild(figure);
 			figure.appendChild(media);
 

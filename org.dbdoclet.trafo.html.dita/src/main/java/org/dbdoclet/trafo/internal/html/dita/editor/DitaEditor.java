@@ -91,6 +91,7 @@ public abstract class DitaEditor implements IEditor {
 		dbk.setRemap(remap);
 	}
 
+	@Override
 	public EditorInstruction edit(EditorInstruction vo) throws EditorException {
 
 		if (vo == null) {
@@ -98,7 +99,7 @@ public abstract class DitaEditor implements IEditor {
 		}
 
 		setValues(vo);
-		DitaTagFactory tagFactory = getTagFactory();
+		DitaTagFactory tagFactory = (DitaTagFactory) getTagFactory();
 
 		if (parent instanceof Row) {
 
@@ -130,7 +131,6 @@ public abstract class DitaEditor implements IEditor {
 
 		values.doIgnore(doIgnore);
 		values.doTraverse(doTraverse);
-		values.setAnything(anything);
 		values.setHtmlElement(child);
 		values.setCurrent(current);
 		values.setParent(parent);
@@ -169,6 +169,7 @@ public abstract class DitaEditor implements IEditor {
 		return parent;
 	}
 
+	@Override
 	public DitaTagFactory getTagFactory() {
 
 		if (tagFactory == null) {
@@ -225,7 +226,6 @@ public abstract class DitaEditor implements IEditor {
 			throw new IllegalStateException("Der Parameter Script darf nicht null sein!");
 		}
 		
- 		anything = values.getAnything();
 		child = values.getHtmlElement();
 		current = values.getCurrent();
 		doIgnore = values.doIgnore();

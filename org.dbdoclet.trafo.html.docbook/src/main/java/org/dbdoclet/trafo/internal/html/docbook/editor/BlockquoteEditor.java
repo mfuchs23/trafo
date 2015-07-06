@@ -8,8 +8,8 @@
  */
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
-import org.dbdoclet.tag.docbook.BlockQuote;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
+import org.dbdoclet.tag.docbook.Blockquote;
 import org.dbdoclet.tag.docbook.Para;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
@@ -22,9 +22,9 @@ public class BlockquoteEditor extends DocBookEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 
-		BlockQuote blockquote = dbfactory.createBlockQuote();
+		Blockquote blockquote = dbfactory.createBlockquote();
 
 		NodeImpl parent = getParent();
 

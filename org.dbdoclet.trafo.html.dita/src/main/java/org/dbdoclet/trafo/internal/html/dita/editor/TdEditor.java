@@ -8,15 +8,8 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import java.util.Iterator;
-
-import org.dbdoclet.tag.dita.DitaTagFactory;
-import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.xiphias.dom.ElementImpl;
-import org.dbdoclet.xiphias.dom.NodeImpl;
-import org.dbdoclet.xiphias.dom.NodeListImpl;
 
 public class TdEditor extends DitaEditor {
 
@@ -26,7 +19,7 @@ public class TdEditor extends DitaEditor {
 
 		setValues(super.edit(values));
 
-		DitaTagFactory tagFactory = getTagFactory();
+		getTagFactory();
 		return finalizeValues();
 	}
 }

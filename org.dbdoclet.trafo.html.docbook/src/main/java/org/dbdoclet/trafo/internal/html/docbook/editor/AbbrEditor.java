@@ -9,7 +9,7 @@
 package org.dbdoclet.trafo.internal.html.docbook.editor;
 
 import org.dbdoclet.tag.docbook.Abbrev;
-import org.dbdoclet.tag.docbook.DocBookTagFactory;
+import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
@@ -20,7 +20,7 @@ public class AbbrEditor extends DocBookEditor {
 			throws EditorException {
 
 		setValues(super.edit(values));
-		DocBookTagFactory dbfactory = getTagFactory();
+		BaseTagFactory dbfactory = getTagFactory();
 
 		Abbrev candidate = dbfactory.createAbbrev();
 

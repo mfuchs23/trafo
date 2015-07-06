@@ -3,3 +3,11 @@ transformation html2docbook;
 node "//ol[@class='procedure']" {
 	map-to = "procedure";
 }
+
+node "//ol[@class='procedure']/li" {
+	map-to = "step";
+}
+
+attribute "//@class[contains(., 'procedure')]" {
+	map-to = "role";
+}

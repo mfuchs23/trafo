@@ -8,14 +8,8 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor.javadoc;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.dbdoclet.tag.dita.DitaTagFactory;
-import org.dbdoclet.tag.docbook.Emphasis;
-import org.dbdoclet.tag.docbook.Literal;
 import org.dbdoclet.trafo.html.EditorInstruction;
 import org.dbdoclet.trafo.internal.html.dita.editor.DitaEditor;
-import org.dbdoclet.xiphias.dom.NodeImpl;
 
 /**
  * The class <code>LinkEditor</code> is reponsible for transforming @link tags
@@ -26,13 +20,11 @@ import org.dbdoclet.xiphias.dom.NodeImpl;
  */
 public class LinkEditor extends DitaEditor {
 
-	private static Log logger = LogFactory.getLog(LinkEditor.class);
-
 	@Override
 	public EditorInstruction edit(EditorInstruction values) {
 
 		setValues(values);
-		DitaTagFactory tagFactory = getTagFactory();
+		getTagFactory();
 		return finalizeValues();
 	}
 }

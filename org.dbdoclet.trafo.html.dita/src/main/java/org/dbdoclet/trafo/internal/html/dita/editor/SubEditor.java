@@ -8,8 +8,6 @@
  */
 package org.dbdoclet.trafo.internal.html.dita.editor;
 
-import org.dbdoclet.tag.dita.DitaTagFactory;
-import org.dbdoclet.tag.docbook.Subscript;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
 
@@ -19,7 +17,7 @@ public class SubEditor extends DitaEditor {
 	public EditorInstruction edit(EditorInstruction values) throws EditorException {
 
 	setValues(super.edit(values));
-	DitaTagFactory tagFactory = getTagFactory();
+	getTagFactory();
 	traverse(true);
 
 	return finalizeValues();

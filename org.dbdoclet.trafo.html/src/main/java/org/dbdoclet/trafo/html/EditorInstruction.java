@@ -11,7 +11,6 @@ package org.dbdoclet.trafo.html;
 import org.dbdoclet.tag.html.HtmlElement;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.dom.CharacterDataImpl;
-import org.dbdoclet.xiphias.dom.ElementImpl;
 import org.dbdoclet.xiphias.dom.NodeImpl;
 
 public class EditorInstruction {
@@ -19,7 +18,6 @@ public class EditorInstruction {
 	private NodeImpl current;
 	private NodeImpl parent;
 	private HtmlElement htmlElement;
-	private Object anything;
 	private CharacterDataImpl characterDataNode;
 	private boolean doIgnore = false;
 	private boolean doTraverse = true;
@@ -45,10 +43,6 @@ public class EditorInstruction {
 		this.doTraverse = traverse;
 	}
 
-	public Object getAnything() {
-		return anything;
-	}
-
 	public HtmlElement getHtmlElement() {
 		return htmlElement;
 	}
@@ -64,11 +58,6 @@ public class EditorInstruction {
 	public CharacterDataImpl getCharacterDataNode() {
 
 		return characterDataNode;
-	}
-
-	public void setAnything(Object anything) {
-
-		this.anything = anything;
 	}
 
 	public void setHtmlElement(HtmlElement htmlElement) {

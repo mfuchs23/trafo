@@ -58,7 +58,7 @@ public class CodeEditor extends DocBookEditor {
 			return finalizeValues();
 		}
 
-		candidate = dbfactory.createProgramListing();
+		candidate = dbfactory.createProgramlisting();
 
 		if (candidate.isValidParent(script.getTransformPosition(), parent)) {
 
