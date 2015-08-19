@@ -207,7 +207,16 @@ public class HtmlProvider implements IHtmlProvider {
 			element = editorInstruction.getCurrent();
 			doTraverse = editorInstruction.doTraverse();
 			doIgnore = editorInstruction.doIgnore();
+			targetNode = editorInstruction.getParent();
 
+			if (targetNode == null) {
+
+				throw new NullPointerException("[Node]"
+						+ " DocBook parent element for element " + child
+						+ " is null!");
+			}
+
+			
 			if (doTraverse == true) {
 
 				NodeImpl childParent = edit(child, element);
@@ -365,15 +374,6 @@ public class HtmlProvider implements IHtmlProvider {
 
 			logger.debug(indent + " Nach der Transformation: " + child + ".\n"
 					+ "Editor " + editor + "\n" + values);
-
-			targetNode = values.getParent();
-
-			if (targetNode == null) {
-
-				throw new NullPointerException("[Node]"
-						+ " DocBook parent element for element " + child
-						+ " is null!");
-			}
 
 			return values;
 

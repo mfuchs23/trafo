@@ -104,4 +104,9 @@ public class SectionTests extends AbstractTests {
 		assertEquals("section", doc.getDocumentElement().getTagName());
 	}
 
+	@Test
+	public void nestingH1H2() {
+		String buffer = transform("<h1>H1</h1><p>P1</p><h2>H2</h2><p>P2</p>");
+		System.out.println(buffer);
+	}
 }
