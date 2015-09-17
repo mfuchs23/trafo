@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-  <info organisation="org.dbdoclet" module="org.dbdoclet.trafo" revision="8.0.0" status="integration" publication="20131022120614">
+  <info organisation="org.dbdoclet" module="org.dbdoclet.trafo" revision="${module.version}" status="integration" publication="20131022120614">
   </info>
   <dependencies>
     <dependency org="org.antlr" name="org.antlr.runtime" rev="4.5" revConstraint="latest.release"/>

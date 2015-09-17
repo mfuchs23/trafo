@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-### Copyright (C) 2001-2012 Michael Fuchs ###
--->
 <project name="trafo" default="build">
-
+  
   <property name="resolveMode" value="default"/>
-
-  <property file="workspace.properties" />
+  <property file="module.properties" />
   <import file="../build/build.config/defaultBuild.xml"/>  
 
   <macrodef name="iterate">
     <attribute name="target"/>
     <sequential>
-      <subant target="@{target}" failonerror="true"> 
+      <subant target="@{target}"> 
 	<fileset dir=".">
 	  <exclude name="org.dbdoclet.test.*/build.xml"/>
-	  <exclude name="org.dbdoclet.trafo/build.xml"/>
 	  <include name="*/build.xml"/>
 	</fileset>
       </subant>
     </sequential>
   </macrodef>
 
-  <target name="distclean">
-    <iterate target="distclean"/>
+  <macrodef name="iterate-test">
+    <attribute name="target"/>
+    <sequential>
+      <subant target="@{target}"> 
+	<fileset dir=".">
+	  <include name="org.dbdoclet.test.*/build.xml"/>
+	</fileset>
+      </subant>
+    </sequential>
+  </macrodef>
+
+  <target name="clean">
+    <iterate target="clean"/>
   </target>
 
   <target name="build">
-    <ant dir="org.dbdoclet.trafo" target="build"/>
     <iterate target="build"/>
+  </target>
+
+  <target name="test">
+    <iterate-test target="test"/>
   </target>
 
   <echo>resolve mode = ${resolveMode}</echo>

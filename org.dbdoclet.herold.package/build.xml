@@ -1,209 +1,207 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-   <!DOCTYPE project PUBLIC "-//Apache Group//DTD Ant V1.0//EN" "ant.dtd">
-   -->
+<!DOCTYPE project PUBLIC "-//Apache Group//DTD Ant V1.0//EN" "ant.dtd">
+-->
 <project name="org.dbdoclet.herold.package" default="build">
 
-	<property file="../workspace.properties" />
-	<property file="module.properties" />
-	<import file="${build.config.dir}/defaultBuild.xml" />
+<property file="../module.properties" />
+<property file="build.properties" />
+<import file="${build.config.dir}/defaultBuild.xml" />
 
-	<taskdef name="packman" classname="org.dbdoclet.ant.PackmanTask" />
-	<taskdef name="srcpacker" classname="org.dbdoclet.tool.src.ProductManagerTask" />
+<taskdef name="packman" classname="org.dbdoclet.ant.PackmanTask" />
+<taskdef name="srcpacker" classname="org.dbdoclet.tool.src.ProductManagerTask" />
 
-	<property file="module.properties" />
+<target name="build">
+  
+  <antcall target="default.compile" />
+  
+  <jar destfile="distrib/herold_${module.version}.jar">
+    <manifest>
+      <attribute name="Main-Class" value="org.dbdoclet.herold.Herold" />
+      <attribute name="Class-Path" value="../conf/ 
+					  org.antlr.runtime.jar 
+					  org.apache.commons.jxpath.jar
+					  org.apache.commons.logging.jar
+					  org.apache.log4j.jar"/>
+      <attribute name="Specification-Version" value="${module.version}" />
+      <attribute name="Implementation-Version" value="${module.version}" />
+    </manifest>
+    <fileset dir="build/main/classes" />
+    <zipgroupfileset dir="lib">
+      <include name="org.dbdoclet.commons_*.jar"/>
+      <include name="org.dbdoclet.getopts_*.jar"/>
+      <include name="org.dbdoclet.html.parser_*.jar"/>
+      <include name="org.dbdoclet.jive_*.jar"/>
+      <include name="org.dbdoclet.xiphias_*.jar"/>
+      <include name="org.dbdoclet.tag_*.jar"/>
+      <include name="org.dbdoclet.trafo_*.jar"/>
+      <include name="org.dbdoclet.trafo.html_*.jar"/>
+      <include name="org.dbdoclet.trafo.html.docbook_*.jar"/>
+      <include name="org.dbdoclet.trafo.html.dita_*.jar"/>
+    </zipgroupfileset>
+  </jar>
+</target>
 
-	<target name="build">
-		
-		<antcall target="default.compile" />
-		
-		<jar destfile="distrib/herold_${module.version}.jar">
-			<manifest>
-				<attribute name="Main-Class" value="org.dbdoclet.herold.Herold" />
-				<attribute name="Class-Path" value="../conf/ 
-					org.antlr.runtime.jar 
-					org.apache.commons.jxpath.jar
-					org.apache.commons.logging.jar
-					org.apache.log4j.jar"/>
-				<attribute name="Specification-Version" value="${module.version}" />
-				<attribute name="Implementation-Version" value="${module.version}" />
-			</manifest>
-			<fileset dir="build/main/classes" />
-			<zipgroupfileset dir="lib">
-				<include name="org.dbdoclet.commons_*.jar"/>
-				<include name="org.dbdoclet.getopts_*.jar"/>
-				<include name="org.dbdoclet.html.parser_*.jar"/>
-				<include name="org.dbdoclet.jive_*.jar"/>
-				<include name="org.dbdoclet.xiphias_*.jar"/>
-				<include name="org.dbdoclet.tag_*.jar"/>
-				<include name="org.dbdoclet.trafo_*.jar"/>
-				<include name="org.dbdoclet.trafo.html_*.jar"/>
-				<include name="org.dbdoclet.trafo.html.docbook_*.jar"/>
-				<include name="org.dbdoclet.trafo.html.dita_*.jar"/>
-			</zipgroupfileset>
-		</jar>
-	</target>
+<!-- ========================================== -->
+<!-- INSTALL                                    -->
+<!-- ========================================== -->
+<target name="install" depends="build">
 
-	<!-- ========================================== -->
-	<!-- INSTALL                                    -->
-	<!-- ========================================== -->
-	<target name="install" depends="build">
+  <property name="instdir" value="/usr/share/herold" />
+  <echo>%%% Installationsverzeichnis [${instdir}]</echo>
+  <mkdir dir="${instdir}" />
+  <delete>
+    <fileset dir="${instdir}">
+      <exclude name="conf/**" />
+    </fileset>
+  </delete>
+  <copy todir="${instdir}">
+    <fileset dir="root">
+      <include name="bin/**" />
+      <include name="conf/**" />
+      <include name="doc/**" />
+      <include name="icons/**" />
+      <include name="profiles/**" />
+      <include name="README" />
+      <include name="COPYING" />
+    </fileset>
+  </copy>
+  <copy todir="${instdir}/jars">
+    <fileset dir="distrib">
+      <include name="herold_${module.version}.jar" />
+    </fileset>
+    <fileset dir="lib">
+      <include name="javax.help_*.jar" />
+      <include name="resolver_*.jar" />
+      <include name="org.antlr.runtime_*.jar" />
+      <include name="org.apache.commons.codec_*.jar" />
+      <include name="org.apache.commons.jxpath_*.jar" />
+      <include name="org.apache.commons.logging_*.jar" />
+      <include name="org.apache.felix.scr_*.jar" />
+      <include name="org.apache.xmlgraphics_*.jar" />
+      <include name="org.apache.log4j_*.jar" />
+      <!--
+	  <include name="org.apache.commons.codec_*.jar" />
+	  <include name="org.apache.xmlgraphics_*.jar" />
+	  <include name="org.dbdoclet.html.parser_*.jar" />
+	  <include name="org.dbdoclet.tag_*.jar" />
+	  <include name="org.dbdoclet.trafo_*.jar" />
+	  <include name="org.dbdoclet.trafo.html_*.jar" />
+	  <include name="org.dbdoclet.trafo.html.docbook_*.jar" />
+	  <include name="org.dbdoclet.commons_*.jar" />
+	  <include name="org.dbdoclet.getopts_*.jar" />
+	  <include name="org.dbdoclet.jive_*.jar" />
+	  <include name="org.dbdoclet.xiphias_*.jar" />
+      -->
+    </fileset>
+    <mapper type="regexp" from="^(.*)[_-][0-9\.]+\.jar" to="\1.jar" />
+  </copy>
+  <chmod perm="0775">
+    <fileset dir="${instdir}/bin">
+      <include name="*"/>
+    </fileset>
+  </chmod>
+  <chmod perm="g+w" type="both">
+    <fileset dir="${instdir}"/>
+  </chmod>
+  <chgrp group="jenkins" type="both">
+    <fileset dir="${instdir}"/>
+  </chgrp>
+</target>
 
-		<property name="instdir" value="/usr/share/herold" />
-		<echo>%%% Installationsverzeichnis [${instdir}]</echo>
-		<mkdir dir="${instdir}" />
-		<delete>
-			<fileset dir="${instdir}">
-				<exclude name="conf/**" />
-			</fileset>
-		</delete>
-		<copy todir="${instdir}">
-			<fileset dir="root">
-				<include name="bin/**" />
-				<include name="conf/**" />
-				<include name="doc/**" />
-				<include name="icons/**" />
-				<include name="profiles/**" />
-				<include name="README" />
-				<include name="COPYING" />
-			</fileset>
-		</copy>
-		<copy todir="${instdir}/jars">
-			<fileset dir="distrib">
-				<include name="herold_${module.version}.jar" />
-			</fileset>
-			<fileset dir="lib">
-				<include name="javax.help_*.jar" />
-				<include name="resolver_*.jar" />
-				<include name="org.antlr.runtime_*.jar" />
-				<include name="org.apache.commons.codec_*.jar" />
-				<include name="org.apache.commons.jxpath_*.jar" />
-				<include name="org.apache.commons.logging_*.jar" />
-				<include name="org.apache.felix.scr_*.jar" />
-				<include name="org.apache.xmlgraphics_*.jar" />
-				<include name="org.apache.log4j_*.jar" />
-			<!--
-				<include name="org.apache.commons.codec_*.jar" />
-				<include name="org.apache.xmlgraphics_*.jar" />
-				<include name="org.dbdoclet.html.parser_*.jar" />
-				<include name="org.dbdoclet.tag_*.jar" />
-				<include name="org.dbdoclet.trafo_*.jar" />
-				<include name="org.dbdoclet.trafo.html_*.jar" />
-				<include name="org.dbdoclet.trafo.html.docbook_*.jar" />
-				<include name="org.dbdoclet.commons_*.jar" />
-				<include name="org.dbdoclet.getopts_*.jar" />
-				<include name="org.dbdoclet.jive_*.jar" />
-				<include name="org.dbdoclet.xiphias_*.jar" />
-			-->
-			</fileset>
-			<mapper type="regexp" from="^(.*)[_-][0-9\.]+\.jar" to="\1.jar" />
-		</copy>
-		<chmod perm="0775">
-			<fileset dir="${instdir}/bin">
-				<include name="*"/>
-			</fileset>
-		</chmod>
-		<chmod perm="g+w" type="both">
-			<fileset dir="${instdir}"/>
-		</chmod>
-		<chgrp group="jenkins" type="both">
-			<fileset dir="${instdir}"/>
-		</chgrp>
-	</target>
+<target name="dist-src">
+  <mkdir dir="/usr/share/herold/src/doc"/>
+  <mkdir dir="/usr/share/herold/src/conf"/>
+  <mkdir dir="/usr/share/herold/src/icons"/>
+  <mkdir dir="/usr/share/herold/src/profiles"/>
+  <copy file="doc/manpage/manpage.xml" todir="/usr/share/herold/src/doc" />
+  <copy todir="/usr/share/herold/src">
+    <fileset dir="root">
+      <include name="conf/**"/>
+      <include name="icons/**"/>
+      <include name="profiles/**"/>
+    </fileset>
+  </copy>
+  <srcpacker product="herold"
+	     workdir="/usr/share/herold/src"
+	     jarfile="distrib/herold.jar" 
+	     zipfile="distrib/herold-src_${module.version}.zip"
+	     buildfile="root/src/build.xml">
+    <fileset dir="src/main/java"/>	
+    <fileset dir="../../common/org.dbdoclet.commons/src/main/java"/>	
+    <fileset dir="../../common/org.dbdoclet.getopts/src/main/java"/>	
+    <fileset dir="../../common/org.dbdoclet.jive/src/main/java"/>	
+    <fileset dir="../../markup/org.dbdoclet.xiphias/src/main/java"/>	
+    <fileset dir="../../markup/org.dbdoclet.tag/src/main/java"/>	
+    <fileset dir="../../markup/org.dbdoclet.html.parser/src/main/java"/>	
+    <fileset dir="../org.dbdoclet.trafo/src/main/java"/>	
+    <fileset dir="../org.dbdoclet.trafo.html/src/main/java"/>	
+    <fileset dir="../org.dbdoclet.trafo.html.dita/src/main/java"/>	
+    <fileset dir="../org.dbdoclet.trafo.html.docbook/src/main/java"/>	
+  </srcpacker>
+</target>
 
-	<target name="dist-src">
-		<mkdir dir="/usr/share/herold/src/doc"/>
-		<mkdir dir="/usr/share/herold/src/conf"/>
-		<mkdir dir="/usr/share/herold/src/icons"/>
-		<mkdir dir="/usr/share/herold/src/profiles"/>
-		<copy file="doc/manpage/manpage.xml" todir="/usr/share/herold/src/doc" />
-		<copy todir="/usr/share/herold/src">
-			<fileset dir="root">
-				<include name="conf/**"/>
-				<include name="icons/**"/>
-				<include name="profiles/**"/>
-			</fileset>
-		</copy>
-		<srcpacker product="herold"
-			workdir="/usr/share/herold/src"
-			jarfile="distrib/herold.jar" 
-			zipfile="distrib/herold-src_${module.version}.zip"
-			buildfile="root/src/build.xml">
-			<fileset dir="src/main/java"/>	
-			<fileset dir="../../common/org.dbdoclet.commons/src/main/java"/>	
-			<fileset dir="../../common/org.dbdoclet.getopts/src/main/java"/>	
-			<fileset dir="../../common/org.dbdoclet.jive/src/main/java"/>	
-			<fileset dir="../../markup/org.dbdoclet.xiphias/src/main/java"/>	
-			<fileset dir="../../markup/org.dbdoclet.tag/src/main/java"/>	
-			<fileset dir="../../markup/org.dbdoclet.html.parser/src/main/java"/>	
-			<fileset dir="../org.dbdoclet.trafo/src/main/java"/>	
-			<fileset dir="../org.dbdoclet.trafo.html/src/main/java"/>	
-			<fileset dir="../org.dbdoclet.trafo.html.dita/src/main/java"/>	
-			<fileset dir="../org.dbdoclet.trafo.html.docbook/src/main/java"/>	
-		</srcpacker>
-	</target>
+<!-- ========================================== -->
+<!-- DOC                                        -->
+<!-- ========================================== -->
+<target name="doc">
+  <ant dir="doc" antfile="build.xml" target="all" />
+</target>
 
-	<!-- ========================================== -->
-	<!-- DOC                                        -->
-	<!-- ========================================== -->
-	<target name="doc">
-		<ant dir="doc" antfile="build.xml" target="all" />
-	</target>
+<!-- ========================================== -->
+<!-- DIST                                       -->
+<!-- ========================================== -->
+<target name="dist-win">
 
-	<!-- ========================================== -->
-	<!-- DIST                                       -->
-	<!-- ========================================== -->
-	<target name="dist-win">
+  <echo>Creating Windows Package (herold)...</echo>
+  <packman spec="spec/packman.xml" destdir="${packman.dir}/${customer}" type="nsis" />
 
-		<echo>Creating Windows Package (herold)...</echo>
-		<packman spec="spec/packman.xml" destdir="${packman.dir}/${customer}" type="nsis" />
+  <zip basedir="${packman.dir}/${customer}" destfile="${packman.dir}/${customer}/herold-${project.version.style.win}.zip">
+    <include name="herold*.exe" />
+  </zip>
 
-		<zip basedir="${packman.dir}/${customer}" destfile="${packman.dir}/${customer}/herold-${project.version.style.win}.zip">
-			<include name="herold*.exe" />
-		</zip>
+</target>
 
-	</target>
+<!-- ========================================== -->
+<!-- DIST                                       -->
+<!-- ========================================== -->
+<target name="dist">
 
-	<!-- ========================================== -->
-	<!-- DIST                                       -->
-	<!-- ========================================== -->
-	<target name="dist">
+  <echo>Starte Auslieferung...</echo>
+  <buildnumber />
+  <echo>Installation...</echo>
+  <antcall target="install" />
 
-		<echo>Starte Auslieferung...</echo>
-		<buildnumber />
-		<echo>Installation...</echo>
-		<antcall target="install" />
+  <copy file="spec/herold.xml" tofile="spec/packman.xml" overwrite="yes">
+    <filterset>
+      <filter token="BUILDNUMBER" value="${build.number}" />
+      <filter token="VERSION" value="${module.version}" />
+    </filterset>
+  </copy>
 
-		<copy file="spec/herold.xml" tofile="spec/packman.xml" overwrite="yes">
-			<filterset>
-				<filter token="BUILDNUMBER" value="${build.number}" />
-				<filter token="VERSION" value="${module.version}" />
-			</filterset>
-		</copy>
+  <mkdir dir="${packman.dir}/main"/>
+  <copy tofile="${packman.dir}/main/build.properties" file="../module.properties"/>
+  
+  <echo>Creating Windows Package...</echo>
+  <replaceregexp byline="true" file="spec/herold.nsi" match="org.dbdoclet.tidbit_[0-9\.]+\.jar" replace="org.dbdoclet.tidbit_${project.version}.jar" />
+  <packman verbose="true" spec="spec/packman.xml" destdir="${packman.dir}/main" type="nsis" />
 
-		<mkdir dir="${packman.dir}/main"/>
-		<copy tofile="${packman.dir}/main/build.properties" file="module.properties"/>
-		
-		<echo>Creating Windows Package...</echo>
-		<replaceregexp byline="true" file="spec/herold.nsi" match="org.dbdoclet.tidbit_[0-9\.]+\.jar" replace="org.dbdoclet.tidbit_${project.version}.jar" />
-		<packman verbose="true" spec="spec/packman.xml" destdir="${packman.dir}/main" type="nsis" />
+  <echo>Creating RPM Package...</echo>
+  <packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="rpm" />
 
-		<echo>Creating RPM Package...</echo>
-		<packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="rpm" />
+  <echo>Creating Debian Package...</echo>
+  <packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="deb" />
 
-		<echo>Creating Debian Package...</echo>
-		<packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="deb" />
+  <echo>Creating tar/gzip Package...</echo>
+  <packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="tgz" />
 
-		<echo>Creating tar/gzip Package...</echo>
-		<packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="tgz" />
+  <echo file="${packman.dir}/main/version.properties">
+    version=${project.version}
+    version.win=${project.version.style.win}
+    release=${build.number}
+  </echo>
 
-		<echo file="${packman.dir}/main/version.properties">
-      version=${project.version}
-      version.win=${project.version.style.win}
-      release=${build.number}
-    </echo>
-
-	</target>
+</target>
 
 </project>

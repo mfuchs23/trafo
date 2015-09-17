@@ -13,7 +13,7 @@
 
   <summary>HTML to DocBook XML conversion.</summary> 
 
-  <copyright>Copyright (c) 2001-2012 by Michael Fuchs.</copyright> 
+  <copyright>Copyright (c) 2001-2015 by Michael Fuchs.</copyright> 
   <group>Productivity/File utilities</group>
 
   <architectures>
@@ -23,7 +23,6 @@
   <provides>herold</provides>
 
   <prepare>
-
   </prepare>
 
 

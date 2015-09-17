@@ -5,15 +5,15 @@
 
   <name>herold</name>
 
-  <version>8.0.0</version>
-  <release>227</release>
+  <version>8.0.0-SNAPSHOT</version>
+  <release>241</release>
 
   <archives>
   </archives>
 
   <summary>HTML to DocBook XML conversion.</summary> 
 
-  <copyright>Copyright (c) 2001-2012 by Michael Fuchs.</copyright> 
+  <copyright>Copyright (c) 2001-2015 by Michael Fuchs.</copyright> 
   <group>Productivity/File utilities</group>
 
   <architectures>
@@ -23,7 +23,6 @@
   <provides>herold</provides>
 
   <prepare>
-
   </prepare>
 
 
