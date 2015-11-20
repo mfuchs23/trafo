@@ -82,9 +82,6 @@ public class SectionDetector {
 	private static Class<?>[] refSect3Map = { Refsect3.class, Refsect4.class,
 			Refsect5.class, Refsect5.class, Refsect5.class, Refsect5.class };
 
-	private static Class<?>[] saveMap = { Para.class, Para.class, Para.class,
-			Para.class, Para.class, Para.class };
-
 	private Class<?>[] map;
 	private EditorInstruction values;
 	private Script script;
