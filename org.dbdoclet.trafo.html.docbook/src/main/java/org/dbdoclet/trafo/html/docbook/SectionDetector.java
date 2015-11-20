@@ -345,7 +345,7 @@ public class SectionDetector {
 		}
 
 		if (map == null) {
-			map = saveMap;
+			map = articleMap;
 		}
 
 		return root;
