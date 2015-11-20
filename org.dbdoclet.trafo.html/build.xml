@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="org.dbdoclet.trafo.html" default="build">
+<<<<<<< HEAD
+=======
+
+  <property file="../workspace.properties" />
+>>>>>>> master
   <property file="../module.properties" />
   <import file="${build.config.dir}/defaultBuild.xml"/>
 </project>

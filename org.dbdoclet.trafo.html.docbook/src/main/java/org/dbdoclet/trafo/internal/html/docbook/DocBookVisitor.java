@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.tag.docbook.Abstract;
+import org.dbdoclet.tag.docbook.DocBookFragment;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Info;
 import org.dbdoclet.tag.html.HtmlDocument;
@@ -87,7 +88,7 @@ public class DocBookVisitor implements IHtmlVisitor {
 	@Override
 	public DocumentFragmentImpl createDocumentFragment(HtmlFragment htmlFragment) {
 
-		DocumentFragmentImpl fragment = new DocumentFragmentImpl();
+		DocumentFragmentImpl fragment = new DocBookFragment();
 		ElementImpl documentElement = createDocumentElement();
 		fragment.setUserData("documentElement", documentElement, null);
 		return fragment;
