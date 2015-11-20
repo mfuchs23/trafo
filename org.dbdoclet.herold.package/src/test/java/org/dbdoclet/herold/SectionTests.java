@@ -117,4 +117,13 @@ public class SectionTests extends AbstractTests {
 				+ "<section><title>title2.2</title><para>para2.2</para></section>";
 		assertEquals(expected, buffer.replaceAll("\\s+", ""));
 	}
+
+	@Test
+	public void multipleH2() {
+		String buffer = transform("<h1>title1</h1><p>para 1</p>"
+				+ "<h2>title 2.1</h2><p>para 2.1</p>"
+				+ "<h2>title 2.2</h2><p>para 2.2</p>");
+		System.out.println(buffer);
+	}
+
 }
