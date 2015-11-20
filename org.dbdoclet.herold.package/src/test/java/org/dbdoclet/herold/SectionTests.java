@@ -109,4 +109,13 @@ public class SectionTests extends AbstractTests {
 		String buffer = transform("<h1>H1</h1><p>P1</p><h2>H2</h2><p>P2</p>");
 		System.out.println(buffer);
 	}
+
+	@Test
+	public void multipleH2() {
+		String buffer = transform("<h1>title1</h1><p>para 1</p>"
+				+ "<h2>title 2.1</h2><p>para 2.1</p>"
+				+ "<h2>title 2.2</h2><p>para 2.2</p>");
+		System.out.println(buffer);
+	}
+
 }
