@@ -2,7 +2,7 @@
 <project default="dbdoclet.pdf" name="herold manpage" xmlns:xi="http://www.w3.org/2001/XInclude">
   <!-- ========================================================== -->
   <!-- Generated from dbdoclet.TiDbit                             -->
-  <!-- Generated at 14.09.2015 13:28:46                           -->
+  <!-- Generated at 21.11.2015 11:44:35                           -->
   <!-- http://www.dbdoclet.org                                    -->
   <!-- ========================================================== -->
   <property file="${basedir}/dbdoclet.properties"/>

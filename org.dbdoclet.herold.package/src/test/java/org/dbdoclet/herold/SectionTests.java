@@ -117,4 +117,5 @@ public class SectionTests extends AbstractTests {
 				+ "<h2>title 2.2</h2><p>para 2.2</p>");
 		System.out.println(buffer);
 	}
+
 }
