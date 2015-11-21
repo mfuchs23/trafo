@@ -125,12 +125,12 @@
   </copy>
   <srcpacker product="herold"
 	     workdir="/usr/share/herold/src"
-	     jarfile="distrib/herold.jar" 
+	     jarfile="distrib/herold_${module.version}.jar" 
 	     zipfile="distrib/herold-src_${module.version}.zip"
 	     buildfile="root/src/build.xml">
     <fileset dir="src/main/java"/>	
     <fileset dir="../../common/org.dbdoclet.commons/src/main/java"/>	
-    <fileset dir="../../common/org.dbdoclet.getopts/src/main/java"/>	
+    <fileset dir="../../getopts/org.dbdoclet.getopts/src/main/java"/>	
     <fileset dir="../../common/org.dbdoclet.jive/src/main/java"/>	
     <fileset dir="../../markup/org.dbdoclet.xiphias/src/main/java"/>	
     <fileset dir="../../markup/org.dbdoclet.tag/src/main/java"/>	
