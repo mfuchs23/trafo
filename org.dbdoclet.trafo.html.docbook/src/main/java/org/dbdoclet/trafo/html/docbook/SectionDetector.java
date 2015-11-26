@@ -376,10 +376,10 @@ public class SectionDetector {
 
 		Node root = getDocumentElement();
 
-		if (root instanceof DocBookFragment) {
-			root = ((DocBookFragment) root).getFirstChildElement();
+		if (root instanceof DocBookFragment) {			
+			root = (Element) root.getUserData("documentElement");
 		}
-
+		
 		if (root instanceof Article) {
 			return true;
 		} else {
@@ -455,9 +455,14 @@ public class SectionDetector {
 				while (tagLevel != -1 && parentLevel != -1
 						&& parentLevel >= tagLevel) {
 
-					DocBookElement ancestor = (DocBookElement) NodeImpl
+					NodeImpl ancestor = NodeImpl
 							.findParent(parent, parentClass);
 
+					if (ancestor == null) {	
+						ancestor = NodeImpl
+							.findParent(parent, DocumentFragment.class);
+					}
+					
 					if (ancestor == null) {
 						break;
 					}
