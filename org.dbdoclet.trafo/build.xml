@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="org.dbdoclet.trafo" default="build">
+<project name="org.dbdoclet.herold.package" default="build">
   <property file="../module.properties" />
   <import file="${build.config.dir}/defaultBuild.xml"/>
 </project>
