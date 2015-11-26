@@ -1,4 +1,4 @@
-version=8.0.1
+version=8.0.2
 Bundle-Name=org.dbdoclet.trafo.html.dita
 Bundle-SymbolicName=org.dbdoclet.trafo.html.dita
 Bundle-Version=${version}
