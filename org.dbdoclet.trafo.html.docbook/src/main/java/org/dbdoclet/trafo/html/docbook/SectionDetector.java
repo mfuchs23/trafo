@@ -82,9 +82,6 @@ public class SectionDetector {
 	private static Class<?>[] refSect3Map = { Refsect3.class, Refsect4.class,
 			Refsect5.class, Refsect5.class, Refsect5.class, Refsect5.class };
 
-	private static Class<?>[] saveMap = { Para.class, Para.class, Para.class,
-			Para.class, Para.class, Para.class };
-
 	private Class<?>[] map;
 	private EditorInstruction values;
 	private Script script;
@@ -379,10 +376,10 @@ public class SectionDetector {
 
 		Node root = getDocumentElement();
 
-		if (root instanceof DocBookFragment) {
-			root = ((DocBookFragment) root).getFirstChildElement();
+		if (root instanceof DocBookFragment) {			
+			root = (Element) root.getUserData("documentElement");
 		}
-
+		
 		if (root instanceof Article) {
 			return true;
 		} else {
@@ -458,9 +455,14 @@ public class SectionDetector {
 				while (tagLevel != -1 && parentLevel != -1
 						&& parentLevel >= tagLevel) {
 
-					DocBookElement ancestor = (DocBookElement) NodeImpl
+					NodeImpl ancestor = NodeImpl
 							.findParent(parent, parentClass);
 
+					if (ancestor == null) {	
+						ancestor = NodeImpl
+							.findParent(parent, DocumentFragment.class);
+					}
+					
 					if (ancestor == null) {
 						break;
 					}
