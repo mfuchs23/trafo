@@ -1,6 +1,8 @@
-.ant-targets-build.xml
-.recommenders/
-RemoteSystemsTempFiles/
+**/RemoteSystemTempFiles/
+**/.recommenders/
+**/bin/
+**/build/
+**/lib/
 **/packman/
-**/packman.log
+*/packman.log
 **/packman.xml
