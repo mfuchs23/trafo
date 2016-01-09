@@ -9,7 +9,6 @@
     <sequential>
       <subant target="@{target}"> 
 	<fileset dir=".">
-	  <exclude name="org.dbdoclet.test.*/build.xml"/>
 	  <include name="*/build.xml"/>
 	</fileset>
       </subant>
@@ -27,17 +26,26 @@
     </sequential>
   </macrodef>
 
+  <target name="rebuild">
+    <antcall target="clean"/>
+    <antcall target="build"/>
+  </target>
+
   <target name="clean">
     <iterate target="clean"/>
   </target>
 
   <target name="build">
-    <iterate target="build"/>
+    <ant dir="org.dbdoclet.trafo" target="build" />
+    <ant dir="org.dbdoclet.trafo.html" target="build" />
+    <ant dir="org.dbdoclet.trafo.html.docbook" target="build" />
+    <ant dir="org.dbdoclet.herold.package" target="install" />
+    <ant dir="org.dbdoclet.herold.package" target="dist" />
+    <ant dir="org.dbdoclet.herold.package" target="dist-src" />
   </target>
 
   <target name="test">
     <iterate-test target="test"/>
   </target>
 
-  <echo>resolve mode = ${resolveMode}</echo>
 </project>

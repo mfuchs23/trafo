@@ -12,9 +12,10 @@
   <taskdef name="packman" classname="org.dbdoclet.ant.PackmanTask" />
   <taskdef name="srcpacker" classname="org.dbdoclet.tool.src.ProductManagerTask" />
 
-  <target name="build">
+  <target name="build" depends="resolve">
 
-    <antcall target="default.compile" />
+    <antcall target="compile" />
+    <antcall target="resources" />
 
     <jar destfile="distrib/herold_${module.version}.jar">
       <manifest>
@@ -41,6 +42,9 @@
 	<include name="org.dbdoclet.trafo.html.dita_*.jar" />
       </zipgroupfileset>
     </jar>
+
+    <antcall target="publish" />
+    
   </target>
 
   <!-- ========================================== -->
@@ -105,7 +109,7 @@
     <chmod perm="g+w" type="both">
       <fileset dir="${instdir}" />
     </chmod>
-    <chgrp group="jenkins" type="both">
+    <chgrp group="michael" type="both">
       <fileset dir="${instdir}" />
     </chgrp>
   </target>
@@ -123,11 +127,12 @@
 	<include name="profiles/**" />
       </fileset>
     </copy>
-    <srcpacker product="herold" workdir="/usr/share/herold/src" jarfile="distrib/herold.jar" zipfile="distrib/herold-src_${module.version}.zip" buildfile="root/src/build.xml">
+    <srcpacker product="herold" workdir="/usr/share/herold/src" jarfile="distrib/herold_${module.version}.jar"
+	       zipfile="distrib/herold-src_${module.version}.zip" buildfile="root/src/build.xml">
       <fileset dir="src/main/java" />
       <fileset dir="../../common/org.dbdoclet.commons/src/main/java" />
-      <fileset dir="../../common/org.dbdoclet.getopts/src/main/java" />
-      <fileset dir="../../common/org.dbdoclet.jive/src/main/java" />
+      <fileset dir="../../getopts/org.dbdoclet.getopts/src/main/java" />
+      <fileset dir="../../jive/org.dbdoclet.jive/src/main/java" />
       <fileset dir="../../markup/org.dbdoclet.xiphias/src/main/java" />
       <fileset dir="../../markup/org.dbdoclet.tag/src/main/java" />
       <fileset dir="../../markup/org.dbdoclet.html.parser/src/main/java" />

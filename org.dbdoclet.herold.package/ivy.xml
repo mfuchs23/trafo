@@ -3,7 +3,7 @@
   <info organisation="org.dbdoclet" module="org.dbdoclet.herold.package" revision="${module.version}" status="integration" publication="20131022120609">
   </info>
   <publications>
-  	<artifact name="herold"/>
+    <artifact name="herold_${module.version}"/>
   </publications>
   <dependencies>
  	<dependency org="org.antlr" name="org.antlr.runtime" rev="4.5"/>
