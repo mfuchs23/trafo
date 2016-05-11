@@ -1,30 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="trafo" default="build">
+<project name="trafo" default="rebuild">
   
   <property file="module.properties" />
   <import file="../build/build.config/defaultBuild.xml"/>  
-
-  <macrodef name="iterate">
-    <attribute name="target"/>
-    <sequential>
-      <subant target="@{target}"> 
-	<fileset dir=".">
-	  <include name="*/build.xml"/>
-	</fileset>
-      </subant>
-    </sequential>
-  </macrodef>
-
-  <macrodef name="iterate-test">
-    <attribute name="target"/>
-    <sequential>
-      <subant target="@{target}"> 
-	<fileset dir=".">
-	  <include name="org.dbdoclet.test.*/build.xml"/>
-	</fileset>
-      </subant>
-    </sequential>
-  </macrodef>
 
   <target name="rebuild">
     <antcall target="clean"/>
@@ -39,9 +17,12 @@
     <ant dir="org.dbdoclet.trafo" target="build" />
     <ant dir="org.dbdoclet.trafo.html" target="build" />
     <ant dir="org.dbdoclet.trafo.html.docbook" target="build" />
+    <ant dir="org.dbdoclet.trafo.html.dita" target="build" />
     <ant dir="org.dbdoclet.herold.package" target="install" />
+    <!--
     <ant dir="org.dbdoclet.herold.package" target="dist" />
     <ant dir="org.dbdoclet.herold.package" target="dist-src" />
+    -->
   </target>
 
   <target name="test">
