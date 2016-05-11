@@ -5,6 +5,5 @@
   <dependencies>
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo" rev="${module.version}" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html" rev="${module.version}" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.html.parser" rev="8.0.4" revConstraint="latest.integration"/>
   </dependencies>
 </ivy-module>

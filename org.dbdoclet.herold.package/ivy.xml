@@ -8,9 +8,9 @@
   <dependencies>
  	<dependency org="org.antlr" name="org.antlr.runtime" rev="4.5"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.commons" rev="8.0.4" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.getopts" rev="8.0.2" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.tag" rev="8.0.4" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.xiphias" rev="8.0.4" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.getopts" rev="8.0.3" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tag" rev="8.1.0" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.xiphias" rev="8.1.0" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo" rev="${module.version}" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html" rev="${module.version}" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html.docbook" rev="${module.version}" revConstraint="latest.integration"/>
