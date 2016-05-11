@@ -17,7 +17,7 @@ import org.dbdoclet.tag.html.P;
 import org.dbdoclet.trafo.html.AbstractTests;
 import org.dbdoclet.trafo.html.EditorException;
 import org.dbdoclet.trafo.html.EditorInstruction;
-import org.dbdoclet.trafo.internal.html.docbook.editor.BrEditor;
+import org.dbdoclet.trafo.html.docbook.editor.BrEditor;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.xiphias.NodeSerializer;
 import org.junit.Test;

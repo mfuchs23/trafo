@@ -186,7 +186,7 @@
 
     <echo>Creating Windows Package...</echo>
     <replaceregexp byline="true" file="spec/herold.nsi" match="org.dbdoclet.tidbit_[0-9\.]+\.jar" replace="org.dbdoclet.tidbit_${project.version}.jar" />
-    <packman verbose="true" spec="spec/packman.xml" destdir="${packman.dir}/main" type="nsis" />
+    <packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="nsis" />
 
     <echo>Creating RPM Package...</echo>
     <packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="rpm" />
