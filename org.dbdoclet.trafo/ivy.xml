@@ -3,13 +3,13 @@
   <info organisation="org.dbdoclet" module="org.dbdoclet.trafo" revision="${module.version}" status="integration" publication="20131022120614">
   </info>
   <dependencies>
-    <dependency org="org.antlr" name="org.antlr.runtime" rev="4.5" revConstraint="latest.release"/>
-    <dependency org="org.apache" name="org.apache.felix" rev="4.4.0" revConstraint="latest.release"/>
-    <dependency org="org.apache" name="org.apache.felix.scr" rev="1.6.0" revConstraint="latest.release"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.commons" rev="8.0.0" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.getopts" rev="8.0.0" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.xiphias" rev="8.0.0" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.jive" rev="8.0.0" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.html.parser" rev="8.1.0" revConstraint="latest.integration"/>
+    <dependency org="org.antlr" name="antlr4-runtime" rev="4.5.3" revConstraint="latest.release"/>
+    <dependency org="org.apache.felix" name="org.apache.felix.framework" rev="7.0.5" revConstraint="latest.integration"/>
+    <dependency org="org.apache.felix" name="org.apache.felix.scr" rev="2.2.6"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.commons" rev="${module.version}" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.getopts" rev="${module.version}" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.xiphias" rev="${module.version}" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.jive" rev="${module.version}" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.html.parser" rev="${module.version}" revConstraint="latest.integration"/>
   </dependencies>
 </ivy-module>

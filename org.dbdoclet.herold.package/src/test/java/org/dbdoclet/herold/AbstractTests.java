@@ -11,9 +11,13 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 import javax.xml.XMLConstants;
+import javax.xml.catalog.CatalogFeatures;
+import javax.xml.catalog.CatalogManager;
+import javax.xml.catalog.CatalogResolver;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -31,8 +35,6 @@ import org.dbdoclet.xiphias.XmlValidationResult;
 import org.junit.Before;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xerces.internal.util.XMLCatalogResolver;
 
 public class AbstractTests {
 
@@ -159,8 +161,8 @@ public class AbstractTests {
 			throws ParserConfigurationException, SAXException, IOException {
 
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		XMLCatalogResolver resolver = new XMLCatalogResolver();
-		resolver.setCatalogList(new String[] { ditaCatalog } );
+		CatalogResolver resolver =
+				CatalogManager.catalogResolver(CatalogFeatures.defaults(), URI.create(ditaCatalog));
 		factory.setResourceResolver(resolver);
 		Schema schema = factory.newSchema(ditaTopicSchemaUrl);
 		Validator validator = schema.newValidator();
