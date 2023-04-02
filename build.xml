@@ -19,12 +19,15 @@
     <ant dir="org.dbdoclet.trafo.html.docbook" target="build" />
     <ant dir="org.dbdoclet.trafo.html.dita" target="build" />
     <ant dir="org.dbdoclet.herold.package" target="install" />
-    <!--
-    <ant dir="org.dbdoclet.herold.package" target="dist" />
-    <ant dir="org.dbdoclet.herold.package" target="dist-src" />
-    -->
   </target>
 
+  <target name="deploy">
+    <ant dir="org.dbdoclet.herold.package" target="install" />
+    <ant dir="org.dbdoclet.herold.package" target="dist" />
+    <ant dir="org.dbdoclet.herold.package" target="dist-src" />
+    <ant dir="org.dbdoclet.herold.package" target="mvn-bundle" />
+  </target>
+  
   <target name="test">
     <iterate-test target="test"/>
   </target>

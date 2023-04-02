@@ -3,7 +3,7 @@ Service-Component: OSGI-INF/component-description.xml
 Bundle-ManifestVersion: 2
 Bundle-Name: org.dbdoclet.trafo.html.docbook
 Bundle-SymbolicName: org.dbdoclet.trafo.html.docbook
-Bundle-Version: 8.0.0
+Bundle-Version: 9.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.antlr.v4.runtime,
  org.apache.commons.logging,

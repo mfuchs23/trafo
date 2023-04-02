@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.xpath.XPathExpressionException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.html.parser.HtmlParser;
@@ -470,7 +472,7 @@ public class HtmlProvider implements IHtmlProvider {
 				for (String excludeXpath : excludeParam.getValues()) {
 
 					ArrayList<Node> nodeList = XPathServices.getNodes(
-							contextNode, excludeXpath);
+								contextNode, excludeXpath);
 
 					for (Node node : nodeList) {
 						if (node.getParentNode() != null) {

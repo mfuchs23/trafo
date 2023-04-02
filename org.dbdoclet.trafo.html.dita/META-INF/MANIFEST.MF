@@ -3,7 +3,7 @@ Service-Component: OSGI-INF/component-description.xml
 Bundle-ManifestVersion: 2
 Bundle-Name: org.dbdoclet.trafo.html.dita
 Bundle-SymbolicName: org.dbdoclet.trafo.html.dita
-Bundle-Version: 7.0.0
+Bundle-Version: 9.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.antlr.v4.runtime,
  org.apache.commons.logging,

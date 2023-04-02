@@ -1,10 +1,14 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.dbdoclet.trafo
 Service-Component: OSGI-INF/component-description.xml
+Bundle-ActivationPolicy: lazy
 Bundle-ManifestVersion: 2
 Bundle-Name: Trafo Plug-in
 Bundle-SymbolicName: org.dbdoclet.trafo
-Bundle-Version: 8.0.0
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Version: 9.0.1
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-ClassPath: .
+Require-Bundle: org.junit;bundle-version="4.11.0"
 Export-Package: org.dbdoclet.trafo,
  org.dbdoclet.trafo.param,
  org.dbdoclet.trafo.script
@@ -19,7 +23,6 @@ Import-Package: org.antlr.v4.runtime,
  org.dbdoclet.html.tokenizer.parser,
  org.dbdoclet.jive,
  org.dbdoclet.jive.widget,
- org.dbdoclet.log,
  org.dbdoclet.option,
  org.dbdoclet.progress,
  org.dbdoclet.service,
@@ -29,5 +32,3 @@ Import-Package: org.antlr.v4.runtime,
  org.dbdoclet.xiphias.dom,
  org.osgi.framework;version="1.5.0",
  org.osgi.service.component;version="1.1.0"
-Require-Bundle: org.junit;bundle-version="4.11.0"
-Bundle-ClassPath: .

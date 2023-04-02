@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.dbdoclet.trafo.html
 Bundle-SymbolicName: org.dbdoclet.trafo.html
-Bundle-Version: 8.0.0
+Bundle-Version: 9.0.1
 Bundle-Vendor: Michael Fuchs
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.apache.commons.logging,
