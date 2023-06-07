@@ -1,4 +1,4 @@
-version=9.0.1-SNAPSHOT
+version=11.0.1
 Bundle-Name=org.dbdoclet.trafo
 Bundle-SymbolicName=org.dbdoclet.trafo
 Bundle-Version=${version}
@@ -7,7 +7,7 @@ Service-Component: OSGI-INF/component-description.xml
 
 Include-Resource: \
   OSGI-INF/component-description.xml=OSGI-INF/component-description.xml,\
-  lib/antlr4-runtime.jar=lib/antlr4-runtime_4.12.0.jar
+  lib/antlr4-runtime.jar=lib/antlr4-runtime_4.13.0.jar
 
 Export-Package: org.dbdoclet.trafo.* ;version=${version}
 
