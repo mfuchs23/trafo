@@ -1,28 +1,22 @@
-// Generated from TrafoScript.g4 by ANTLR 4.5
-
+// Generated from TrafoScript.g4 by ANTLR 4.13.1
 package org.dbdoclet.trafo.script.parser;
 
-import java.util.List;
 
-import org.antlr.v4.runtime.NoViableAltException;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.RuntimeMetaData;
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.Vocabulary;
-import org.antlr.v4.runtime.VocabularyImpl;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNDeserializer;
-import org.antlr.v4.runtime.atn.ParserATNSimulator;
-import org.antlr.v4.runtime.atn.PredictionContextCache;
+import java.util.LinkedList;
+
+
+import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.*;
+import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class TrafoScriptParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.13.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -34,19 +28,28 @@ public class TrafoScriptParser extends Parser {
 	public static final int
 		RULE_parse = 0, RULE_transformation = 1, RULE_section = 2, RULE_node = 3, 
 		RULE_attribute = 4, RULE_param = 5, RULE_expr = 6;
-	public static final String[] ruleNames = {
-		"parse", "transformation", "section", "node", "attribute", "param", "expr"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"parse", "transformation", "section", "node", "attribute", "param", "expr"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, "'{'", "'}'", "'['", "']'", null, "'='", "';'", "','", null, "'node'", 
-		"'attribute'", "'section'", "'transformation'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, "BO", "BC", "SBO", "SBC", "BOOL", "EQ", "EOS", "COMMA", "NUMBER", 
-		"NODE", "ATTRIBUTE", "SECTION", "TRAN", "ID", "REGEXP", "TEXT", "MULTILINE", 
-		"WS", "COMMENT", "LINE_COMMENT"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "'{'", "'}'", "'['", "']'", null, "'='", "';'", "','", null, "'node'", 
+			"'attribute'", "'section'", "'transformation'"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "BO", "BC", "SBO", "SBC", "BOOL", "EQ", "EOS", "COMMA", "NUMBER", 
+			"NODE", "ATTRIBUTE", "SECTION", "TRAN", "ID", "REGEXP", "TEXT", "MULTILINE", 
+			"WS", "COMMENT", "LINE_COMMENT"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -96,6 +99,8 @@ public class TrafoScriptParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
+	@SuppressWarnings("CheckReturnValue")
 	public static class ParseContext extends ParserRuleContext {
 		public TransformationContext transformation() {
 			return getRuleContext(TransformationContext.class,0);
@@ -131,6 +136,11 @@ public class TrafoScriptParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitParse(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TrafoScriptVisitor ) return ((TrafoScriptVisitor<? extends T>)visitor).visitParse(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ParseContext parse() throws RecognitionException {
@@ -145,9 +155,10 @@ public class TrafoScriptParser extends Parser {
 			setState(20);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NODE) | (1L << ATTRIBUTE) | (1L << SECTION))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 7168L) != 0)) {
 				{
 				setState(18);
+				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case SECTION:
 					{
@@ -190,6 +201,7 @@ public class TrafoScriptParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class TransformationContext extends ParserRuleContext {
 		public TerminalNode TRAN() { return getToken(TrafoScriptParser.TRAN, 0); }
 		public TerminalNode ID() { return getToken(TrafoScriptParser.ID, 0); }
@@ -205,6 +217,11 @@ public class TrafoScriptParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitTransformation(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TrafoScriptVisitor ) return ((TrafoScriptVisitor<? extends T>)visitor).visitTransformation(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -233,6 +250,7 @@ public class TrafoScriptParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class SectionContext extends ParserRuleContext {
 		public TerminalNode SECTION() { return getToken(TrafoScriptParser.SECTION, 0); }
 		public TerminalNode BO() { return getToken(TrafoScriptParser.BO, 0); }
@@ -257,6 +275,11 @@ public class TrafoScriptParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitSection(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TrafoScriptVisitor ) return ((TrafoScriptVisitor<? extends T>)visitor).visitSection(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final SectionContext section() throws RecognitionException {
@@ -272,7 +295,10 @@ public class TrafoScriptParser extends Parser {
 			_la = _input.LA(1);
 			if ( !(_la==ID || _la==REGEXP) ) {
 			_errHandler.recoverInline(this);
-			} else {
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
 				consume();
 			}
 			setState(31);
@@ -306,6 +332,7 @@ public class TrafoScriptParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class NodeContext extends ParserRuleContext {
 		public TerminalNode NODE() { return getToken(TrafoScriptParser.NODE, 0); }
 		public TerminalNode TEXT() { return getToken(TrafoScriptParser.TEXT, 0); }
@@ -328,6 +355,11 @@ public class TrafoScriptParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitNode(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TrafoScriptVisitor ) return ((TrafoScriptVisitor<? extends T>)visitor).visitNode(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -373,6 +405,7 @@ public class TrafoScriptParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class AttributeContext extends ParserRuleContext {
 		public TerminalNode ATTRIBUTE() { return getToken(TrafoScriptParser.ATTRIBUTE, 0); }
 		public TerminalNode TEXT() { return getToken(TrafoScriptParser.TEXT, 0); }
@@ -395,6 +428,11 @@ public class TrafoScriptParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitAttribute(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TrafoScriptVisitor ) return ((TrafoScriptVisitor<? extends T>)visitor).visitAttribute(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -440,6 +478,7 @@ public class TrafoScriptParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class ParamContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(TrafoScriptParser.ID, 0); }
 		public TerminalNode EQ() { return getToken(TrafoScriptParser.EQ, 0); }
@@ -458,6 +497,11 @@ public class TrafoScriptParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitParam(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TrafoScriptVisitor ) return ((TrafoScriptVisitor<? extends T>)visitor).visitParam(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -488,6 +532,7 @@ public class TrafoScriptParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class ExprContext extends ParserRuleContext {
 		public TerminalNode BOOL() { return getToken(TrafoScriptParser.BOOL, 0); }
 		public TerminalNode NUMBER() { return getToken(TrafoScriptParser.NUMBER, 0); }
@@ -517,6 +562,11 @@ public class TrafoScriptParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TrafoScriptListener ) ((TrafoScriptListener)listener).exitExpr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TrafoScriptVisitor ) return ((TrafoScriptVisitor<? extends T>)visitor).visitExpr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ExprContext expr() throws RecognitionException {
@@ -525,15 +575,19 @@ public class TrafoScriptParser extends Parser {
 		int _la;
 		try {
 			setState(81);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(67);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOL) | (1L << NUMBER) | (1L << TEXT) | (1L << MULTILINE))) != 0)) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 197152L) != 0)) ) {
 				_errHandler.recoverInline(this);
-				} else {
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
 					consume();
 				}
 				}
@@ -588,28 +642,56 @@ public class TrafoScriptParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\26V\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\3\2\3\2\3\2\3\2\7\2\25\n\2"+
-		"\f\2\16\2\30\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\7\4$\n\4\f\4"+
-		"\16\4\'\13\4\3\4\3\4\3\5\3\5\3\5\3\5\7\5/\n\5\f\5\16\5\62\13\5\3\5\3\5"+
-		"\3\6\3\6\3\6\3\6\7\6:\n\6\f\6\16\6=\13\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3"+
-		"\b\3\b\3\b\3\b\3\b\3\b\3\b\7\bM\n\b\f\b\16\bP\13\b\3\b\3\b\5\bT\n\b\3"+
-		"\b\2\2\t\2\4\6\b\n\f\16\2\4\3\2\20\21\5\2\7\7\13\13\22\23W\2\20\3\2\2"+
-		"\2\4\33\3\2\2\2\6\37\3\2\2\2\b*\3\2\2\2\n\65\3\2\2\2\f@\3\2\2\2\16S\3"+
-		"\2\2\2\20\26\5\4\3\2\21\25\5\6\4\2\22\25\5\b\5\2\23\25\5\n\6\2\24\21\3"+
-		"\2\2\2\24\22\3\2\2\2\24\23\3\2\2\2\25\30\3\2\2\2\26\24\3\2\2\2\26\27\3"+
-		"\2\2\2\27\31\3\2\2\2\30\26\3\2\2\2\31\32\7\2\2\3\32\3\3\2\2\2\33\34\7"+
-		"\17\2\2\34\35\7\20\2\2\35\36\7\t\2\2\36\5\3\2\2\2\37 \7\16\2\2 !\t\2\2"+
-		"\2!%\7\3\2\2\"$\5\f\7\2#\"\3\2\2\2$\'\3\2\2\2%#\3\2\2\2%&\3\2\2\2&(\3"+
-		"\2\2\2\'%\3\2\2\2()\7\4\2\2)\7\3\2\2\2*+\7\f\2\2+,\7\22\2\2,\60\7\3\2"+
-		"\2-/\5\f\7\2.-\3\2\2\2/\62\3\2\2\2\60.\3\2\2\2\60\61\3\2\2\2\61\63\3\2"+
-		"\2\2\62\60\3\2\2\2\63\64\7\4\2\2\64\t\3\2\2\2\65\66\7\r\2\2\66\67\7\22"+
-		"\2\2\67;\7\3\2\28:\5\f\7\298\3\2\2\2:=\3\2\2\2;9\3\2\2\2;<\3\2\2\2<>\3"+
-		"\2\2\2=;\3\2\2\2>?\7\4\2\2?\13\3\2\2\2@A\7\20\2\2AB\7\b\2\2BC\5\16\b\2"+
-		"CD\7\t\2\2D\r\3\2\2\2ET\t\3\2\2FG\7\5\2\2GT\7\6\2\2HI\7\5\2\2IN\5\16\b"+
-		"\2JK\7\n\2\2KM\5\16\b\2LJ\3\2\2\2MP\3\2\2\2NL\3\2\2\2NO\3\2\2\2OQ\3\2"+
-		"\2\2PN\3\2\2\2QR\7\6\2\2RT\3\2\2\2SE\3\2\2\2SF\3\2\2\2SH\3\2\2\2T\17\3"+
-		"\2\2\2\t\24\26%\60;NS";
+		"\u0004\u0001\u0014T\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
+		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0001\u0000\u0001\u0000\u0001"+
+		"\u0000\u0001\u0000\u0005\u0000\u0013\b\u0000\n\u0000\f\u0000\u0016\t\u0000"+
+		"\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0005\u0002\"\b\u0002"+
+		"\n\u0002\f\u0002%\t\u0002\u0001\u0002\u0001\u0002\u0001\u0003\u0001\u0003"+
+		"\u0001\u0003\u0001\u0003\u0005\u0003-\b\u0003\n\u0003\f\u00030\t\u0003"+
+		"\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004"+
+		"\u0005\u00048\b\u0004\n\u0004\f\u0004;\t\u0004\u0001\u0004\u0001\u0004"+
+		"\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0006"+
+		"\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0005\u0006K\b\u0006\n\u0006\f\u0006N\t\u0006\u0001\u0006\u0001\u0006"+
+		"\u0003\u0006R\b\u0006\u0001\u0006\u0000\u0000\u0007\u0000\u0002\u0004"+
+		"\u0006\b\n\f\u0000\u0002\u0001\u0000\u000e\u000f\u0003\u0000\u0005\u0005"+
+		"\t\t\u0010\u0011U\u0000\u000e\u0001\u0000\u0000\u0000\u0002\u0019\u0001"+
+		"\u0000\u0000\u0000\u0004\u001d\u0001\u0000\u0000\u0000\u0006(\u0001\u0000"+
+		"\u0000\u0000\b3\u0001\u0000\u0000\u0000\n>\u0001\u0000\u0000\u0000\fQ"+
+		"\u0001\u0000\u0000\u0000\u000e\u0014\u0003\u0002\u0001\u0000\u000f\u0013"+
+		"\u0003\u0004\u0002\u0000\u0010\u0013\u0003\u0006\u0003\u0000\u0011\u0013"+
+		"\u0003\b\u0004\u0000\u0012\u000f\u0001\u0000\u0000\u0000\u0012\u0010\u0001"+
+		"\u0000\u0000\u0000\u0012\u0011\u0001\u0000\u0000\u0000\u0013\u0016\u0001"+
+		"\u0000\u0000\u0000\u0014\u0012\u0001\u0000\u0000\u0000\u0014\u0015\u0001"+
+		"\u0000\u0000\u0000\u0015\u0017\u0001\u0000\u0000\u0000\u0016\u0014\u0001"+
+		"\u0000\u0000\u0000\u0017\u0018\u0005\u0000\u0000\u0001\u0018\u0001\u0001"+
+		"\u0000\u0000\u0000\u0019\u001a\u0005\r\u0000\u0000\u001a\u001b\u0005\u000e"+
+		"\u0000\u0000\u001b\u001c\u0005\u0007\u0000\u0000\u001c\u0003\u0001\u0000"+
+		"\u0000\u0000\u001d\u001e\u0005\f\u0000\u0000\u001e\u001f\u0007\u0000\u0000"+
+		"\u0000\u001f#\u0005\u0001\u0000\u0000 \"\u0003\n\u0005\u0000! \u0001\u0000"+
+		"\u0000\u0000\"%\u0001\u0000\u0000\u0000#!\u0001\u0000\u0000\u0000#$\u0001"+
+		"\u0000\u0000\u0000$&\u0001\u0000\u0000\u0000%#\u0001\u0000\u0000\u0000"+
+		"&\'\u0005\u0002\u0000\u0000\'\u0005\u0001\u0000\u0000\u0000()\u0005\n"+
+		"\u0000\u0000)*\u0005\u0010\u0000\u0000*.\u0005\u0001\u0000\u0000+-\u0003"+
+		"\n\u0005\u0000,+\u0001\u0000\u0000\u0000-0\u0001\u0000\u0000\u0000.,\u0001"+
+		"\u0000\u0000\u0000./\u0001\u0000\u0000\u0000/1\u0001\u0000\u0000\u0000"+
+		"0.\u0001\u0000\u0000\u000012\u0005\u0002\u0000\u00002\u0007\u0001\u0000"+
+		"\u0000\u000034\u0005\u000b\u0000\u000045\u0005\u0010\u0000\u000059\u0005"+
+		"\u0001\u0000\u000068\u0003\n\u0005\u000076\u0001\u0000\u0000\u00008;\u0001"+
+		"\u0000\u0000\u000097\u0001\u0000\u0000\u00009:\u0001\u0000\u0000\u0000"+
+		":<\u0001\u0000\u0000\u0000;9\u0001\u0000\u0000\u0000<=\u0005\u0002\u0000"+
+		"\u0000=\t\u0001\u0000\u0000\u0000>?\u0005\u000e\u0000\u0000?@\u0005\u0006"+
+		"\u0000\u0000@A\u0003\f\u0006\u0000AB\u0005\u0007\u0000\u0000B\u000b\u0001"+
+		"\u0000\u0000\u0000CR\u0007\u0001\u0000\u0000DE\u0005\u0003\u0000\u0000"+
+		"ER\u0005\u0004\u0000\u0000FG\u0005\u0003\u0000\u0000GL\u0003\f\u0006\u0000"+
+		"HI\u0005\b\u0000\u0000IK\u0003\f\u0006\u0000JH\u0001\u0000\u0000\u0000"+
+		"KN\u0001\u0000\u0000\u0000LJ\u0001\u0000\u0000\u0000LM\u0001\u0000\u0000"+
+		"\u0000MO\u0001\u0000\u0000\u0000NL\u0001\u0000\u0000\u0000OP\u0005\u0004"+
+		"\u0000\u0000PR\u0001\u0000\u0000\u0000QC\u0001\u0000\u0000\u0000QD\u0001"+
+		"\u0000\u0000\u0000QF\u0001\u0000\u0000\u0000R\r\u0001\u0000\u0000\u0000"+
+		"\u0007\u0012\u0014#.9LQ";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

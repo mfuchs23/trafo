@@ -3,7 +3,7 @@
   <info organisation="org.dbdoclet" module="org.dbdoclet.trafo" revision="${module.version}" status="integration" publication="20131022120614">
   </info>
   <dependencies>
-    <dependency org="org.antlr" name="antlr4-runtime" rev="4.5.3" revConstraint="latest.release"/>
+    <dependency org="org.antlr" name="antlr4-runtime" rev="4.13.1" revConstraint="latest.release"/>
     <dependency org="org.apache.felix" name="org.apache.felix.framework" rev="7.0.5" revConstraint="latest.integration"/>
     <dependency org="org.apache.felix" name="org.apache.felix.scr" rev="2.2.6"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.commons" rev="${module.version}" revConstraint="latest.integration"/>

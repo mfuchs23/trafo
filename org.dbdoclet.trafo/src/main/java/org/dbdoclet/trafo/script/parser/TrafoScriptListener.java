@@ -1,7 +1,5 @@
-// Generated from TrafoScript.g4 by ANTLR 4.5
-
+// Generated from TrafoScript.g4 by ANTLR 4.13.1
 package org.dbdoclet.trafo.script.parser;
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

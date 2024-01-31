@@ -1,5 +1,4 @@
-// Generated from TrafoScript.g4 by ANTLR 4.5
-
+// Generated from TrafoScript.g4 by ANTLR 4.13.1
 package org.dbdoclet.trafo.script.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -11,6 +10,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
+@SuppressWarnings("CheckReturnValue")
 public class TrafoScriptBaseListener implements TrafoScriptListener {
 	/**
 	 * {@inheritDoc}

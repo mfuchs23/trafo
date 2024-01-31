@@ -1,14 +1,12 @@
 grammar TrafoScript;
 
 @parser::header {
-package org.dbdoclet.trafo.script.parser;
 
 import java.util.LinkedList;
 
 }
 
 @lexer::header {
-package org.dbdoclet.trafo.script.parser;
 }
 
 parse	: transformation (section | node | attribute)* EOF;
