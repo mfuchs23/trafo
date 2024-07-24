@@ -8,15 +8,9 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.dbdoclet.jive.PanelProvider;
 import org.dbdoclet.progress.ProgressEvent;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.progress.ProgressManager;
-import org.dbdoclet.service.ResourceServices;
 import org.dbdoclet.tag.docbook.BaseTagFactory;
 import org.dbdoclet.tag.docbook.DocBookTagFactory;
 import org.dbdoclet.tag.docbook.Index;
@@ -25,15 +19,11 @@ import org.dbdoclet.tag.html.HtmlFragment;
 import org.dbdoclet.trafo.AbstractTrafoService;
 import org.dbdoclet.trafo.TrafoConstants;
 import org.dbdoclet.trafo.TrafoResult;
-import org.dbdoclet.trafo.TrafoScriptManager;
 import org.dbdoclet.trafo.html.HtmlProvider;
-import org.dbdoclet.trafo.param.TextParam;
-import org.dbdoclet.trafo.script.Namespace;
 import org.dbdoclet.trafo.script.Script;
 import org.dbdoclet.trafo.script.ScriptEvent;
 import org.dbdoclet.trafo.script.ScriptEvent.Type;
 import org.dbdoclet.trafo.script.ScriptListener;
-import org.dbdoclet.trafo.script.Section;
 import org.dbdoclet.xiphias.NodeSerializer;
 import org.dbdoclet.xiphias.dom.DocumentImpl;
 import org.dbdoclet.xiphias.dom.ElementImpl;
@@ -43,11 +33,8 @@ import org.osgi.service.component.ComponentContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 
-public class HtmlDocBookTrafo extends AbstractTrafoService implements
-		PanelProvider, ScriptListener {
+public class HtmlDocBookTrafo extends AbstractTrafoService implements ScriptListener {
 
-	private final Log logger = LogFactory.getLog(HtmlDocBookTrafo.class);
-	private HtmlDocBookPanel htmlDocBookPanel;
 	private DocBookTagFactory dbfactory = new DocBookTagFactory();
 	private Script script;
 	private InputStream in;
@@ -55,19 +42,11 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 	private ArrayList<ProgressListener> listeners = new ArrayList<ProgressListener>();
 
 	protected void activate(ComponentContext context) {
-		logger.info("Activierung des Bundles " + getId());
 	}
 
 	@Override
 	public String getId() {
 		return "html2docbook";
-	}
-
-	@Override
-	public JPanel getPanel() {
-
-		htmlDocBookPanel = new HtmlDocBookPanel();
-		return htmlDocBookPanel;
 	}
 
 	public Script getScript() {
@@ -113,34 +92,6 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 			String encoding = script.getTextParameter(
 					TrafoConstants.SECTION_HTML, TrafoConstants.PARAM_ENCODING,
 					"UTF-8");
-
-			if (htmlDocBookPanel != null) {
-
-				String profileName = htmlDocBookPanel.getProfile();
-
-				if (profileName != null && profileName.trim().length() > 0) {
-
-					String profileText = ResourceServices.getResourceAsString(
-							"profiles/" + profileName + ".her",
-							HtmlDocBookTrafo.class.getClassLoader());
-
-					if (profileText != null) {
-						TrafoScriptManager mgr = new TrafoScriptManager();
-						mgr.parseScript(script, profileText);
-					}
-				}
-
-				Namespace namespace = script.getNamespace();
-				Section section = namespace.findOrCreateSection(TrafoConstants.SECTION_HTML);
-				section.setParam(new TextParam(TrafoConstants.PARAM_ENCODING,
-						htmlDocBookPanel.getSourceEncoding()));
-
-				section = namespace.findOrCreateSection(TrafoConstants.SECTION_DOCBOOK);
-				section.setParam(new TextParam(TrafoConstants.PARAM_LANGUAGE,
-						htmlDocBookPanel.getLanguage()));
-				section.setParam(new TextParam(TrafoConstants.PARAM_DOCUMENT_ELEMENT,
-						htmlDocBookPanel.getDocumentType()));
-			}
 
 			DocBookVisitor visitor = new DocBookVisitor();
 			visitor.addProgressListeners(listeners);
@@ -250,8 +201,6 @@ public class HtmlDocBookTrafo extends AbstractTrafoService implements
 						new ArrayList<String>());
 
 				for (String chunkElement : chunkElementList) {
-					logger.debug(String.format("Adding chunk element %s",
-							chunkElement));
 					int depth = script.getIntParameter(
 							TrafoConstants.SECTION_DOCBOOK,
 							String.format("chunk-%s-depth", chunkElement), 1);

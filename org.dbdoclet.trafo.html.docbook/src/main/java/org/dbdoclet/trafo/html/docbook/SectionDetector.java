@@ -484,7 +484,7 @@ public class SectionDetector {
 
 		DocBookElement section = null;
 
-		if (levelParent == null || levelParent instanceof Para
+		if (levelParent == null || levelParent instanceof Para || levelParent instanceof DocBookFragment
 				|| isValidHeader(header) == false) {
 			section = dbfactory.createBridgehead();
 		}
@@ -564,7 +564,7 @@ public class SectionDetector {
 		return section;
 	}
 
-	public DocBookElement createSectionPara(Element parent)
+	protected DocBookElement createSectionPara(Element parent)
 			throws OptionException {
 
 		DocBookElement para;

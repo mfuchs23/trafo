@@ -5,8 +5,8 @@ Bundle-ActivationPolicy: lazy
 Bundle-ManifestVersion: 2
 Bundle-Name: Trafo Plug-in
 Bundle-SymbolicName: org.dbdoclet.trafo
-Bundle-Version: 9.0.1
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-Version: 17
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ClassPath: .
 Require-Bundle: org.junit;bundle-version="4.11.0"
 Export-Package: org.dbdoclet.trafo,
@@ -21,9 +21,6 @@ Import-Package: org.antlr.v4.runtime,
  org.dbdoclet,
  org.dbdoclet.html.tokenizer,
  org.dbdoclet.html.tokenizer.parser,
- org.dbdoclet.jive,
- org.dbdoclet.jive.widget,
- org.dbdoclet.option,
  org.dbdoclet.progress,
  org.dbdoclet.service,
  org.dbdoclet.tag,

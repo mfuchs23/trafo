@@ -3,12 +3,12 @@ package org.dbdoclet.trafo.html.docbook;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.progress.ProgressListener;
 import org.dbdoclet.tag.docbook.Abstract;
 import org.dbdoclet.tag.docbook.DocBookFragment;
@@ -37,7 +37,7 @@ import org.xml.sax.InputSource;
 
 public class DocBookVisitor implements IHtmlVisitor {
 
-	private static Log logger = LogFactory.getLog(DocBookVisitor.class);
+	private static Logger logger = Logger.getLogger(DocBookVisitor.class.getName());
 
 	private ArrayList<ProgressListener> listeners;
 	private LinkManager linkManager;
@@ -143,6 +143,7 @@ public class DocBookVisitor implements IHtmlVisitor {
 		if (documentElement == null) {
 			throw new IllegalStateException("Can't create document element " + tagName);
 		}
+		
 		documentElement.setNamespaceURI(XmlConstants.NAMESPACE_DOCBOOK);
 		documentElement.setAttribute("xmlns", XmlConstants.NAMESPACE_DOCBOOK);
 		documentElement.setAttribute("version", "5.0");
@@ -154,16 +155,16 @@ public class DocBookVisitor implements IHtmlVisitor {
 				TrafoConstants.SECTION_DOCBOOK, TrafoConstants.PARAM_LANGUAGE,
 				null);
 
-		logger.debug("Profile: Parameter language = " + language);
+		logger.finest("Profile: Parameter language = " + language);
 
 		if (language == null) {
 
 			language = detectLanguage(documentElement);
-			logger.debug("Detected language from HTML = " + language);
+			logger.finest("Detected language from HTML = " + language);
 
 			if (language == null) {
 				language = Locale.getDefault().getLanguage().toLowerCase();
-				logger.debug("Using default language from JVM = " + language);
+				logger.finest("Using default language from JVM = " + language);
 			}
 
 		}
@@ -236,8 +237,7 @@ public class DocBookVisitor implements IHtmlVisitor {
 			}
 
 		} catch (Exception oops) {
-
-			logger.error("Parsing abstract failed!", oops);
+			logger.log(Level.SEVERE, "Parsing abstract failed!", oops);
 		}
 	}
 

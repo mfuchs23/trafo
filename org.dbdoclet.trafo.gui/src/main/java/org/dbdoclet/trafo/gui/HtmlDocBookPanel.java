@@ -1,4 +1,4 @@
-package org.dbdoclet.trafo.html.docbook;
+package org.dbdoclet.trafo.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

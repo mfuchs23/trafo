@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.xml.xpath.XPathExpressionException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.html.parser.HtmlParser;
 import org.dbdoclet.html.parser.ParserException;
 import org.dbdoclet.html.tokenizer.TokenizerException;
@@ -44,7 +42,7 @@ import org.w3c.dom.Text;
 
 public class HtmlProvider implements IHtmlProvider {
 
-	private static Log logger = LogFactory.getLog(HtmlProvider.class);
+	private static Logger logger = Logger.getLogger(HtmlProvider.class.getName());
 
 	public ArrayList<ProgressListener> listeners;
 	private IEditorFactory editorFactory;
@@ -148,15 +146,15 @@ public class HtmlProvider implements IHtmlProvider {
 
 	private NodeImpl edit(NodeImpl htmlNode, NodeImpl targetNode) {
 
-		logger.debug("-> edit " + htmlNode);
+		logger.fine("-> edit " + htmlNode);
 
 		if (htmlNode == null) {
-			logger.error("[DocBookDoclet.edit] - Parameter node is null!");
+			logger.severe("[DocBookDoclet.edit] - Parameter node is null!");
 			return null;
 		}
 
 		if (targetNode == null) {
-			logger.error("[DocBookDoclet.edit] - Parameter dbParent is null!");
+			logger.severe("[DocBookDoclet.edit] - Parameter dbParent is null!");
 			return null;
 		}
 
@@ -170,10 +168,10 @@ public class HtmlProvider implements IHtmlProvider {
 
 		NodeImpl oldParent = targetNode;
 
-		logger.debug(indent
+		logger.finest(indent
 				+ "\n>>>==================================================");
-		logger.debug(indent + " HTML Vaterelement " + htmlNode + ".");
-		logger.debug(indent + " DocBook Vaterelement " + targetNode + ".");
+		logger.finest(indent + " HTML Vaterelement " + htmlNode + ".");
+		logger.finest(indent + " DocBook Vaterelement " + targetNode + ".");
 
 		indent += ".";
 
@@ -184,7 +182,7 @@ public class HtmlProvider implements IHtmlProvider {
 			pm.fireProgressEvent(new ProgressEvent("Transforming "
 					+ child.toString()));
 
-			logger.debug(indent + " HTML element is " + child + ".");
+			logger.finest(indent + " HTML element is " + child + ".");
 
 			NodeImpl element = targetNode;
 			doTraverse = true;
@@ -223,7 +221,7 @@ public class HtmlProvider implements IHtmlProvider {
 
 				NodeImpl childParent = edit(child, element);
 
-				logger.debug(indent
+				logger.fine(indent
 						+ "\n<<<==================================================");
 
 				if (doIgnore == true) {
@@ -242,16 +240,16 @@ public class HtmlProvider implements IHtmlProvider {
 				// System.out.println("doTraverse == false " + num + "  ");
 			}
 
-			logger.debug(indent + "[Teilbaum bearbeitet] HTML: " + child
+			logger.fine(indent + "[Teilbaum bearbeitet] HTML: " + child
 					+ ", DocBook: " + element + ", Vater: " + targetNode);
 
 			if (targetNode != oldParent) {
 
-				logger.debug(indent + "Parent changed. Old parent was "
+				logger.fine(indent + "Parent changed. Old parent was "
 						+ oldParent + ". New parent is " + targetNode + ".");
 
 				NodeImpl dbelem = oldParent;
-				logger.debug(indent + "Closing old parent " + dbelem
+				logger.fine(indent + "Closing old parent " + dbelem
 						+ ". HTML Element is " + child + ".");
 
 				oldParent = targetNode;
@@ -264,10 +262,10 @@ public class HtmlProvider implements IHtmlProvider {
 			indent = indent.substring(0, indent.length() - 2);
 		}
 
-		logger.debug(indent + "[Vaterknoten bearbeitet] HTML: " + child
+		logger.fine(indent + "[Vaterknoten bearbeitet] HTML: " + child
 				+ ", Vaterknoten: " + targetNode);
 
-		logger.debug("<- edit ");
+		logger.fine("<- edit ");
 		return targetNode;
 	}
 
@@ -288,12 +286,12 @@ public class HtmlProvider implements IHtmlProvider {
 
 				IEditor editor = editorFactory.getCommentEditor();
 
-				logger.debug(indent + " Vor der Kommentarbearbeitung: " + child
+				logger.fine(indent + " Vor der Kommentarbearbeitung: " + child
 						+ ".\n");
 
 				values = editor.edit(values);
 
-				logger.debug(indent + " Nach der Kommentarbearbeitung: "
+				logger.fine(indent + " Nach der Kommentarbearbeitung: "
 						+ child + ".\n");
 
 				targetNode = values.getParent();
@@ -314,7 +312,7 @@ public class HtmlProvider implements IHtmlProvider {
 			}
 
 		} catch (EditorException oops) {
-			logger.debug(indent + " EditorException " + oops.getMessage());
+			logger.fine(indent + " EditorException " + oops.getMessage());
 		}
 
 		return null;
@@ -328,7 +326,7 @@ public class HtmlProvider implements IHtmlProvider {
 
 			IEditor editor = editorFactory.getChildEditor(htmlElement);
 
-			logger.debug("Setting editor values.");
+			logger.fine("Setting editor values.");
 
 			EditorInstruction values = new EditorInstruction(
 					visitor.getScript());
@@ -338,7 +336,7 @@ public class HtmlProvider implements IHtmlProvider {
 			values.setParent(targetNode);
 			values.setCharacterDataNode(null);
 
-			logger.debug(indent + " Vor der Transformation: " + child + ".\n"
+			logger.fine(indent + " Vor der Transformation: " + child + ".\n"
 					+ "Editor " + editor + "\n" + values);
 
 			MapToNodeAnnotation mapToAnnotation = child
@@ -374,18 +372,18 @@ public class HtmlProvider implements IHtmlProvider {
 						}
 					});
 
-			logger.debug(indent + " Nach der Transformation: " + child + ".\n"
+			logger.fine(indent + " Nach der Transformation: " + child + ".\n"
 					+ "Editor " + editor + "\n" + values);
 
 			return values;
 
 		} catch (EditorFactoryException oops) {
 
-			logger.fatal("EditorFactoryException", oops);
+			logger.log(Level.SEVERE, "EditorFactoryException", oops);
 
 		} catch (EditorException oops) {
 
-			logger.fatal("EditorException", oops);
+			logger.log(Level.SEVERE, "EditorException", oops);
 		}
 
 		return null;
@@ -393,7 +391,7 @@ public class HtmlProvider implements IHtmlProvider {
 
 	private EditorInstruction editText(NodeImpl child, NodeImpl targetNode) {
 
-		logger.debug("Text='" + ((Text) child).toString() + "'");
+		logger.fine("Text='" + ((Text) child).toString() + "'");
 
 		try {
 
@@ -407,10 +405,10 @@ public class HtmlProvider implements IHtmlProvider {
 
 			IEditor editor = editorFactory.getTextEditor();
 
-			logger.debug(indent + " Vor der Textbearbeitung: " + child + ".\n");
+			logger.fine(indent + " Vor der Textbearbeitung: " + child + ".\n");
 			values = editor.edit(values);
 
-			logger.debug(indent + " Nach der Textbearbeitung: " + child + ".\n");
+			logger.fine(indent + " Nach der Textbearbeitung: " + child + ".\n");
 
 			targetNode = values.getParent();
 
@@ -424,8 +422,7 @@ public class HtmlProvider implements IHtmlProvider {
 			return values;
 
 		} catch (EditorException oops) {
-
-			logger.fatal("EditorException", oops);
+			logger.log(Level.SEVERE, "EditorException", oops);
 		}
 
 		return null;

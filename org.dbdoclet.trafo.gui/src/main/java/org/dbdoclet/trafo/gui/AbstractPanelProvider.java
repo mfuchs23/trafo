@@ -1,4 +1,4 @@
-package org.dbdoclet.trafo;
+package org.dbdoclet.trafo.gui;
 
 import java.awt.Component;
 import java.util.ArrayList;

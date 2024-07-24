@@ -3,6 +3,7 @@
   <info organisation="org.dbdoclet" module="org.dbdoclet.trafo.html.dita" revision="${module.version}" status="integration" publication="20131022120628">
   </info>
   <dependencies>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.jive" rev="${module.version}" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo" rev="${module.version}" revConstraint="latest.integration"/>
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html" rev="${module.version}" revConstraint="latest.integration"/>
   </dependencies>
